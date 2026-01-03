@@ -23,6 +23,6 @@
       }
     ],
     "@typescript-eslint/explicit-function-return-types": "off",
-    "@typescript-eslint/no-explicit-any": "warn"
+    "@typescript-eslint/no-explicit-any": "off"
   }
 }
