@@ -1,6 +1,12 @@
-'use client'
-
 import { Bot, Globe, Github, ExternalLink, Mail, Twitter } from 'lucide-react'
+import { getVersion } from '@ai-agent-platform/versioning'
+
+let versionInfo = 'v1.0.0'
+try {
+  versionInfo = getVersion()
+} catch (error) {
+  console.warn('Failed to load version info:', error)
+}
 
 export default function Footer() {
   return (
@@ -137,8 +143,13 @@ export default function Footer() {
 
         {/* Bottom */}
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <div className="text-gray-400 text-sm mb-4 md:mb-0">
-            © 2024 AI Agent Platform. Built for AWS 10,000 AIdeas Competition.
+          <div className="text-gray-400 text-sm mb-4 md:mb-0 flex items-center gap-4">
+            <span>© 2024 AI Agent Platform. Built for AWS 10,000 AIdeas Competition.</span>
+            {versionInfo && (
+              <span className="bg-gray-800 px-2 py-1 rounded text-xs border border-gray-700">
+                {versionInfo}
+              </span>
+            )}
           </div>
           <div className="flex items-center gap-6 text-sm">
             <a href="#" className="text-gray-400 hover:text-white transition-colors">

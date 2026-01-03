@@ -13,16 +13,20 @@
     "lint": "turbo run lint",
     "test": "turbo run test",
     "type-check": "turbo run type-check",
-    "clean": "turbo run clean"
+    "clean": "turbo run clean",
+    "version:patch": "npm version patch",
+    "version:minor": "npm version minor",
+    "version:major": "npm version major",
+    "version:info": "node -e \"const { getDetailedVersion } = require('./packages/versioning/dist/index.js'); console.log(getDetailedVersion());\""
   },
   "devDependencies": {
-    "turbo": "^1.11.2",
-    "prettier": "^3.1.0",
-    "eslint": "^8.54.0"
+    "eslint": "^8.57.1",
+    "prettier": "^3.7.4",
+    "turbo": "^1.13.4"
   },
   "packageManager": "pnpm@8.12.0",
   "engines": {
-    "node": ">=18.0.0",
+    "node": ">=22.18.0",
     "pnpm": ">=8.0.0"
   }
 }
