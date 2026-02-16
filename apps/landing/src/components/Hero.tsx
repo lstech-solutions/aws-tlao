@@ -37,10 +37,14 @@ export default function Hero() {
             </span>
           </div>
 
-          {/* Main heading */}
-          <h1 className="text-7xl md:text-9xl font-bold mb-6 leading-tight animate-fade-in tracking-tight">
-            TLÁO
-          </h1>
+          {/* Main heading with logo */}
+          <div className="mb-6 animate-fade-in">
+            <img 
+              src="/aws-tlao/tláo-logo.png" 
+              alt="TLÁO" 
+              className="w-64 md:w-96 mx-auto"
+            />
+          </div>
           
           <p className="text-lg md:text-xl mb-4 text-muted-foreground max-w-2xl mx-auto font-light tracking-wide">
             Tactical Layer for Action & Outcomes
