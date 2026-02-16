@@ -42,7 +42,7 @@ export default function Hero() {
             <img 
               src="/tláo-logo.png" 
               alt="TLÁO" 
-              className="w-64 md:w-96 mx-auto"
+              className="w-80 md:w-[32rem] lg:w-[40rem] mx-auto"
             />
           </div>
           
