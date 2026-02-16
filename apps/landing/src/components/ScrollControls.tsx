@@ -27,14 +27,14 @@ export function ScrollIndicator() {
       onClick={handleScrollDown}
       animate={{ y: [0, 8, 0] }}
       transition={{ duration: 2, repeat: Infinity }}
-      className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 p-2 rounded-full hover:bg-white/10 dark:hover:bg-gray-800/50 transition-colors group"
+      className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20 p-2 rounded-full hover:bg-primary/10 transition-colors group"
       aria-label="Scroll down"
     >
-      <div className="w-6 h-10 border-2 border-white dark:border-gray-400 rounded-full flex justify-center group-hover:border-blue-400 transition-colors">
+      <div className="w-6 h-10 border-2 border-foreground/40 dark:border-foreground/60 rounded-full flex justify-center group-hover:border-primary transition-colors">
         <motion.div
           animate={{ y: [0, 6, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
-          className="w-1 h-2 bg-white dark:bg-gray-400 rounded-full mt-2 group-hover:bg-blue-400 transition-colors"
+          className="w-1 h-2 bg-foreground/40 dark:bg-foreground/60 rounded-full mt-2 group-hover:bg-primary transition-colors"
         />
       </div>
     </motion.button>
@@ -83,7 +83,7 @@ function BackToTopButton() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-40 p-3 rounded-full bg-blue-600 dark:bg-blue-500 text-white shadow-lg hover:shadow-xl hover:bg-blue-700 dark:hover:bg-blue-600 transition-all"
+          className="fixed bottom-8 right-8 z-40 p-3 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl hover:bg-primary/90 transition-all"
           aria-label="Back to top"
         >
           <ChevronUp className="w-6 h-6" />

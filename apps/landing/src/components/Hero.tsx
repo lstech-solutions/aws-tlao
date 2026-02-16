@@ -38,7 +38,7 @@ export default function Hero() {
           </div>
 
           {/* Main heading with logo */}
-          <div className="mb-6 animate-fade-in">
+          <div className="mb-4 animate-fade-in">
             <img 
               src="/tláo-logo.png" 
               alt="TLÁO" 
@@ -46,19 +46,19 @@ export default function Hero() {
             />
           </div>
           
-          <p className="text-lg md:text-xl mb-4 text-muted-foreground max-w-2xl mx-auto font-light tracking-wide">
+          <p className="text-base md:text-lg mb-3 text-muted-foreground max-w-2xl mx-auto font-light tracking-wide">
             Tactical Layer for Action & Outcomes
           </p>
 
           {/* Subtitle */}
-          <p className="text-2xl md:text-4xl mb-16 max-w-4xl mx-auto leading-relaxed font-light">
+          <p className="text-xl md:text-3xl mb-12 max-w-4xl mx-auto leading-relaxed font-light">
             <span className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent animate-gradient">
               AI agents that bear your operational burden
             </span>
           </p>
 
           {/* Agent cards - minimalistic */}
-          <div className="flex flex-col sm:flex-row justify-center gap-6 mb-16 max-w-2xl mx-auto">
+          <div className="flex flex-col sm:flex-row justify-center gap-6 max-w-2xl mx-auto">
             <button 
               onClick={scrollToAgents}
               className="group relative bg-card/40 backdrop-blur-xl rounded-3xl px-10 py-8 border border-primary/30 hover:border-primary transition-all duration-500 hover:scale-105 hover:shadow-2xl overflow-hidden"
@@ -105,16 +105,6 @@ export default function Hero() {
               </div>
             </button>
           </div>
-
-          {/* CTA button */}
-          <button 
-            onClick={scrollToDemo}
-            className="group inline-flex items-center gap-3 bg-gradient-to-r from-primary to-accent text-white px-8 py-4 rounded-full text-lg font-medium hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-2xl"
-          >
-            <Sparkles className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-            Try Interactive Demo
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </button>
         </div>
       </div>
 
