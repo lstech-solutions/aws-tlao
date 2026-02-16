@@ -8,6 +8,16 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 /**
+ * Free Tier limits configuration
+ */
+export interface FreeTierLimits {
+  tokenLimit: number; // 100,000 tokens/user/day
+  storageCap: number; // 5GB per user
+  rateLimit: number; // 100 requests/minute per user
+  dailyLimit: number; // 1,000 API requests/user/day
+}
+
+/**
  * Application configuration
  */
 export const config = {
@@ -36,6 +46,12 @@ export const config = {
   logging: {
     level: process.env.LOG_LEVEL || 'info',
   },
+  freeTier: {
+    tokenLimit: parseInt(process.env.FREE_TIER_TOKEN_LIMIT || '100000', 10),
+    storageCap: parseInt(process.env.FREE_TIER_STORAGE_CAP || '5368709120', 10), // 5GB in bytes
+    rateLimit: parseInt(process.env.FREE_TIER_RATE_LIMIT || '100', 10),
+    dailyLimit: parseInt(process.env.FREE_TIER_DAILY_LIMIT || '1000', 10),
+  } as FreeTierLimits,
 };
 
 /**

@@ -1,121 +1,136 @@
 'use client'
 
-import { FileText, MessageSquare, Mic, Globe, Zap, Shield, Cloud, Database } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 
 const features = [
   {
-    icon: FileText,
-    title: 'Multi-Format Document Processing',
-    description: 'Process emails, PDFs, audio files, text, and markdown documents with intelligent parsing and extraction.',
-    color: 'text-blue-500',
-    bgColor: 'bg-blue-50',
+    icon: (
+      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+      </svg>
+    ),
+    title: 'Smart Documents',
+    description: 'Process emails, PDFs, audio, and text with AI extraction.',
   },
   {
-    icon: Mic,
+    icon: (
+      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+      </svg>
+    ),
     title: 'Audio Transcription',
-    description: 'Automatic transcription of audio files using AWS Transcribe with support for multiple formats.',
-    color: 'text-purple-500',
-    bgColor: 'bg-purple-50',
+    description: 'Automatic transcription using AWS Transcribe.',
   },
   {
-    icon: MessageSquare,
-    title: 'AI-Powered Analysis',
-    description: 'Claude 3 Sonnet via AWS Bedrock analyzes your inputs and generates structured, actionable outputs.',
-    color: 'text-green-500',
-    bgColor: 'bg-green-50',
+    icon: (
+      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+      </svg>
+    ),
+    title: 'Multilingual',
+    description: 'English, Spanish, and Portuguese support.',
   },
   {
-    icon: Globe,
-    title: 'Multilingual Support',
-    description: 'Grant Navigator supports English, Spanish, and Portuguese for global accessibility.',
-    color: 'text-orange-500',
-    bgColor: 'bg-orange-50',
+    icon: (
+      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+      </svg>
+    ),
+    title: 'Serverless',
+    description: 'AWS Lambda for automatic scaling.',
   },
   {
-    icon: Zap,
-    title: 'Serverless Architecture',
-    description: 'Built on AWS Lambda for automatic scaling and cost-effective operation within Free Tier limits.',
-    color: 'text-yellow-500',
-    bgColor: 'bg-yellow-50',
+    icon: (
+      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+      </svg>
+    ),
+    title: 'Secure',
+    description: 'End-to-end encryption with AWS KMS.',
   },
   {
-    icon: Shield,
-    title: 'Enterprise Security',
-    description: 'End-to-end encryption, API key authentication, and secure data storage with AWS KMS.',
-    color: 'text-red-500',
-    bgColor: 'bg-red-50',
-  },
-  {
-    icon: Cloud,
-    title: 'AWS Free Tier Optimized',
-    description: 'Carefully designed to operate within AWS Free Tier limits with cost monitoring and optimization.',
-    color: 'text-indigo-500',
-    bgColor: 'bg-indigo-50',
-  },
-  {
-    icon: Database,
-    title: 'Scalable Data Storage',
-    description: 'DynamoDB for metadata and S3 for documents with automatic backup and versioning.',
-    color: 'text-teal-500',
-    bgColor: 'bg-teal-50',
+    icon: (
+      <svg className="w-7 h-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+        <path strokeLinecap="round" strokeLinejoin="round" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
+      </svg>
+    ),
+    title: 'Free Tier Optimized',
+    description: 'Designed for AWS Free Tier limits.',
   },
 ]
 
 export default function Features() {
+  const [visibleCards, setVisibleCards] = useState<number[]>([])
+  const cardsRef = useRef<(HTMLDivElement | null)[]>([])
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const index = cardsRef.current.indexOf(entry.target as HTMLDivElement)
+            if (index !== -1 && !visibleCards.includes(index)) {
+              setVisibleCards((prev) => [...prev, index])
+            }
+          }
+        })
+      },
+      { threshold: 0.2 }
+    )
+
+    cardsRef.current.forEach((card) => {
+      if (card) observer.observe(card)
+    })
+
+    return () => observer.disconnect()
+  }, [visibleCards])
+
   return (
-    <section className="section-padding bg-gray-50">
+    <section className="section-padding bg-muted/30">
       <div className="container-max">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        <div className="text-center mb-16 animate-fade-in">
+          <h2 className="text-5xl md:text-6xl font-bold mb-4">
             Powerful Features
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Built with modern AWS services and AI capabilities to provide a robust, 
-            scalable platform for operational efficiency and grant discovery.
+          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            Built with AWS and AI for robust, scalable automation
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((feature, index) => {
-            const Icon = feature.icon
+            const isVisible = visibleCards.includes(index)
             return (
               <div
                 key={index}
-                className="bg-white rounded-xl p-6 shadow-lg card-hover border border-gray-100"
+                ref={(el) => { cardsRef.current[index] = el }}
+                className={`group relative bg-card/60 backdrop-blur-xl rounded-3xl p-8 border border-border/50 transition-all duration-700 hover:scale-105 hover:shadow-2xl cursor-pointer overflow-hidden ${
+                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                }`}
+                style={{ transitionDelay: `${index * 100}ms` }}
               >
-                <div className={`w-12 h-12 ${feature.bgColor} rounded-lg flex items-center justify-center mb-4`}>
-                  <Icon className={`w-6 h-6 ${feature.color}`} />
+                {/* Animated background gradient */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-accent/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="relative">
+                  {/* Minimalistic icon with glow */}
+                  <div className="w-14 h-14 mb-6 relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500" />
+                    <div className="relative w-full h-full bg-gradient-to-br from-primary to-accent rounded-2xl flex items-center justify-center text-white group-hover:scale-110 transition-transform duration-500">
+                      {feature.icon}
+                    </div>
+                  </div>
+                  
+                  <h3 className="text-xl font-bold mb-3">
+                    {feature.title}
+                  </h3>
+                  <p className="text-muted-foreground leading-relaxed">
+                    {feature.description}
+                  </p>
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">
-                  {feature.title}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {feature.description}
-                </p>
               </div>
             )
           })}
-        </div>
-
-        {/* Technical highlights */}
-        <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg border border-gray-100">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
-            Technical Highlights
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary-600 mb-2">TypeScript</div>
-              <div className="text-gray-600">Type-safe development with comprehensive error handling</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary-600 mb-2">Property-Based</div>
-              <div className="text-gray-600">Testing with fast-check for comprehensive validation</div>
-            </div>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-primary-600 mb-2">Monorepo</div>
-              <div className="text-gray-600">Organized codebase with Turbo for efficient builds</div>
-            </div>
-          </div>
         </div>
       </div>
     </section>

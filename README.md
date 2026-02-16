@@ -1,23 +1,29 @@
-# AI Ops Copilot for Solo Founders
+# TLÁO - Autonomous Agent Platform
 
-An AI assistant that turns messy operational inputs (emails, notes, invoices, GitHub issues) into clear weekly execution plans, alerts, and metrics.
+> **TLÁO** — inspired by the Ancient Greek verb τλάω (tláō), meaning "to bear" or "to endure", and by Ἄτλας (Atlas) — "the bearer".
+
+**TLÁO** stands for **Tactical Layer for Action & Outcomes**, inspired by the Greek concept of bearing and enduring work on behalf of others. TLÁO represents a platform designed to carry the operational and administrative burden so people can focus on execution and impact.
+
+An autonomous agent platform that provides two specialized AI agents (TLÁO Plan and TLÁO Grant) to help users transform operational inputs into structured execution plans and match organizations to funding opportunities.
 
 ## 🎯 The Problem
 
-Solo founders waste massive time context-switching between:
+Solo founders and small organizations waste massive time context-switching between:
 - Email inboxes
 - Scattered notes and documents
 - GitHub issues and PRs
 - Invoices and financial records
 - Meeting notes and action items
+- Grant research and application materials
 
 This gives them **"AI middle management"** — automating the operational overhead so they can focus on building.
 
 ## 💡 The Solution
 
-**AI Ops Copilot** ingests all your messy operational data and delivers:
+**TLÁO** ingests all your messy operational data and delivers:
 
-- **Weekly Execution Plans**: Prioritized, actionable tasks with deadlines
+- **TLÁO Plan**: Weekly Execution Plans with prioritized, actionable tasks with deadlines
+- **TLÁO Grant**: Grant matching and proposal generation for organizations
 - **Real-time Alerts**: Critical issues that need immediate attention
 - **Metrics Dashboard**: KPIs, burn rate, progress tracking
 - **Context Synthesis**: AI connects dots across all your data sources
@@ -33,6 +39,7 @@ This gives them **"AI middle management"** — automating the operational overhe
 - **Amazon S3**: Document and data storage
 - **Amazon SES**: Email ingestion and notifications
 - **Amazon EventBridge**: Event-driven workflows
+- **Amazon Transcribe**: Audio transcription for voice inputs
 
 ### Technology Stack
 
@@ -90,11 +97,12 @@ aws/
 │       │   ├── app/          # App routes and pages
 │       │   ├── components/   # React components
 │       │   └── styles/       # Global styles
-│       └── public/           # Static assets
+│       └── public/           # Static assets (favicon, icons)
 ├── packages/
 │   ├── backend/              # AWS Lambda functions
 │   │   ├── src/
 │   │   │   ├── api/          # API endpoints
+│   │   │   ├── agents/       # TLÁO Plan and TLÁO Grant agents
 │   │   │   ├── services/     # AWS service integrations
 │   │   │   ├── models/       # Data models
 │   │   │   └── utils/        # Utility functions
@@ -105,6 +113,22 @@ aws/
 ```
 
 ## 🎨 Core Features
+
+### TLÁO Plan Agent
+
+- **Weekly Plans**: Intelligent prioritization of tasks from emails, notes, transcripts
+- **Deadline Tracking**: Automatic deadline extraction and reminders
+- **Owner Assignment**: AI suggests task owners based on context
+- **Dependency Mapping**: Identifies task dependencies
+- **Alert Generation**: Critical issues that need immediate attention
+
+### TLÁO Grant Agent
+
+- **Grant Matching**: AI-powered matching of organizations to relevant grants
+- **Eligibility Scoring**: Automated eligibility assessment with scores
+- **Proposal Generation**: First-pass proposal drafts based on matched grants
+- **Multilingual Support**: Output in English, Spanish, and Portuguese
+- **Proposal Management**: Track application status and deadlines
 
 ### 1. Document Ingestion Pipeline
 
@@ -139,31 +163,40 @@ aws/
 ```
 Messy Inputs
     ↓
-[Email, Notes, Invoices, GitHub Issues, Documents]
+[Email, Notes, Invoices, GitHub Issues, Documents, Audio]
     ↓
 Amazon SES / S3 Ingestion
     ↓
 Document Processing & Parsing
     ↓
+Amazon Transcribe (for audio)
+    ↓
 Amazon Bedrock (Claude)
     ↓
-AI Analysis & Planning
+AI Analysis & Planning (TLÁO Plan) OR Grant Matching (TLÁO Grant)
     ↓
 DynamoDB Storage
     ↓
-Weekly Plans + Alerts + Metrics
+Weekly Plans + Alerts + Metrics OR Grant Matches + Proposals
     ↓
 Dashboard + Email Notifications
 ```
 
 ## 🎯 Use Cases
 
-### For Solo Founders
+### For Solo Founders (TLÁO Plan)
 
-- **Monday Morning**: Get your weekly plan automatically generated
+- **Monday Morning**: Get your weekly plan automatically generated from emails and notes
 - **Throughout Week**: Real-time alerts on critical issues
 - **Friday Review**: Metrics dashboard shows progress and blockers
 - **Financial Health**: Automatic invoice tracking and burn rate alerts
+
+### For NGOs and Nonprofits (TLÁO Grant)
+
+- **Grant Discovery**: AI matches your organization to relevant funding opportunities
+- **Proposal Writing**: Generate first-pass proposals for matched grants
+- **Eligibility Tracking**: Know which grants you qualify for
+- **Multilingual Support**: Apply in English, Spanish, or Portuguese
 
 ### For Small Teams
 
@@ -195,7 +228,7 @@ Solo founders are the backbone of innovation. By automating operational overhead
 
 - End-to-end encryption for sensitive data
 - GDPR-compliant data handling
-- Secure API authentication
+- Secure API authentication with Builder ID
 - Regular security audits
 - Privacy Policy: [privacy@lstech.solutions](mailto:privacy@lstech.solutions)
 - Legal Inquiries: [legal@lstech.solutions](mailto:legal@lstech.solutions)
@@ -204,7 +237,7 @@ Solo founders are the backbone of innovation. By automating operational overhead
 
 - **General Inquiries**: [contact@lstech.solutions](mailto:contact@lstech.solutions)
 - **Security Issues**: [security@lstech.solutions](mailto:security@lstech.solutions)
-- **Website**: [https://lstech-solutions.github.io/aws](https://lstech-solutions.github.io/aws)
+- **Website**: [https://tlao.dev](https://tlao.dev)
 
 ## � ️ Development Roadmap
 
@@ -273,6 +306,7 @@ This project is an official submission to the AWS 10,000 AIdeas Challenge.
 - **Amazon S3**: Document storage
 - **Amazon SES**: Email ingestion
 - **Amazon EventBridge**: Event workflows
+- **Amazon Transcribe**: Audio transcription
 
 ## 📚 Documentation
 
@@ -290,4 +324,4 @@ This project is an official submission to the AWS 10,000 AIdeas Challenge.
 
 **Team**: LSTS  
 **Contact**: admin@lealsystem.net  
-**Last Updated**: January 2026
+**Last Updated**: February 2026

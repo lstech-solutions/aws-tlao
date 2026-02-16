@@ -1,3 +1,24 @@
+## [1.1.1](https://github.com/lstech-solutions/aws/compare/v1.1.0...v1.1.1) (2026-01-03)
+
+
+### Bug Fixes
+
+* add basePath for GitHub Pages subdirectory deployment ([61f3abc](https://github.com/lstech-solutions/aws/commit/61f3abc72dc577c2962fa1202b5267cc25f20cd8))
+* add ESLint configs and fix linting errors ([fef6d94](https://github.com/lstech-solutions/aws/commit/fef6d94b607b6d256b1d345e9aba7ea0b6c3f29f))
+* allow tests to pass when no tests exist ([f87de74](https://github.com/lstech-solutions/aws/commit/f87de748addfa6fc8e50efac1a4f154a15b7faf2))
+* correct working-directory placement in deploy step ([cd996ee](https://github.com/lstech-solutions/aws/commit/cd996ee994298eaec21e97a5b232644b48678255))
+* disable no-explicit-any ESLint rule for backend and versioning ([e8a368f](https://github.com/lstech-solutions/aws/commit/e8a368fea9d5fe1cc49a3a17c2f89a3dd90b4029))
+* use Vercel CLI instead of non-existent action ([3bfea27](https://github.com/lstech-solutions/aws/commit/3bfea2785875f8508a5bc7630354ff2a0c7b43a8))
+
+
+### Features
+
+* configure GitHub Pages deployment ([f923a51](https://github.com/lstech-solutions/aws/commit/f923a5157d8b0047401bada229cc5a87f6caa6a9))
+
+
+
+
+
 # [1.1.0](https://github.com/lstech-solutions/aws/compare/v1.0.1...v1.1.0) (2026-01-03)
 
 

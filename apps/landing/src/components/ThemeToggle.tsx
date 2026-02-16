@@ -45,7 +45,7 @@ function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(nextTheme)}
-      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium text-gray-600 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors border border-gray-200 dark:border-gray-700"
+      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium text-foreground bg-muted hover:bg-muted/80 transition-colors border border-border"
       aria-label={`Switch to ${nextTheme} theme`}
       title={`Current: ${getLabel()} | Click to switch to ${nextTheme}`}
     >

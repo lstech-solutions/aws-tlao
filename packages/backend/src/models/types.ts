@@ -5,7 +5,7 @@
 /**
  * Supported agent types
  */
-export type AgentType = 'ops-copilot' | 'grant-navigator';
+export type AgentType = 'tlao-plan' | 'tlao-grant';
 
 /**
  * Supported document types
@@ -228,4 +228,76 @@ export interface PaginatedResponse<T> {
     limit: number;
     offset: number;
   };
+}
+
+/**
+ * Free Tier usage tracking types
+ */
+
+/**
+ * Token usage tracking
+ */
+export interface TokenUsage {
+  sessionId: string;
+  userId: string;
+  date: string; // YYYY-MM-DD format
+  currentUsage: number;
+  dailyLimit: number;
+  lastUpdated: number;
+}
+
+/**
+ * Storage usage tracking
+ */
+export interface StorageUsage {
+  sessionId: string;
+  userId: string;
+  currentUsage: number;
+  maxUsage: number;
+  lastUpdated: number;
+}
+
+/**
+ * Rate limit tracking
+ */
+export interface RateLimitUsage {
+  sessionId: string;
+  userId: string;
+  windowStart: number; // Unix timestamp
+  requestCount: number;
+  limit: number;
+}
+
+/**
+ * Daily API request tracking
+ */
+export interface DailyUsage {
+  sessionId: string;
+  userId: string;
+  date: string; // YYYY-MM-DD format
+  apiRequests: number;
+  dailyLimit: number;
+  lastUpdated: number;
+}
+
+/**
+ * Free Tier limits configuration
+ */
+export interface FreeTierLimits {
+  tokenLimit: number; // 100,000 tokens/user/day
+  storageCap: number; // 5GB per user
+  rateLimit: number; // 100 requests/minute per user
+  dailyLimit: number; // 1,000 API requests/user/day
+}
+
+/**
+ * Usage alert for monitoring
+ */
+export interface UsageAlert {
+  userId: string;
+  alertType: 'token' | 'storage' | 'rate' | 'daily';
+  currentUsage: number;
+  limit: number;
+  percentageUsed: number;
+  timestamp: number;
 }

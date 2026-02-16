@@ -26,7 +26,23 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const initialTheme = stored || 'system'
     setThemeState(initialTheme)
     
-    applyTheme(initialTheme)
+    // Apply theme on mount
+    const html = document.documentElement
+    let effectiveTheme: 'light' | 'dark'
+
+    if (initialTheme === 'system') {
+      effectiveTheme = getSystemTheme()
+    } else {
+      effectiveTheme = initialTheme
+    }
+
+    setResolvedTheme(effectiveTheme)
+
+    if (effectiveTheme === 'dark') {
+      html.classList.add('dark')
+    } else {
+      html.classList.remove('dark')
+    }
   }, [])
 
   const getSystemTheme = (): 'light' | 'dark' => {

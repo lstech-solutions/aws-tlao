@@ -9,7 +9,7 @@ import { AgentType, ProcessedDocument, ExecutionPlan, GrantAssessment } from './
  */
 export interface AgentConfig {
   userId: string;
-  documents: ProcessedDocument[];
+  documents?: ProcessedDocument[];
   language?: string;
   additionalContext?: Record<string, any>;
 }

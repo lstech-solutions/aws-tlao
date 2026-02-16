@@ -1,10 +1,9 @@
 /**
  * Versioning utilities for AI Agent Platform
+ * Browser-compatible version
  */
 
 import * as semver from 'semver';
-import { readFileSync } from 'fs';
-import { join } from 'path';
 
 export interface VersionInfo {
   version: string;
@@ -28,12 +27,10 @@ export interface PackageJson {
  * Version manager class
  */
 export class VersionManager {
-  private packagePath: string;
   private packageJson: PackageJson;
 
-  constructor(packagePath?: string) {
-    this.packagePath = packagePath || this.findPackageJson();
-    this.packageJson = this.loadPackageJson();
+  constructor(packageJson?: PackageJson) {
+    this.packageJson = packageJson || { name: 'ai-agent-platform', version: '1.1.1' };
   }
 
   /**
@@ -56,7 +53,7 @@ export class VersionManager {
       buildMetadata: parsed.build.length > 0 ? parsed.build.join('.') : undefined,
       gitCommit: this.getGitCommit(),
       buildDate: new Date().toISOString(),
-      environment: process.env.NODE_ENV || 'development',
+      environment: 'browser',
     };
   }
 
@@ -131,37 +128,6 @@ export class VersionManager {
   }
 
   /**
-   * Find package.json file
-   */
-  private findPackageJson(): string {
-    let currentDir = process.cwd();
-    
-    while (currentDir !== '/') {
-      const packagePath = join(currentDir, 'package.json');
-      try {
-        readFileSync(packagePath);
-        return packagePath;
-      } catch {
-        currentDir = join(currentDir, '..');
-      }
-    }
-    
-    throw new Error('package.json not found');
-  }
-
-  /**
-   * Load package.json
-   */
-  private loadPackageJson(): PackageJson {
-    try {
-      const content = readFileSync(this.packagePath, 'utf-8');
-      return JSON.parse(content);
-    } catch (error) {
-      throw new Error(`Failed to load package.json: ${error}`);
-    }
-  }
-
-  /**
    * Get git commit hash
    */
   private getGitCommit(): string | undefined {
@@ -174,11 +140,7 @@ export class VersionManager {
       if (process.env.GITHUB_SHA) {
         return process.env.GITHUB_SHA;
       }
-
-      // Try to read from git
-      const { execSync } = require('child_process');
-      const commit = execSync('git rev-parse HEAD', { encoding: 'utf-8' }).trim();
-      return commit;
+      return undefined;
     } catch {
       return undefined;
     }
@@ -188,31 +150,31 @@ export class VersionManager {
 /**
  * Create version manager instance
  */
-export function createVersionManager(packagePath?: string): VersionManager {
-  return new VersionManager(packagePath);
+export function createVersionManager(packageJson?: PackageJson): VersionManager {
+  return new VersionManager(packageJson);
 }
 
 /**
  * Get version info for current package
  */
-export function getVersionInfo(packagePath?: string): VersionInfo {
-  const manager = new VersionManager(packagePath);
+export function getVersionInfo(packageJson?: PackageJson): VersionInfo {
+  const manager = new VersionManager(packageJson);
   return manager.getVersionInfo();
 }
 
 /**
  * Get formatted version string
  */
-export function getVersion(packagePath?: string): string {
-  const manager = new VersionManager(packagePath);
+export function getVersion(packageJson?: PackageJson): string {
+  const manager = new VersionManager(packageJson);
   return manager.getFormattedVersion();
 }
 
 /**
  * Get detailed version string
  */
-export function getDetailedVersion(packagePath?: string): string {
-  const manager = new VersionManager(packagePath);
+export function getDetailedVersion(packageJson?: PackageJson): string {
+  const manager = new VersionManager(packageJson);
   return manager.getDetailedVersion();
 }
 
