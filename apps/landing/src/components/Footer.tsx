@@ -125,7 +125,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-4">
               <a 
-                href="https://github.com/lstech-solutions/aws" 
+                href="https://github.com/lstech-solutions/aws-tlao" 
                 className="w-9 h-9 rounded-lg bg-card/50 backdrop-blur-sm border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary transition-all duration-300 hover:scale-110"
                 aria-label="GitHub"
                 target="_blank"
