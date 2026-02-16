@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  basePath: '/aws-tlao',
+  basePath: process.env.NEXT_PUBLIC_BASE_PATH || '',
   images: {
     domains: ['images.unsplash.com'],
     unoptimized: true,

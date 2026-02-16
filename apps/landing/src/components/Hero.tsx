@@ -40,7 +40,7 @@ export default function Hero() {
           {/* Main heading with logo */}
           <div className="mb-6 animate-fade-in">
             <img 
-              src="/aws-tlao/tláo-logo.png" 
+              src="/tláo-logo.png" 
               alt="TLÁO" 
               className="w-64 md:w-96 mx-auto"
             />
