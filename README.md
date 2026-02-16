@@ -1,3 +1,7 @@
+<div align="center">
+  <img src="apps/landing/public/tláo-logo.png" alt="TLÁO Logo" width="200"/>
+</div>
+
 # TLÁO - Autonomous Agent Platform
 
 > **TLÁO** — inspired by the Ancient Greek verb τλάω (tláō), meaning "to bear" or "to endure", and by Ἄτλας (Atlas) — "the bearer".
