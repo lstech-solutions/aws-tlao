@@ -21,7 +21,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     // Only run on client
     setMounted(true)
     
-    // Check localStorage for saved preference
+    // Check localStorage for saved preference, default to 'system'
     const stored = localStorage.getItem('theme') as Theme | null
     const initialTheme = stored || 'system'
     setThemeState(initialTheme)
@@ -42,6 +42,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       html.classList.add('dark')
     } else {
       html.classList.remove('dark')
+    }
+    
+    // Save system as default if nothing was stored
+    if (!stored) {
+      localStorage.setItem('theme', 'system')
     }
   }, [])
 
