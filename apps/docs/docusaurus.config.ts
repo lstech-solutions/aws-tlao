@@ -88,7 +88,7 @@ const config: Config = {
           items: [
             {
               label: 'Introduction',
-              to: '/documentation',
+              href: '/aws-tlao/documentation',
             },
           ],
         },
