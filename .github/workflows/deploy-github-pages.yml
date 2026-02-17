@@ -37,10 +37,10 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build landing page
-        run: pnpm run build --filter=@ai-agent-platform/landing
+        run: pnpm --filter @ai-agent-platform/landing run build
 
       - name: Build documentation site
-        run: pnpm run build:github --filter=@tlao/docs
+        run: pnpm --filter @tlao/docs run build:github
 
       - name: Combine builds
         run: |

@@ -38,7 +38,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build documentation site
-        run: pnpm run build --filter=@tlao/docs
+        run: pnpm --filter @tlao/docs run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
