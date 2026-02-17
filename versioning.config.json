@@ -1,13 +1,22 @@
 {
   "rootPackageJson": "package.json",
-  "packages": [
-    "packages/versioning",
-    "packages/backend",
-    "apps/landing"
-  ],
+  "packages": ["packages/versioning", "packages/backend", "apps/landing", "apps/docs"],
   "changelogFile": "CHANGELOG.md",
   "conventionalCommits": true,
   "syncDependencies": true,
   "ignorePackages": [],
-  "extensions": []
+  "extensions": [],
+  "privateCheck": true,
+  "cleanupRoot": true,
+  "roadmapFile": "ROADMAP.md",
+  "reentryFeatures": {
+    "enabled": true,
+    "trackHistory": true,
+    "versionHistory": ".version-history.json"
+  },
+  "validation": {
+    "enforceConventionalCommits": true,
+    "requireChangelog": true,
+    "checkDependencySync": true
+  }
 }

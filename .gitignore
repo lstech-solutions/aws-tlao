@@ -41,6 +41,20 @@ Thumbs.db
 .aws-sam/
 cdk.out/
 
+# Infrastructure sensitive files
+infrastructure/sensitive/*
+!infrastructure/sensitive/.gitkeep
+!infrastructure/sensitive/README.md
+!infrastructure/sensitive/config.example.yaml
+infrastructure/**/*.tfstate
+infrastructure/**/*.tfstate.backup
+infrastructure/**/.terraform/
+infrastructure/**/terraform.tfvars
+infrastructure/**/*.pem
+infrastructure/**/*.key
+infrastructure/**/secrets.yaml
+infrastructure/**/config.local.yaml
+
 # Temporary files
 .tmp/
 temp/

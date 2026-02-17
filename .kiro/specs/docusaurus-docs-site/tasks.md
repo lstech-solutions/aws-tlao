@@ -17,7 +17,7 @@ The implementation follows a logical progression: setup and configuration, core 
   - Configure tsconfig.json for TypeScript support
   - _Requirements: 1.1, 1.3, 1.5_
 
-- [~] 1.1 Write unit tests for Docusaurus configuration
+- [-] 1.1 Write unit tests for Docusaurus configuration
   - Test that package.json includes required Docusaurus dependencies
   - Test that Docusaurus version is >= 3.0.0
   - Test that url is set to 'https://docs.tláo.com'

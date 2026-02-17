@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Validate conventional commit message format
+commit_msg=$(cat "$1")
+
+# Conventional commit pattern: type(scope?): description
+pattern="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\(.+\))?: .{1,}"
+
+if ! echo "$commit_msg" | grep -qE "$pattern"; then
+  echo "❌ Invalid commit message format!"
+  echo ""
+  echo "Commit message must follow Conventional Commits format:"
+  echo "  <type>(<scope>): <description>"
+  echo ""
+  echo "Types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+  echo ""
+  echo "Examples:"
+  echo "  feat: add 3D carousel to hero section"
+  echo "  fix(landing): resolve carousel overlap issue"
+  echo "  docs: update infrastructure README"
+  echo ""
+  exit 1
+fi
+
+echo "✅ Commit message format valid"

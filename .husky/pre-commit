@@ -1,0 +1,18 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Run version validation
+echo "🔍 Validating versions..."
+pnpm run version:validate || {
+  echo "❌ Version validation failed!"
+  exit 1
+}
+
+# Run lint-staged
+echo "🎨 Running lint-staged..."
+pnpm exec lint-staged || {
+  echo "❌ Linting failed!"
+  exit 1
+}
+
+echo "✅ Pre-commit checks passed!"

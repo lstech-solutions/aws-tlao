@@ -1,6 +1,6 @@
 {
   "name": "@ai-agent-platform/backend",
-  "version": "1.1.1",
+  "version": "1.3.1",
   "description": "AI Agent Platform Backend - AWS Lambda Functions",
   "main": "dist/index.js",
   "scripts": {

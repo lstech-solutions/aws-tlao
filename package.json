@@ -1,6 +1,6 @@
 {
   "name": "ai-agent-platform",
-  "version": "1.1.1",
+  "version": "1.3.1",
   "description": "AI Agent Platform - AWS 10,000 AIdeas Competition Entry",
   "private": true,
   "workspaces": [
@@ -14,20 +14,27 @@
     "test": "turbo run test",
     "type-check": "turbo run type-check",
     "clean": "turbo run clean",
-    "version:patch": "versioning bump patch",
-    "version:minor": "versioning bump minor",
-    "version:major": "versioning bump major",
+    "version:patch": "versioning patch",
+    "version:minor": "versioning minor",
+    "version:major": "versioning major",
     "version:prerelease": "versioning bump prerelease",
     "version:sync": "versioning sync",
     "version:changelog": "versioning changelog",
-    "version:info": "versioning info",
-    "version:validate": "versioning validate"
+    "version:validate": "versioning validate",
+    "version:cleanup": "versioning cleanup",
+    "version:reentry": "versioning reentry",
+    "version:roadmap": "versioning roadmap",
+    "version:secrets": "versioning check-secrets",
+    "prepare": "husky",
+    "pre-commit": "pnpm run version:validate && pnpm run lint"
   },
   "devDependencies": {
-    "@edcalderon/versioning": "^1.0.11",
+    "@edcalderon/versioning": "^1.3.1",
     "eslint": "^8.57.1",
     "prettier": "^3.7.4",
-    "turbo": "^1.13.4"
+    "turbo": "^1.13.4",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.0"
   },
   "packageManager": "pnpm@8.12.0",
   "engines": {
@@ -36,5 +43,17 @@
   },
   "dependencies": {
     "framer-motion": "^12.23.26"
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,yaml,yml}": [
+      "prettier --write"
+    ],
+    "package.json": [
+      "pnpm run version:validate"
+    ]
   }
 }

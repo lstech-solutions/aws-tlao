@@ -1,0 +1,273 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SES Email Forwarding for tláo.com (xn--tlo-6ma.com) using Lambda'
+
+Parameters:
+  DomainName:
+    Type: String
+    Default: 'xn--tlo-6ma.com'
+    Description: 'Punycode version of tláo.com'
+
+  ForwardingMappings:
+    Type: String
+    Default: 'admin@xn--tlo-6ma.com=admin@lstech.solutions,info@xn--tlo-6ma.com=admin@lstech.solutions'
+    Description: 'Comma-separated email forwarding mappings (from=to)'
+
+Resources:
+  # S3 Bucket for storing incoming emails
+  EmailBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${DomainName}-ses-emails'
+      LifecycleConfiguration:
+        Rules:
+          - Id: DeleteOldEmails
+            Status: Enabled
+            ExpirationInDays: 7
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+
+  # S3 Bucket Policy for SES
+  EmailBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref EmailBucket
+      PolicyDocument:
+        Statement:
+          - Sid: AllowSESPuts
+            Effect: Allow
+            Principal:
+              Service: ses.amazonaws.com
+            Action: 's3:PutObject'
+            Resource: !Sub '${EmailBucket.Arn}/*'
+            Condition:
+              StringEquals:
+                'aws:Referer': !Ref AWS::AccountId
+
+  # IAM Role for Lambda
+  EmailForwarderRole:
+    Type: AWS::IAM::Role
+    Properties:
+      RoleName: !Sub '${DomainName}-email-forwarder-role'
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      Policies:
+        - PolicyName: EmailForwardingPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 's3:GetObject'
+                Resource: !Sub '${EmailBucket.Arn}/*'
+              - Effect: Allow
+                Action:
+                  - 'ses:SendRawEmail'
+                Resource: '*'
+
+  # Lambda Function for Email Forwarding
+  EmailForwarderFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub '${DomainName}-email-forwarder'
+      Runtime: python3.11
+      Handler: index.lambda_handler
+      Role: !GetAtt EmailForwarderRole.Arn
+      Timeout: 30
+      Environment:
+        Variables:
+          FORWARDING_MAPPINGS: !Ref ForwardingMappings
+          FROM_EMAIL: !Sub 'noreply@${DomainName}'
+      Code:
+        ZipFile: |
+          import os
+          import json
+          import email
+          import boto3
+          from email.mime.multipart import MIMEMultipart
+          from email.mime.text import MIMEText
+          from email.mime.application import MIMEApplication
+
+          s3 = boto3.client('s3')
+          ses = boto3.client('ses')
+
+          def lambda_handler(event, context):
+              print(f"Event: {json.dumps(event)}")
+              
+              # Parse forwarding mappings from environment
+              mappings_str = os.environ.get('FORWARDING_MAPPINGS', '')
+              mappings = {}
+              for mapping in mappings_str.split(','):
+                  if '=' in mapping:
+                      from_addr, to_addr = mapping.split('=')
+                      mappings[from_addr.strip().lower()] = to_addr.strip()
+              
+              print(f"Forwarding mappings: {mappings}")
+              
+              # Process SES event
+              for record in event['Records']:
+                  ses_notification = record['ses']
+                  message_id = ses_notification['mail']['messageId']
+                  receipt = ses_notification['receipt']
+                  
+                  # Get recipients
+                  recipients = receipt['recipients']
+                  print(f"Recipients: {recipients}")
+                  
+                  # Get S3 bucket and key
+                  s3_bucket = None
+                  s3_key = None
+                  
+                  for action in receipt['action']:
+                      if action['type'] == 'S3':
+                          s3_bucket = action['bucketName']
+                          s3_key = action['objectKey']
+                          break
+                  
+                  if not s3_bucket or not s3_key:
+                      print("No S3 action found")
+                      continue
+                  
+                  # Download email from S3
+                  print(f"Downloading email from s3://{s3_bucket}/{s3_key}")
+                  response = s3.get_object(Bucket=s3_bucket, Key=s3_key)
+                  email_content = response['Body'].read()
+                  
+                  # Parse email
+                  msg = email.message_from_bytes(email_content)
+                  
+                  # Forward to mapped addresses
+                  for recipient in recipients:
+                      recipient_lower = recipient.lower()
+                      if recipient_lower in mappings:
+                          forward_to = mappings[recipient_lower]
+                          print(f"Forwarding {recipient} to {forward_to}")
+                          
+                          # Create forwarded message
+                          forward_msg = MIMEMultipart()
+                          forward_msg['From'] = os.environ.get('FROM_EMAIL', 'noreply@example.com')
+                          forward_msg['To'] = forward_to
+                          forward_msg['Subject'] = f"Fwd: {msg.get('Subject', 'No Subject')}"
+                          
+                          # Add original headers as text
+                          original_info = f"""
+                          Original From: {msg.get('From', 'Unknown')}
+                          Original To: {recipient}
+                          Original Date: {msg.get('Date', 'Unknown')}
+                          
+                          ---
+                          """
+                          
+                          # Get email body
+                          body = ""
+                          if msg.is_multipart():
+                              for part in msg.walk():
+                                  if part.get_content_type() == "text/plain":
+                                      body = part.get_payload(decode=True).decode('utf-8', errors='ignore')
+                                      break
+                          else:
+                              body = msg.get_payload(decode=True).decode('utf-8', errors='ignore')
+                          
+                          forward_msg.attach(MIMEText(original_info + body, 'plain'))
+                          
+                          # Send email
+                          try:
+                              ses.send_raw_email(
+                                  RawMessage={'Data': forward_msg.as_string()}
+                              )
+                              print(f"Successfully forwarded to {forward_to}")
+                          except Exception as e:
+                              print(f"Error forwarding to {forward_to}: {str(e)}")
+                      else:
+                          print(f"No mapping found for {recipient}")
+              
+              return {'statusCode': 200, 'body': 'Email processed'}
+
+  # Lambda Permission for SES
+  EmailForwarderPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref EmailForwarderFunction
+      Action: 'lambda:InvokeFunction'
+      Principal: ses.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+
+  # SES Receipt Rule Set
+  ReceiptRuleSet:
+    Type: AWS::SES::ReceiptRuleSet
+    Properties:
+      RuleSetName: !Sub '${DomainName}-ruleset'
+
+  # SES Receipt Rule
+  ReceiptRule:
+    Type: AWS::SES::ReceiptRule
+    Properties:
+      RuleSetName: !Ref ReceiptRuleSet
+      Rule:
+        Name: !Sub '${DomainName}-forward-rule'
+        Enabled: true
+        ScanEnabled: true
+        TlsPolicy: Require
+        Recipients:
+          - !Ref DomainName
+        Actions:
+          - S3Action:
+              BucketName: !Ref EmailBucket
+              ObjectKeyPrefix: 'incoming/'
+          - LambdaAction:
+              FunctionArn: !GetAtt EmailForwarderFunction.Arn
+              InvocationType: Event
+
+Outputs:
+  EmailBucketName:
+    Description: 'S3 Bucket for storing emails'
+    Value: !Ref EmailBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-EmailBucket'
+
+  LambdaFunctionArn:
+    Description: 'Lambda function ARN for email forwarding'
+    Value: !GetAtt EmailForwarderFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-LambdaArn'
+
+  ReceiptRuleSetName:
+    Description: 'SES Receipt Rule Set name'
+    Value: !Ref ReceiptRuleSet
+    Export:
+      Name: !Sub '${AWS::StackName}-RuleSetName'
+
+  SetupInstructions:
+    Description: 'Setup Instructions'
+    Value: !Sub |
+      1. Verify domain in SES:
+         - Go to SES Console > Verified identities
+         - Add domain: ${DomainName}
+         - Add the provided DNS records to Route53
+
+      2. Add MX record in Route53:
+         Name: ${DomainName}
+         Type: MX
+         Value: 10 inbound-smtp.${AWS::Region}.amazonaws.com
+
+      3. Activate the receipt rule set:
+         aws ses set-active-receipt-rule-set --rule-set-name ${ReceiptRuleSet}
+
+      4. Move SES out of sandbox (if needed):
+         - Request production access in SES Console
+
+      5. Verify destination email:
+         - Verify admin@lstech.solutions in SES Console
+
+      6. Update forwarding mappings:
+         - Update Lambda environment variable FORWARDING_MAPPINGS
+         - Format: email1@domain=forward1@dest,email2@domain=forward2@dest

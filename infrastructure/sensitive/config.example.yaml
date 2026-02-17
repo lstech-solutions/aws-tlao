@@ -1,0 +1,51 @@
+# Example configuration file for TLÁO infrastructure
+# Copy this file to config.yaml and fill in your values
+# config.yaml is git-ignored
+
+domain:
+  # Punycode version of tláo.com
+  name: "xn--tlo-6ma.com"
+  # Display name
+  display_name: "tláo.com"
+  # Target URL for redirect
+  target_url: "https://lstech-solutions.github.io/aws-tlao/"
+
+aws:
+  # AWS Region (must be us-east-1 for CloudFront certificates)
+  region: "us-east-1"
+  # AWS Account ID
+  account_id: "YOUR_AWS_ACCOUNT_ID"
+  # AWS Profile (optional, uses default if not specified)
+  profile: "default"
+
+stacks:
+  # CloudFormation stack names
+  domain_redirect: "tlao-domain-redirect"
+  email_forwarding: "tlao-email-forwarding"
+
+email:
+  # Email forwarding mappings
+  # Format: from_address: to_address
+  forwarding:
+    "admin@xn--tlo-6ma.com": "admin@lstech.solutions"
+    "info@xn--tlo-6ma.com": "admin@lstech.solutions"
+    "support@xn--tlo-6ma.com": "support@lstech.solutions"
+    "contact@xn--tlo-6ma.com": "admin@lstech.solutions"
+  
+  # Email to use as sender for forwarded emails
+  from_email: "noreply@xn--tlo-6ma.com"
+  
+  # Destination emails that need to be verified in SES
+  verify_destinations:
+    - "admin@lstech.solutions"
+    - "support@lstech.solutions"
+
+route53:
+  # Route53 Hosted Zone ID for the domain
+  hosted_zone_id: "YOUR_HOSTED_ZONE_ID"
+
+notifications:
+  # SNS topic for infrastructure alerts (optional)
+  sns_topic_arn: ""
+  # Email for alerts
+  alert_email: "admin@lstech.solutions"

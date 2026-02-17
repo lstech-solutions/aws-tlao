@@ -1,41 +1,100 @@
-# Website
+# TLÁO Documentation Site
 
-This website is built using [Docusaurus](https://docusaurus.io/), a modern static website generator.
+This is the documentation site for TLÁO (Tactical Layer for Action & Outcomes), built with Docusaurus 3.x.
 
-## Installation
+## Getting Started
 
-```bash
-yarn
-```
+### Prerequisites
 
-## Local Development
+- Node.js >= 22.18.0
+- pnpm >= 8.0.0
 
-```bash
-yarn start
-```
+### Installation
 
-This command starts a local development server and opens up a browser window. Most changes are reflected live without having to restart the server.
-
-## Build
+From the monorepo root:
 
 ```bash
-yarn build
+pnpm install
 ```
 
-This command generates static content into the `build` directory and can be served using any static contents hosting service.
+### Development
+
+Start the development server:
+
+```bash
+# From the monorepo root
+pnpm --filter @tlao/docs dev
+
+# Or from this directory
+pnpm dev
+```
+
+The site will be available at http://localhost:3000
+
+### Building
+
+Build the static site:
+
+```bash
+# From the monorepo root
+pnpm --filter @tlao/docs build
+
+# Or from this directory
+pnpm build
+```
+
+The static files will be generated in the `build/` directory.
+
+### Testing
+
+Run tests:
+
+```bash
+pnpm test
+```
+
+Run type checking:
+
+```bash
+pnpm type-check
+```
+
+Run linting:
+
+```bash
+pnpm lint
+```
+
+## Project Structure
+
+```
+apps/docs/
+├── docs/                   # Documentation content (Markdown/MDX)
+├── src/                    # Custom React components and pages
+│   ├── components/         # Reusable React components
+│   └── css/               # Custom styles
+├── static/                # Static assets (images, files)
+├── docusaurus.config.ts   # Docusaurus configuration
+├── sidebars.ts            # Sidebar navigation structure
+└── package.json
+```
+
+## Configuration
+
+The main configuration is in `docusaurus.config.ts`. Key settings:
+
+- **URL**: https://docs.tláo.com
+- **Base URL**: /
+- **Route Base Path**: / (docs served at root)
+- **Locales**: English (default)
 
 ## Deployment
 
-Using SSH:
+The site is configured to deploy to Vercel. The build command and output directory are:
 
-```bash
-USE_SSH=true yarn deploy
-```
+- Build command: `pnpm build`
+- Output directory: `build/`
 
-Not using SSH:
+## Documentation
 
-```bash
-GIT_USER=<Your GitHub username> yarn deploy
-```
-
-If you are using GitHub pages for hosting, this command is a convenient way to build the website and push to the `gh-pages` branch.
+For more information about Docusaurus, see the [official documentation](https://docusaurus.io/).
