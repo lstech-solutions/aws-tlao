@@ -4,6 +4,11 @@
 
 # TLÁO - Autonomous Agent Platform
 
+[![CI](https://github.com/lstech-solutions/aws-tlao/actions/workflows/ci.yml/badge.svg)](https://github.com/lstech-solutions/aws-tlao/actions/workflows/ci.yml)
+[![Deploy Landing](https://github.com/lstech-solutions/aws-tlao/actions/workflows/deploy-landing.yml/badge.svg)](https://github.com/lstech-solutions/aws-tlao/actions/workflows/deploy-landing.yml)
+[![Live Demo](https://img.shields.io/badge/demo-live-success)](https://lstech-solutions.github.io/aws-tlao/)
+[![License](https://img.shields.io/badge/license-AWS%2010%2C000%20AIdeas-blue)](https://github.com/lstech-solutions/aws-tlao)
+
 > **TLÁO** — inspired by the Ancient Greek verb τλάω (tláō), meaning "to bear" or "to endure", and by Ἄτλας (Atlas) — "the bearer".
 
 **TLÁO** stands for **Tactical Layer for Action & Outcomes**, inspired by the Greek concept of bearing and enduring work on behalf of others. TLÁO represents a platform designed to carry the operational and administrative burden so people can focus on execution and impact.
