@@ -510,224 +510,225 @@ describe('Custom Agents Documentation', () => {
       expect(configContent).toContain('kebab-case')
     })
   })
-})
-describe('tool-access.md', () => {
-  let toolAccessContent: string
 
-  beforeAll(() => {
-    const toolAccessPath = path.join(customAgentsPath, 'tool-access.md')
-    toolAccessContent = fs.readFileSync(toolAccessPath, 'utf-8')
-  })
+  describe('tool-access.md', () => {
+    let toolAccessContent: string
 
-  it('should exist at correct path', () => {
-    // Validates: Requirement 2.1
-    const toolAccessPath = path.join(customAgentsPath, 'tool-access.md')
-    expect(fs.existsSync(toolAccessPath)).toBe(true)
-  })
+    beforeAll(() => {
+      const toolAccessPath = path.join(customAgentsPath, 'tool-access.md')
+      toolAccessContent = fs.readFileSync(toolAccessPath, 'utf-8')
+    })
 
-  it('should have valid frontmatter with sidebar_position', () => {
-    // Validates: Requirement 2.1
-    expect(toolAccessContent).toContain('---')
-    expect(toolAccessContent).toContain('sidebar_position:')
+    it('should exist at correct path', () => {
+      // Validates: Requirement 2.1
+      const toolAccessPath = path.join(customAgentsPath, 'tool-access.md')
+      expect(fs.existsSync(toolAccessPath)).toBe(true)
+    })
 
-    // Extract frontmatter and verify it's valid YAML
-    const frontmatterMatch = toolAccessContent.match(/^---\n([\s\S]*?)\n---/)
-    expect(frontmatterMatch).not.toBeNull()
+    it('should have valid frontmatter with sidebar_position', () => {
+      // Validates: Requirement 2.1
+      expect(toolAccessContent).toContain('---')
+      expect(toolAccessContent).toContain('sidebar_position:')
 
-    // Verify sidebar_position is set to 4 (fourth page)
-    expect(toolAccessContent).toContain('sidebar_position: 4')
-  })
+      // Extract frontmatter and verify it's valid YAML
+      const frontmatterMatch = toolAccessContent.match(/^---\n([\s\S]*?)\n---/)
+      expect(frontmatterMatch).not.toBeNull()
 
-  it('should document built-in Kiro tools', () => {
-    // Validates: Requirement 2.1
-    expect(toolAccessContent).toContain('Built-in Kiro Tools')
-    expect(toolAccessContent).toContain('Tool Categories')
+      // Verify sidebar_position is set to 4 (fourth page)
+      expect(toolAccessContent).toContain('sidebar_position: 4')
+    })
 
-    // Should list major tool categories
-    expect(toolAccessContent).toContain('read')
-    expect(toolAccessContent).toContain('write')
-    expect(toolAccessContent).toContain('shell')
-    expect(toolAccessContent).toContain('grep')
-    expect(toolAccessContent).toContain('glob')
-  })
+    it('should document built-in Kiro tools', () => {
+      // Validates: Requirement 2.1
+      expect(toolAccessContent).toContain('Built-in Kiro Tools')
+      expect(toolAccessContent).toContain('Tool Categories')
 
-  it('should document MCP integration', () => {
-    // Validates: Requirement 2.2
-    expect(toolAccessContent).toContain('Model Context Protocol (MCP) Integration')
-    expect(toolAccessContent).toContain('MCP servers')
+      // Should list major tool categories
+      expect(toolAccessContent).toContain('read')
+      expect(toolAccessContent).toContain('write')
+      expect(toolAccessContent).toContain('shell')
+      expect(toolAccessContent).toContain('grep')
+      expect(toolAccessContent).toContain('glob')
+    })
 
-    // Should explain MCP tool syntax
-    expect(toolAccessContent).toContain('@server_name')
-    expect(toolAccessContent).toContain('@server_name/tool_name')
-  })
+    it('should document MCP integration', () => {
+      // Validates: Requirement 2.2
+      expect(toolAccessContent).toContain('Model Context Protocol (MCP) Integration')
+      expect(toolAccessContent).toContain('MCP servers')
 
-  it('should explain pre-approval feature', () => {
-    // Validates: Requirement 4.1
-    expect(toolAccessContent).toContain('Pre-Approval: Automating Trusted Operations')
-    expect(toolAccessContent).toContain('What is Pre-Approval?')
+      // Should explain MCP tool syntax
+      expect(toolAccessContent).toContain('@server_name')
+      expect(toolAccessContent).toContain('@server_name/tool_name')
+    })
 
-    // Should explain the concept
-    expect(toolAccessContent.toLowerCase()).toContain('without user confirmation')
-    expect(toolAccessContent.toLowerCase()).toContain('automation')
-  })
+    it('should explain pre-approval feature', () => {
+      // Validates: Requirement 4.1
+      expect(toolAccessContent).toContain('Pre-Approval: Automating Trusted Operations')
+      expect(toolAccessContent).toContain('What is Pre-Approval?')
 
-  it('should explain when to use pre-approval', () => {
-    // Validates: Requirement 4.2
-    expect(toolAccessContent).toContain('When to Use Pre-Approval')
-    expect(toolAccessContent).toContain('When NOT to Use Pre-Approval')
+      // Should explain the concept
+      expect(toolAccessContent.toLowerCase()).toContain('without user confirmation')
+      expect(toolAccessContent.toLowerCase()).toContain('automation')
+    })
 
-    // Should provide guidance
-    expect(toolAccessContent).toContain('Repetitive workflows')
-    expect(toolAccessContent).toContain('Read-only operations')
-    expect(toolAccessContent).toContain('Destructive operations')
-  })
+    it('should explain when to use pre-approval', () => {
+      // Validates: Requirement 4.2
+      expect(toolAccessContent).toContain('When to Use Pre-Approval')
+      expect(toolAccessContent).toContain('When NOT to Use Pre-Approval')
 
-  it('should include security considerations for pre-approval', () => {
-    // Validates: Requirement 4.3
-    expect(toolAccessContent).toContain('Security Considerations')
-    expect(toolAccessContent).toContain('Principle of Least Privilege')
+      // Should provide guidance
+      expect(toolAccessContent).toContain('Repetitive workflows')
+      expect(toolAccessContent).toContain('Read-only operations')
+      expect(toolAccessContent).toContain('Destructive operations')
+    })
 
-    // Should list security principles
-    expect(toolAccessContent).toContain('Scope Limitation')
-    expect(toolAccessContent).toContain('Audit Trail')
-    expect(toolAccessContent).toContain('Gradual Expansion')
-    expect(toolAccessContent).toContain('Regular Review')
-  })
+    it('should include security considerations for pre-approval', () => {
+      // Validates: Requirement 4.3
+      expect(toolAccessContent).toContain('Security Considerations')
+      expect(toolAccessContent).toContain('Principle of Least Privilege')
 
-  it('should show how to configure pre-approved tools', () => {
-    // Validates: Requirement 4.4
-    expect(toolAccessContent).toContain('Configuring Pre-Approved Tools')
-    expect(toolAccessContent).toContain('allowedTools')
+      // Should list security principles
+      expect(toolAccessContent).toContain('Scope Limitation')
+      expect(toolAccessContent).toContain('Audit Trail')
+      expect(toolAccessContent).toContain('Gradual Expansion')
+      expect(toolAccessContent).toContain('Regular Review')
+    })
 
-    // Should show configuration examples
-    expect(toolAccessContent).toContain('"allowedTools":')
-    expect(toolAccessContent).toContain('readFile')
-    expect(toolAccessContent).toContain('grepSearch')
-  })
+    it('should show how to configure pre-approved tools', () => {
+      // Validates: Requirement 4.4
+      expect(toolAccessContent).toContain('Configuring Pre-Approved Tools')
+      expect(toolAccessContent).toContain('allowedTools')
 
-  it('should include pre-approval examples', () => {
-    // Validates: Requirement 4.4
-    expect(toolAccessContent).toContain('Pre-Approval Examples')
+      // Should show configuration examples
+      expect(toolAccessContent).toContain('"allowedTools":')
+      expect(toolAccessContent).toContain('readFile')
+      expect(toolAccessContent).toContain('grepSearch')
+    })
 
-    // Should show different approaches
-    expect(toolAccessContent).toContain('Conservative approach')
-    expect(toolAccessContent).toContain('Moderate approach')
-    expect(toolAccessContent).toContain('Aggressive approach')
-  })
+    it('should include pre-approval examples', () => {
+      // Validates: Requirement 4.4
+      expect(toolAccessContent).toContain('Pre-Approval Examples')
 
-  it('should include tool access configuration examples', () => {
-    // Validates: Requirement 2.1
-    expect(toolAccessContent).toContain('Tool Access Configuration Examples')
+      // Should show different approaches
+      expect(toolAccessContent).toContain('Conservative approach')
+      expect(toolAccessContent).toContain('Moderate approach')
+      expect(toolAccessContent).toContain('Aggressive approach')
+    })
 
-    // Should have multiple examples
-    expect(toolAccessContent).toContain('Example 1:')
-    expect(toolAccessContent).toContain('Example 2:')
-    expect(toolAccessContent).toContain('Example 3:')
-    expect(toolAccessContent).toContain('Example 4:')
-  })
+    it('should include tool access configuration examples', () => {
+      // Validates: Requirement 2.1
+      expect(toolAccessContent).toContain('Tool Access Configuration Examples')
 
-  it('should include security best practices', () => {
-    // Validates: Requirement 2.3
-    expect(toolAccessContent).toContain('Security Best Practices')
+      // Should have multiple examples
+      expect(toolAccessContent).toContain('Example 1:')
+      expect(toolAccessContent).toContain('Example 2:')
+      expect(toolAccessContent).toContain('Example 3:')
+      expect(toolAccessContent).toContain('Example 4:')
+    })
 
-    // Should have multiple best practices
-    expect(toolAccessContent).toContain('Start Restrictive, Expand Gradually')
-    expect(toolAccessContent).toContain('Separate Agents by Risk Level')
-    expect(toolAccessContent).toContain('Use Read-Only Agents for Analysis')
-    expect(toolAccessContent).toContain('Limit Shell Access')
-  })
+    it('should include security best practices', () => {
+      // Validates: Requirement 2.3
+      expect(toolAccessContent).toContain('Security Best Practices')
 
-  it('should include audit and logging information', () => {
-    // Validates: Requirement 2.4
-    expect(toolAccessContent).toContain('Audit and Logging')
-    expect(toolAccessContent).toContain('Monitoring Tool Usage')
-    expect(toolAccessContent).toContain('Reviewing Agent Activity')
-    expect(toolAccessContent).toContain('Adjusting Based on Usage')
-  })
+      // Should have multiple best practices
+      expect(toolAccessContent).toContain('Start Restrictive, Expand Gradually')
+      expect(toolAccessContent).toContain('Separate Agents by Risk Level')
+      expect(toolAccessContent).toContain('Use Read-Only Agents for Analysis')
+      expect(toolAccessContent).toContain('Limit Shell Access')
+    })
 
-  it('should include code examples', () => {
-    // Validates: Requirement 2.1
-    // Should have JSON code blocks
-    expect(toolAccessContent).toContain('```json')
+    it('should include audit and logging information', () => {
+      // Validates: Requirement 2.4
+      expect(toolAccessContent).toContain('Audit and Logging')
+      expect(toolAccessContent).toContain('Monitoring Tool Usage')
+      expect(toolAccessContent).toContain('Reviewing Agent Activity')
+      expect(toolAccessContent).toContain('Adjusting Based on Usage')
+    })
 
-    // Should have bash code blocks
-    expect(toolAccessContent).toContain('```bash')
+    it('should include code examples', () => {
+      // Validates: Requirement 2.1
+      // Should have JSON code blocks
+      expect(toolAccessContent).toContain('```json')
 
-    // Should have multiple configuration examples
-    const jsonBlocks = toolAccessContent.match(/```json/g)
-    expect(jsonBlocks).not.toBeNull()
-    expect(jsonBlocks!.length).toBeGreaterThan(5)
-  })
+      // Should have bash code blocks
+      expect(toolAccessContent).toContain('```bash')
 
-  it('should include next steps section with links', () => {
-    // Validates: Requirement 2.1
-    expect(toolAccessContent).toContain('Next Steps')
-    expect(toolAccessContent).toContain('examples.md')
-    expect(toolAccessContent).toContain('configuration.md')
-    expect(toolAccessContent).toContain('getting-started.md')
-  })
+      // Should have multiple configuration examples
+      const jsonBlocks = toolAccessContent.match(/```json/g)
+      expect(jsonBlocks).not.toBeNull()
+      expect(jsonBlocks!.length).toBeGreaterThan(5)
+    })
 
-  it('should explain tool categories in detail', () => {
-    // Validates: Requirement 2.1
-    expect(toolAccessContent).toContain('read')
-    expect(toolAccessContent).toContain('File reading and code analysis')
-    expect(toolAccessContent).toContain('write')
-    expect(toolAccessContent).toContain('File modification and creation')
-    expect(toolAccessContent).toContain('shell')
-    expect(toolAccessContent).toContain('Command execution')
-  })
+    it('should include next steps section with links', () => {
+      // Validates: Requirement 2.1
+      expect(toolAccessContent).toContain('Next Steps')
+      expect(toolAccessContent).toContain('examples.md')
+      expect(toolAccessContent).toContain('configuration.md')
+      expect(toolAccessContent).toContain('getting-started.md')
+    })
 
-  it('should explain MCP server configuration', () => {
-    // Validates: Requirement 2.2
-    expect(toolAccessContent).toContain('Adding MCP Servers')
-    expect(toolAccessContent).toContain('"mcpServers":')
-    expect(toolAccessContent).toContain('command')
-    expect(toolAccessContent).toContain('args')
-    expect(toolAccessContent).toContain('env')
-  })
+    it('should explain tool categories in detail', () => {
+      // Validates: Requirement 2.1
+      expect(toolAccessContent).toContain('read')
+      expect(toolAccessContent).toContain('File reading and code analysis')
+      expect(toolAccessContent).toContain('write')
+      expect(toolAccessContent).toContain('File modification and creation')
+      expect(toolAccessContent).toContain('shell')
+      expect(toolAccessContent).toContain('Command execution')
+    })
 
-  it('should explain global MCP configuration', () => {
-    // Validates: Requirement 2.2
-    expect(toolAccessContent).toContain('Global MCP Configuration')
-    expect(toolAccessContent).toContain('includeMcpJson')
-    expect(toolAccessContent).toContain('kiro --add-mcp')
-  })
+    it('should explain MCP server configuration', () => {
+      // Validates: Requirement 2.2
+      expect(toolAccessContent).toContain('Adding MCP Servers')
+      expect(toolAccessContent).toContain('"mcpServers":')
+      expect(toolAccessContent).toContain('command')
+      expect(toolAccessContent).toContain('args')
+      expect(toolAccessContent).toContain('env')
+    })
 
-  it('should provide guidance on tool access balance', () => {
-    // Validates: Requirement 2.3
-    expect(toolAccessContent).toContain('automation and safety')
-    expect(toolAccessContent).toContain('Start conservative')
-    expect(toolAccessContent).toContain('build trust')
-    expect(toolAccessContent).toContain('expand permissions thoughtfully')
-  })
+    it('should explain global MCP configuration', () => {
+      // Validates: Requirement 2.2
+      expect(toolAccessContent).toContain('Global MCP Configuration')
+      expect(toolAccessContent).toContain('includeMcpJson')
+      expect(toolAccessContent).toContain('kiro --add-mcp')
+    })
 
-  it('should explain version control for agents', () => {
-    // Validates: Requirement 2.3
-    expect(toolAccessContent).toContain('Version Control Your Agents')
-    expect(toolAccessContent).toContain('Track changes over time')
-    expect(toolAccessContent).toContain('Review modifications')
-    expect(toolAccessContent).toContain('Share configurations')
-    expect(toolAccessContent).toContain('Rollback problematic changes')
-  })
+    it('should provide guidance on tool access balance', () => {
+      // Validates: Requirement 2.3
+      expect(toolAccessContent).toContain('automation and safety')
+      expect(toolAccessContent).toContain('Start conservative')
+      expect(toolAccessContent).toContain('build trust')
+      expect(toolAccessContent).toContain('expand permissions thoughtfully')
+    })
 
-  it('should recommend testing in safe environments', () => {
-    // Validates: Requirement 2.3
-    expect(toolAccessContent).toContain('Test in Safe Environments')
-    expect(toolAccessContent).toContain('isolated development environments')
-    expect(toolAccessContent).toContain('test repositories or branches')
-    expect(toolAccessContent).toContain('verify behavior')
-    expect(toolAccessContent).toContain('monitor what tools are actually used')
-  })
+    it('should explain version control for agents', () => {
+      // Validates: Requirement 2.3
+      expect(toolAccessContent).toContain('Version Control Your Agents')
+      expect(toolAccessContent).toContain('Track changes over time')
+      expect(toolAccessContent).toContain('Review modifications')
+      expect(toolAccessContent).toContain('Share configurations')
+      expect(toolAccessContent).toContain('Rollback problematic changes')
+    })
 
-  it('should have proper code syntax highlighting', () => {
-    // Validates: Requirement 2.1
-    // All code blocks should have language specifiers
-    const codeBlocks = toolAccessContent.match(/```(\w+)/g)
-    expect(codeBlocks).not.toBeNull()
-    expect(codeBlocks!.length).toBeGreaterThan(10)
+    it('should recommend testing in safe environments', () => {
+      // Validates: Requirement 2.3
+      expect(toolAccessContent).toContain('Test in Safe Environments')
+      expect(toolAccessContent).toContain('isolated development environments')
+      expect(toolAccessContent).toContain('test repositories or branches')
+      expect(toolAccessContent).toContain('Verify behavior')
+      expect(toolAccessContent).toContain('Monitor what tools are actually used')
+    })
 
-    // Should have json, bash code blocks
-    expect(toolAccessContent).toContain('```json')
-    expect(toolAccessContent).toContain('```bash')
+    it('should have proper code syntax highlighting', () => {
+      // Validates: Requirement 2.1
+      // All code blocks should have language specifiers
+      const codeBlocks = toolAccessContent.match(/```(\w+)/g)
+      expect(codeBlocks).not.toBeNull()
+      expect(codeBlocks!.length).toBeGreaterThan(10)
+
+      // Should have json, bash code blocks
+      expect(toolAccessContent).toContain('```json')
+      expect(toolAccessContent).toContain('```bash')
+    })
   })
 })
