@@ -31,7 +31,7 @@
     "pre-commit": "pnpm run version:validate && pnpm run lint"
   },
   "devDependencies": {
-    "@edcalderon/versioning": "^1.4.1",
+    "@edcalderon/versioning": "^1.4.5",
     "eslint": "^8.57.1",
     "prettier": "^3.7.4",
     "turbo": "^1.13.4",
@@ -40,7 +40,7 @@
   },
   "packageManager": "pnpm@8.12.0",
   "engines": {
-    "node": ">=22.18.0",
+    "node": "22.22.0",
     "pnpm": ">=8.0.0"
   },
   "dependencies": {

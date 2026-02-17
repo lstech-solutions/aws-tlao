@@ -12,7 +12,7 @@ This guide covers deploying the AI Agent Platform for the AWS 10,000 AIdeas Comp
 ### Option 2: Manual Deployment
 
 #### Prerequisites
-- Node.js 22.18+
+- Node.js 22.22.0
 - pnpm 8+
 - Vercel CLI (for frontend)
 - AWS CLI (for backend)

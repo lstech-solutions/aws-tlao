@@ -7,9 +7,9 @@
     "dev": "docusaurus start --port 3002",
     "start": "docusaurus start --port 3002",
     "build": "docusaurus build",
-    "build:github": "SITE_URL=https://lstech-solutions.github.io BASE_URL=/aws-tlao/ docusaurus build",
-    "build:custom": "SITE_URL=https://tláo.com BASE_URL=/ docusaurus build",
-    "build:aws": "SITE_URL=https://docs.tláo.com BASE_URL=/ docusaurus build",
+    "build:github": "SITE_URL=https://lstech-solutions.github.io BASE_URL=/aws-tlao/documentation/ docusaurus build",
+    "build:custom": "SITE_URL=https://tlao.com BASE_URL=/ docusaurus build",
+    "build:aws": "SITE_URL=https://docs.tlao.com BASE_URL=/ docusaurus build",
     "swizzle": "docusaurus swizzle",
     "deploy": "docusaurus deploy",
     "deploy:github": "npm run build:github && echo 'Upload build/ directory to GitHub Pages'",
@@ -63,6 +63,6 @@
     ]
   },
   "engines": {
-    "node": ">=20.0"
+    "node": "22.22.0"
   }
 }

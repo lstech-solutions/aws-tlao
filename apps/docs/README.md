@@ -6,7 +6,7 @@ This is the documentation site for TLÁO (Tactical Layer for Action & Outcomes),
 
 ### Prerequisites
 
-- Node.js >= 22.18.0
+- Node.js 22.22.0
 - pnpm >= 8.0.0
 
 ### Installation

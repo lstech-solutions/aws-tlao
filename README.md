@@ -61,7 +61,7 @@ This gives them **"AI middle management"** — automating the operational overhe
 
 ### Prerequisites
 
-- Node.js 22.18+
+- Node.js 22.22.0
 - pnpm 8.0+
 - AWS Account with Free Tier access
 - Git

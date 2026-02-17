@@ -30,7 +30,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '22.18'
+          node-version: '22.22.0'
           cache: 'pnpm'
 
       - name: Install dependencies
@@ -40,10 +40,7 @@ jobs:
         run: pnpm run build --filter=@ai-agent-platform/landing
 
       - name: Build documentation site
-        run: pnpm run build --filter=@tlao/docs
-        env:
-          BASE_URL: /aws-tlao/documentation/
-          SITE_URL: https://lstech-solutions.github.io/aws-tlao/
+        run: pnpm run build:github --filter=@tlao/docs
 
       - name: Combine builds
         run: |

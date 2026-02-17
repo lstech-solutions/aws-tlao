@@ -283,7 +283,7 @@ export async function withTimeout<T>(
   timeoutMs: number,
   timeoutMessage: string = 'Operation timed out'
 ): Promise<T> {
-  let timeoutId: NodeJS.Timeout | undefined;
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
 
   const timeoutPromise = new Promise<T>((_, reject) => {
     timeoutId = setTimeout(() => {
