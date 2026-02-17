@@ -8,19 +8,35 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'TLÁO - Tactical Layer for Action & Outcomes',
-  description: 'TLÁO (τλάω - to bear, to endure) — AI agents that carry your operational burden. Transform messy inputs into execution plans with TLÁO Plan, discover grants with TLÁO Grant. Powered by AWS Bedrock.',
-  keywords: ['AI', 'AWS', 'Bedrock', 'Lambda', 'DynamoDB', 'agents', 'automation', 'grants', 'operations', 'TLÁO', 'execution planning', 'grant discovery'],
+  description:
+    'TLÁO (τλάω - to bear, to endure) — AI agents that carry your operational burden. Transform messy inputs into execution plans with TLÁO Plan, discover grants with TLÁO Grant. Powered by AWS Bedrock.',
+  keywords: [
+    'AI',
+    'AWS',
+    'Bedrock',
+    'Lambda',
+    'DynamoDB',
+    'agents',
+    'automation',
+    'grants',
+    'operations',
+    'TLÁO',
+    'execution planning',
+    'grant discovery',
+  ],
   authors: [{ name: 'TLÁO Team' }],
   openGraph: {
     title: 'TLÁO - AI Agents That Bear Your Operational Burden',
-    description: 'Inspired by the Greek τλάω (to bear) and Atlas (the bearer). AI-powered execution planning and grant discovery.',
+    description:
+      'Inspired by the Greek τλάω (to bear) and Atlas (the bearer). AI-powered execution planning and grant discovery.',
     type: 'website',
     url: 'https://tlao.dev',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'TLÁO - Tactical Layer for Action & Outcomes',
-    description: 'AI agents that carry your operational burden. Execution planning and grant discovery powered by AWS Bedrock.',
+    description:
+      'AI agents that carry your operational burden. Execution planning and grant discovery powered by AWS Bedrock.',
   },
   icons: {
     icon: '/favicon.ico',
@@ -35,12 +51,14 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode
-}) {
+}>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} bg-background text-foreground transition-colors duration-300`}>
+      <body
+        className={`${inter.className} bg-background text-foreground transition-colors duration-300`}
+      >
         <ThemeProvider>
           <BackToTopButtonWrapper />
           {children}

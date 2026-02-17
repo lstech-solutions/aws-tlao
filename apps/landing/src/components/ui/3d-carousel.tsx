@@ -1,46 +1,46 @@
-"use client"
+'use client'
 
-import { useEffect, useMemo, useRef, useState } from "react"
-import { AnimatePresence, motion } from "framer-motion"
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ""
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
 
 const CARDS = [
   {
     img: `${basePath}/tlao-plan-logo.png`,
-    title: "TLÁO Plan",
-    description: "Execution Planning",
-    section: "agents",
+    title: 'TLÁO Plan',
+    description: 'Execution Planning',
+    section: 'agents',
   },
   {
     img: `${basePath}/tlao-grant-logo.png`,
-    title: "TLÁO Grant",
-    description: "Grant Discovery",
-    section: "agents",
+    title: 'TLÁO Grant',
+    description: 'Grant Discovery',
+    section: 'agents',
   },
   {
     img: `${basePath}/tlao-plan-logo.png`,
-    title: "TLÁO Plan",
-    description: "Execution Planning",
-    section: "agents",
+    title: 'TLÁO Plan',
+    description: 'Execution Planning',
+    section: 'agents',
   },
   {
     img: `${basePath}/tlao-grant-logo.png`,
-    title: "TLÁO Grant",
-    description: "Grant Discovery",
-    section: "agents",
+    title: 'TLÁO Grant',
+    description: 'Grant Discovery',
+    section: 'agents',
   },
   {
     img: `${basePath}/tlao-plan-logo.png`,
-    title: "TLÁO Plan",
-    description: "Execution Planning",
-    section: "agents",
+    title: 'TLÁO Plan',
+    description: 'Execution Planning',
+    section: 'agents',
   },
   {
     img: `${basePath}/tlao-grant-logo.png`,
-    title: "TLÁO Grant",
-    description: "Grant Discovery",
-    section: "agents",
+    title: 'TLÁO Grant',
+    description: 'Grant Discovery',
+    section: 'agents',
   },
 ]
 
@@ -51,11 +51,11 @@ function ThreeDPhotoCarousel() {
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 640px)")
+    const mq = window.matchMedia('(max-width: 640px)')
     setIsMobile(mq.matches)
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches)
-    mq.addEventListener("change", handler)
-    return () => mq.removeEventListener("change", handler)
+    mq.addEventListener('change', handler)
+    return () => mq.removeEventListener('change', handler)
   }, [])
 
   const faceCount = CARDS.length
@@ -73,8 +73,8 @@ function ThreeDPhotoCarousel() {
     // Rotate the ring so the clicked card faces front
     if (ringRef.current) {
       const angle = -(index * (360 / faceCount))
-      ringRef.current.style.transition = "transform 0.8s cubic-bezier(0.32,0.72,0,1)"
-      ringRef.current.style.animationPlayState = "paused"
+      ringRef.current.style.transition = 'transform 0.8s cubic-bezier(0.32,0.72,0,1)'
+      ringRef.current.style.animationPlayState = 'paused'
       ringRef.current.style.transform = `rotateY(${angle}deg)`
 
       setTimeout(() => setExpandedCard(index), 800)
@@ -82,14 +82,14 @@ function ThreeDPhotoCarousel() {
   }
 
   const handleLearnMore = (section: string) => {
-    document.getElementById(section)?.scrollIntoView({ behavior: "smooth" })
+    document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' })
     setTimeout(() => {
       setExpandedCard(null)
       setIsPaused(false)
       if (ringRef.current) {
-        ringRef.current.style.transition = ""
-        ringRef.current.style.transform = ""
-        ringRef.current.style.animationPlayState = "running"
+        ringRef.current.style.transition = ''
+        ringRef.current.style.transform = ''
+        ringRef.current.style.animationPlayState = 'running'
       }
     }, 400)
   }
@@ -98,9 +98,9 @@ function ThreeDPhotoCarousel() {
     setExpandedCard(null)
     setIsPaused(false)
     if (ringRef.current) {
-      ringRef.current.style.transition = ""
-      ringRef.current.style.transform = ""
-      ringRef.current.style.animationPlayState = "running"
+      ringRef.current.style.transition = ''
+      ringRef.current.style.transform = ''
+      ringRef.current.style.animationPlayState = 'running'
     }
   }
 
@@ -117,24 +117,24 @@ function ThreeDPhotoCarousel() {
       <div
         className="relative mx-auto overflow-visible"
         style={{
-          perspective: "1200px",
+          perspective: '1200px',
           height: `${faceWidth + 60}px`,
-          width: "100%",
+          width: '100%',
         }}
       >
         <div
           ref={ringRef}
           style={{
-            position: "absolute",
-            left: "50%",
-            top: "50%",
+            position: 'absolute',
+            left: '50%',
+            top: '50%',
             width: `${faceWidth}px`,
             height: `${faceWidth}px`,
             marginLeft: `${-faceWidth / 2}px`,
             marginTop: `${-faceWidth / 2}px`,
-            transformStyle: "preserve-3d",
-            animation: "carousel-spin 30s linear infinite",
-            animationPlayState: isPaused ? "paused" : "running",
+            transformStyle: 'preserve-3d',
+            animation: 'carousel-spin 30s linear infinite',
+            animationPlayState: isPaused ? 'paused' : 'running',
           }}
         >
           {CARDS.map((card, i) => {
@@ -148,9 +148,10 @@ function ThreeDPhotoCarousel() {
                   width: `${faceWidth}px`,
                   height: `${faceWidth}px`,
                   transform: `rotateY(${angle}deg) translateZ(${radius}px)`,
-                  backfaceVisibility: "hidden",
+                  backfaceVisibility: 'hidden',
                 }}
               >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={card.img}
                   alt={card.title}
@@ -173,12 +174,8 @@ function ThreeDPhotoCarousel() {
             transition={{ duration: 0.3 }}
             className="mt-6 flex flex-col items-center gap-3 z-50"
           >
-            <h3 className="text-2xl font-semibold text-foreground">
-              {CARDS[expandedCard].title}
-            </h3>
-            <p className="text-muted-foreground">
-              {CARDS[expandedCard].description}
-            </p>
+            <h3 className="text-2xl font-semibold text-foreground">{CARDS[expandedCard].title}</h3>
+            <p className="text-muted-foreground">{CARDS[expandedCard].description}</p>
             <div className="flex gap-4 mt-2">
               <button
                 onClick={() => handleLearnMore(CARDS[expandedCard!].section)}
@@ -191,7 +188,12 @@ function ThreeDPhotoCarousel() {
                   stroke="currentColor"
                   viewBox="0 0 24 24"
                 >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 9l-7 7-7-7"
+                  />
                 </svg>
               </button>
               <button

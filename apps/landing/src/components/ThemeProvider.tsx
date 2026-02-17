@@ -20,12 +20,12 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Only run on client
     setMounted(true)
-    
+
     // Check localStorage for saved preference, default to 'system'
     const stored = localStorage.getItem('theme') as Theme | null
     const initialTheme = stored || 'system'
     setThemeState(initialTheme)
-    
+
     // Apply theme on mount
     const html = document.documentElement
     let effectiveTheme: 'light' | 'dark'
@@ -43,7 +43,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } else {
       html.classList.remove('dark')
     }
-    
+
     // Save system as default if nothing was stored
     if (!stored) {
       localStorage.setItem('theme', 'system')
@@ -92,7 +92,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
     mediaQuery.addEventListener('change', handleChange)
     return () => mediaQuery.removeEventListener('change', handleChange)
-  }, [mounted, theme])
+  }, [mounted, theme, applyTheme])
 
   // Always render with provider to avoid hydration mismatch
   return (
