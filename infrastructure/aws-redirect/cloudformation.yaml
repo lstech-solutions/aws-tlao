@@ -1,11 +1,11 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'AWS Infrastructure for tláo.com redirect to GitHub Pages'
+Description: 'Updated AWS Infrastructure for tláo.com redirect to GitHub Pages'
 
 Parameters:
   DomainName:
     Type: String
-    Default: 'tláo.com'
-    Description: 'The custom domain name for the redirect'
+    Default: 'xn--tlo-fla.com'
+    Description: 'The Punycode domain name for the redirect'
   TargetDomain:
     Type: String
     Default: 'lstech-solutions.github.io'
@@ -20,45 +20,37 @@ Parameters:
     Default: ''
 
 Resources:
-  # S3 Bucket for Redirect
+  # S3 Bucket for Redirect - ALLOW public access for website
   RedirectBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Ref DomainName
+      BucketName: !Sub 'tlao-redirect-${AWS::AccountId}-final'
       WebsiteConfiguration:
         RedirectAllRequestsTo:
           HostName: !Ref TargetDomain
           Protocol: https
+      # ALLOW public access for website hosting
       PublicAccessBlockConfiguration:
-        BlockPublicAcls: true
-        BlockPublicPolicy: true
-        IgnorePublicAcls: true
-        RestrictPublicBuckets: true
-      BucketEncryption:
-        ServerSideEncryptionConfiguration:
-          - ServerSideEncryptionByDefault:
-              SSEAlgorithm: AES256
+        BlockPublicAcls: false
+        IgnorePublicAcls: false
+        BlockPublicPolicy: false
+        RestrictPublicBuckets: false
+      # Add bucket policy to allow public read access for website
+      AccessControl: PublicRead
 
-  # S3 Bucket Policy (for CloudFront access)
+  # S3 Bucket Policy to allow public access for website
   RedirectBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
       Bucket: !Ref RedirectBucket
       PolicyDocument:
+        Version: '2012-10-17'
         Statement:
-          - Sid: AllowCloudFrontOAI
+          - Sid: PublicReadGetObject
             Effect: Allow
-            Principal:
-              CanonicalUser: !GetAtt CloudFrontOAI.S3CanonicalUserId
-            Action: s3:GetObject
+            Principal: '*'
+            Action: 's3:GetObject'
             Resource: !Sub '${RedirectBucket.Arn}/*'
-
-  # CloudFront Origin Access Identity
-  CloudFrontOAI:
-    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
-    Properties:
-      CloudFrontOriginAccessIdentityConfig:
-        Comment: !Sub 'OAI for ${DomainName} redirect'
 
   # CloudFront Distribution
   CloudFrontDistribution:
@@ -69,61 +61,90 @@ Resources:
         Comment: !Sub 'Redirect ${DomainName} to ${TargetDomain}${TargetPath}'
         Aliases:
           - !Ref DomainName
-          - !Sub 'www.${DomainName}'
         DefaultRootObject: index.html
         Origins:
-          - Id: !Ref RedirectBucket
-            DomainName: !Sub '${RedirectBucket}.s3-website-${AWS::Region}.amazonaws.com'
-            S3OriginConfig:
-              OriginAccessIdentity: !Sub 'origin-access-identity/cloudfront/${CloudFrontOAI}'
+          - Id: S3Redirect
+            DomainName: !GetAtt RedirectBucket.RegionalDomainName
+            CustomOriginConfig:
+              HTTPPort: 80
+              HTTPSPort: 443
+              OriginProtocolPolicy: http-only
         DefaultCacheBehavior:
-          TargetOriginId: !Ref RedirectBucket
+          TargetOriginId: S3Redirect
           ViewerProtocolPolicy: redirect-to-https
           AllowedMethods:
             - GET
             - HEAD
-          Compress: true
-          CachePolicyId: '658327ea-f89d-4fab-a63d-7e88639e58f6' # Managed CachingOptimized
+          CachedMethods:
+            - GET
+            - HEAD
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+          MinTTL: 0
+          DefaultTTL: 86400
+          MaxTTL: 31536000
         PriceClass: PriceClass_100
         ViewerCertificate:
           AcmCertificateArn: !Ref CertificateArn
+          SslSupportMethod: sni-only
           MinimumProtocolVersion: TLSv1.2_2021
-          SSLSupportMethod: sni-only
 
-  # Route 53 Record Sets
+  # Route 53 A record pointing to CloudFront
   DNSRecord:
-    Type: AWS::Route53::RecordSetGroup
+    Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneName: !Sub '${DomainName}.'
-      RecordSets:
-        - Name: !Ref DomainName
-          Type: A
-          AliasTarget:
-            DNSName: !GetAtt CloudFrontDistribution.DomainName
-            HostedZoneId: Z2FDTNDATAQYW2
-        - Name: !Sub 'www.${DomainName}'
-          Type: CNAME
-          TTL: 300
-          SetIdentifier: www
-          Weight: 100
-          ResourceRecords:
-            - !Ref DomainName
+      Name: !Ref DomainName
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        HostedZoneId: Z2FDTNDATAQYW2
+        EvaluateTargetHealth: false
+
+  # Route 53 CNAME record for www subdomain
+  WWWDNSRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: !Sub '${DomainName}.'
+      Name: !Sub 'www.${DomainName}'
+      Type: CNAME
+      TTL: 300
+      ResourceRecords:
+        - !Ref DomainName
 
 Outputs:
   BucketName:
     Description: 'S3 Bucket Name'
     Value: !Ref RedirectBucket
-    Export:
-      Name: !Sub '${AWS::StackName}-BucketName'
 
   DistributionId:
     Description: 'CloudFront Distribution ID'
     Value: !Ref CloudFrontDistribution
-    Export:
-      Name: !Sub '${AWS::StackName}-DistributionId'
 
   DistributionDomainName:
     Description: 'CloudFront Distribution Domain Name'
     Value: !GetAtt CloudFrontDistribution.DomainName
-    Export:
-      Name: !Sub '${AWS::StackName}-DistributionDomainName'
+
+  CloudFrontURL:
+    Description: 'CloudFront URL for testing'
+    Value: !Sub 'https://${CloudFrontDistribution.DomainName}'
+
+  DomainURL:
+    Description: 'Domain URL after DNS propagation'
+    Value: !Sub 'https://${DomainName}'
+
+  Instructions:
+    Description: 'Deployment Complete'
+    Value: !Sub |
+      AWS Infrastructure deployed successfully!
+
+      S3 bucket configured for public website access.
+      CloudFront distribution updated.
+
+      Next steps:
+      1. Wait for CloudFront deployment (15-30 minutes)
+      2. Test the redirect: https://${CloudFrontDistribution.DomainName}
+      3. After DNS propagation: https://${DomainName}
+      4. The domain will redirect to: https://${TargetDomain}${TargetPath}

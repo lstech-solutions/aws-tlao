@@ -61,3 +61,5 @@ temp/
 # AWS CLI installation files
 aws/
 awscliv2.zip
+# TypeScript build info
+*.tsbuildinfo
