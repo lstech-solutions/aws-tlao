@@ -4,7 +4,7 @@ import './globals.css'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { BackToTopButtonWrapper } from '@/components/ScrollControls'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ['latin', 'greek'] })
 
 export const metadata: Metadata = {
   title: 'TLÁO - Tactical Layer for Action & Outcomes',
