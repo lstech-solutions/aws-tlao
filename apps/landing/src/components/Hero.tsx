@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { InfiniteGrid } from './InfiniteGrid'
 import { ScrollIndicator } from './ScrollControls'
+import { ThreeDPhotoCarousel } from './ui/3d-carousel'
 
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false)
@@ -10,10 +11,6 @@ export default function Hero() {
   useEffect(() => {
     setIsVisible(true)
   }, [])
-
-  const scrollToAgents = () => {
-    document.getElementById('agents')?.scrollIntoView({ behavior: 'smooth' })
-  }
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -52,49 +49,9 @@ export default function Hero() {
             </span>
           </p>
 
-          {/* Agent cards - minimalistic */}
-          <div className="flex flex-col sm:flex-row justify-center gap-6 max-w-2xl mx-auto">
-            <button 
-              onClick={scrollToAgents}
-              className="group relative bg-card/40 backdrop-blur-xl rounded-3xl px-10 py-8 border border-primary/30 hover:border-primary transition-all duration-500 hover:scale-105 hover:shadow-2xl overflow-hidden"
-            >
-              {/* Animated background gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              <div className="relative">
-                {/* Logo */}
-                <div className="w-48 h-48 mx-auto mb-6 relative">
-                  <img 
-                    src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/tlao-plan-logo.png`}
-                    alt="TLÁO Plan"
-                    className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
-                
-                <span className="text-lg text-muted-foreground">Execution Planning</span>
-              </div>
-            </button>
-
-            <button 
-              onClick={scrollToAgents}
-              className="group relative bg-card/40 backdrop-blur-xl rounded-3xl px-10 py-8 border border-accent/30 hover:border-accent transition-all duration-500 hover:scale-105 hover:shadow-2xl overflow-hidden"
-            >
-              {/* Animated background gradient */}
-              <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-accent/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              <div className="relative">
-                {/* Logo */}
-                <div className="w-48 h-48 mx-auto mb-6 relative">
-                  <img 
-                    src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/tlao-grant-logo.png`}
-                    alt="TLÁO Grant"
-                    className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
-                  />
-                </div>
-                
-                <span className="text-lg text-muted-foreground">Grant Discovery</span>
-              </div>
-            </button>
+          {/* 3D Carousel Gallery */}
+          <div className="max-w-4xl mx-auto">
+            <ThreeDPhotoCarousel />
           </div>
         </div>
       </div>
