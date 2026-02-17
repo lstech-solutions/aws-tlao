@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     description:
       'Inspired by the Greek τλάω (to bear) and Atlas (the bearer). AI-powered execution planning and grant discovery.',
     type: 'website',
-    url: 'https://tlao.dev',
+    url: 'https://tlao.com',
   },
   twitter: {
     card: 'summary_large_image',
