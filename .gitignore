@@ -8,6 +8,7 @@ yarn.lock
 dist/
 build/
 .next/
+out/
 .turbo/
 *.js.map
 
