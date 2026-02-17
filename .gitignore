@@ -58,3 +58,6 @@ infrastructure/**/config.local.yaml
 # Temporary files
 .tmp/
 temp/
+# AWS CLI installation files
+aws/
+awscliv2.zip
