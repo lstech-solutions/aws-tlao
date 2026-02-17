@@ -199,7 +199,7 @@ export default function Footer() {
             <ul className="space-y-3">
               <li>
                 <a
-                  href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/docs`}
+                  href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/documentation`}
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 group"
                 >
                   <div className="w-1 h-1 rounded-full bg-foreground opacity-0 group-hover:opacity-100 transition-opacity" />

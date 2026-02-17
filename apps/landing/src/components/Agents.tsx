@@ -107,7 +107,7 @@ export default function Agents() {
 
               <div className="flex items-center gap-2 text-primary font-medium group-hover:gap-4 transition-all">
                 <a
-                  href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/docs/agents/tlao-plan`}
+                  href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/documentation/agents/tlao-plan`}
                   className="flex items-center gap-2"
                 >
                   Learn more <ArrowRight className="w-5 h-5" />
@@ -175,7 +175,7 @@ export default function Agents() {
 
               <div className="flex items-center gap-2 text-accent font-medium group-hover:gap-4 transition-all">
                 <a
-                  href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/docs/agents/tlao-grant`}
+                  href={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/documentation/agents/tlao-grant`}
                   className="flex items-center gap-2"
                 >
                   Learn more <ArrowRight className="w-5 h-5" />
