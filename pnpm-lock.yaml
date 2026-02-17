@@ -13,8 +13,8 @@ importers:
         version: 12.23.26(react-dom@19.2.4)(react@19.2.4)
     devDependencies:
       '@edcalderon/versioning':
-        specifier: ^1.4.1
-        version: 1.4.1
+        specifier: ^1.4.5
+        version: 1.4.5
       eslint:
         specifier: ^8.57.1
         version: 8.57.1
@@ -4251,8 +4251,8 @@ packages:
       - webpack-cli
     dev: false
 
-  /@edcalderon/versioning@1.4.1:
-    resolution: {integrity: sha512-Am8y9UNvu2UxYqtGGKzmGqo1a8Dw8hIyk6PX5+buh9WcNWCaVsvjQruVtio3TIvOCX6qiazX9M82ifNfWIB2CQ==}
+  /@edcalderon/versioning@1.4.5:
+    resolution: {integrity: sha512-4Z+BdWSZoLJsTYGEadPRYXUzEfRbsJ3wEaLs5FHzQLuMgUSFzuCMVXQb05cOKXdHd8PQHEzYLil7fIAqk6XrGg==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dependencies:
