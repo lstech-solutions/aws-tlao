@@ -48,7 +48,7 @@ jobs:
   deploy:
     environment:
       name: github-pages-docs
-      url: https://docs.tlao.com
+      url: https://docs.tláo.com
     runs-on: ubuntu-latest
     needs: build
 

@@ -1,10 +1,9 @@
-name: Deploy Landing Page
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches: [main]
-    paths: ['apps/landing/**']
-    tags: ['v*']
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -40,15 +39,25 @@ jobs:
       - name: Build landing page
         run: pnpm run build --filter=@ai-agent-platform/landing
 
+      - name: Build documentation site
+        run: pnpm run build --filter=@tlao/docs
+
+      - name: Combine builds
+        run: |
+          mkdir -p combined-build
+          cp -r apps/landing/out/* combined-build/
+          mkdir -p combined-build/documentation
+          cp -r apps/docs/build/* combined-build/documentation/
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'apps/landing/out'
+          path: 'combined-build'
 
   deploy:
     environment:
       name: github-pages
-      url: https://tlao.com
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
 
