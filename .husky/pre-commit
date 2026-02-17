@@ -12,4 +12,11 @@ pnpm exec lint-staged || {
   exit 1
 }
 
+# Run secrets check
+echo "🔒 Checking for secrets..."
+pnpm exec versioning check-secrets || {
+  echo "❌ Secrets check failed!"
+  exit 1
+}
+
 echo "✅ Pre-commit checks passed!"
