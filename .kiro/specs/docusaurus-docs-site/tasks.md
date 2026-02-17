@@ -8,7 +8,7 @@ The implementation follows a logical progression: setup and configuration, core 
 
 ## Tasks
 
-- [-] 1. Initialize Docusaurus project and configure monorepo integration
+- [x] 1. Initialize Docusaurus project and configure monorepo integration
   - Create apps/docs directory in the monorepo
   - Initialize Docusaurus 3.x using `npx create-docusaurus@latest`
   - Configure package.json with TypeScript dependencies
@@ -17,13 +17,13 @@ The implementation follows a logical progression: setup and configuration, core 
   - Configure tsconfig.json for TypeScript support
   - _Requirements: 1.1, 1.3, 1.5_
 
-- [-] 1.1 Write unit tests for Docusaurus configuration
+- [x] 1.1 Write unit tests for Docusaurus configuration
   - Test that package.json includes required Docusaurus dependencies
   - Test that Docusaurus version is >= 3.0.0
   - Test that url is set to 'https://docs.tláo.com'
   - _Requirements: 1.1, 1.3, 1.5_
 
-- [~] 2. Configure Docusaurus for TLÁO branding and domain
+- [x] 2. Configure Docusaurus for TLÁO branding and domain
   - Create docusaurus.config.js with TLÁO title, tagline, and URL
   - Configure navbar with TLÁO logo and navigation items
   - Create src/css/custom.css with TLÁO brand colors
@@ -31,13 +31,13 @@ The implementation follows a logical progression: setup and configuration, core 
   - Configure footer with appropriate links
   - _Requirements: 1.5, 2.1, 11.2, 11.5_
 
-- [~] 2.1 Write unit tests for branding configuration
+- [x] 2.1 Write unit tests for branding configuration
   - Test that custom.css contains TLÁO brand color variables
   - Test that navbar includes logo configuration
   - Test that domain is correctly configured
   - _Requirements: 1.5, 11.2, 11.5_
 
-- [~] 3. Create core concept documentation pages
+- [x] 3. Create core concept documentation pages
   - Create docs/intro.md as the landing page
   - Create docs/concepts/why-layer.md explaining the "Layer" concept
   - Create docs/concepts/why-tactical.md explaining "Tactical"
@@ -45,7 +45,7 @@ The implementation follows a logical progression: setup and configuration, core 
   - Include examples of unstructured inputs and execution systems
   - _Requirements: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6_
 
-- [~] 3.1 Write unit tests for core concept pages
+- [x] 3.1 Write unit tests for core concept pages
   - Test that all concept markdown files exist
   - Test that intro.md exists
   - _Requirements: 3.1_
@@ -61,7 +61,7 @@ The implementation follows a logical progression: setup and configuration, core 
   - Include cross-links between related layers in each document
   - _Requirements: 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7_
 
-- [~] 4.1 Write unit tests for architecture documentation
+- [~]\* 4.1 Write unit tests for architecture documentation
   - Test that all 6 layer documentation files exist (layer-0 through layer-5)
   - Test that overview.md exists
   - _Requirements: 4.1_
@@ -166,7 +166,7 @@ The implementation follows a logical progression: setup and configuration, core 
   - Create i18n/es and i18n/pt directory structures
   - _Requirements: 7.1, 7.2, 7.3, 7.5, 7.6_
 
-- [~] 11.1 Write unit tests for i18n configuration
+- [~]\* 11.1 Write unit tests for i18n configuration
   - Test that i18n config includes all three locales (en, es, pt)
   - Test that defaultLocale is 'en'
   - Test that navbar includes localeDropdown
@@ -180,7 +180,7 @@ The implementation follows a logical progression: setup and configuration, core 
   - Translate getting-started guide to Spanish
   - _Requirements: 7.2_
 
-- [~] 13. Create Portuguese translations
+- [~]\* 13. Create Portuguese translations
   - Run `pnpm write-translations --locale pt` to generate translation files
   - Translate core concept pages to Portuguese
   - Translate architecture overview to Portuguese
@@ -263,26 +263,26 @@ The implementation follows a logical progression: setup and configuration, core 
 - [~] 18. Create DNS and deployment documentation
   - Create docs/deployment/dns-configuration.md with DNS setup instructions
   - Document IDN (Internationalized Domain Name) requirements for "tláo.com"
-  - Create docs/deployment/vercel-setup.md with Vercel deployment guide
+  - Create docs/deployment/aws-setup.md with aws deployment guide
   - Document HTTPS configuration
   - Include troubleshooting section
   - _Requirements: 2.3_
 
-- [~] 18.1 Write unit test for deployment documentation
+- [~]\* 18.1 Write unit test for deployment documentation
   - Test that dns-configuration.md exists
-  - Test that vercel-setup.md exists
+  - Test that aws-setup.md exists
   - _Requirements: 2.3_
 
 - [~] 19. Configure CI/CD pipeline
   - Create .github/workflows/docs.yml
   - Add jobs for lint, type-check, test, build
   - Add system change detector to CI pipeline
-  - Configure Vercel deployment on main branch
+  - Configure aws deployment on main branch
   - Set up required secrets (VERCEL_TOKEN, etc.)
   - _Requirements: 8.4_
 
-- [~] 20. Create Vercel deployment configuration
-  - Create vercel.json in apps/docs with build configuration
+- [~] 20. Create aws deployment configuration
+  - Create aws.json in apps/docs with build configuration
   - Configure build command and output directory
   - Set up custom domain (docs.tláo.com)
   - Configure security headers

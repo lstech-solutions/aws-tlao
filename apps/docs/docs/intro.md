@@ -3,46 +3,44 @@ sidebar_position: 1
 slug: /
 ---
 
-# Tutorial Intro
+# Welcome to TLÁO
 
-Let's discover **Docusaurus in less than 5 minutes**.
+**TLÁO** (Tactical Layer for Action & Outcomes) is a middleware system that sits between the chaos of unstructured reality and the precision of execution systems.
 
-## Getting Started
+## What is TLÁO?
 
-Get started by **creating a new site**.
+TLÁO transforms messy, real-world inputs into concrete, actionable outcomes. It bridges the gap between:
 
-Or **try Docusaurus immediately** with **[docusaurus.new](https://docusaurus.new)**.
+- **Unstructured Reality**: Emails, PDFs, meeting notes, invoices, transcripts, grant pages
+- **Execution Systems**: GitHub issues, calendars, Notion/Jira, proposal documents, budgets, deployments
 
-### What you'll need
+## Why TLÁO?
 
-- [Node.js](https://nodejs.org/en/download/) version 20.0 or above:
-  - When installing Node.js, you are recommended to check all checkboxes related to dependencies.
+In modern work environments, information comes from everywhere in every format. TLÁO provides a unified layer that:
 
-## Generate a new site
+1. **Ingests** diverse inputs without requiring standardization
+2. **Understands** context and extracts structured information
+3. **Reasons** tactically about what needs to happen next
+4. **Executes** by interfacing with your existing tools
+5. **Orchestrates** the entire process with full audit trails
 
-Generate a new Docusaurus site using the **classic template**.
+## Core Concepts
 
-The classic template will automatically be added to your project after you run the command:
+To understand TLÁO, you need to grasp three fundamental concepts:
 
-```bash
-npm init docusaurus@latest my-website classic
-```
+- **[Why "Layer"?](concepts/why-layer)** - TLÁO sits between unstructured inputs and structured outputs
+- **[Why "Tactical"?](concepts/why-tactical)** - Focus on short-horizon, concrete, actionable steps
+- **[Action & Outcomes](concepts/action-outcomes)** - Tasks, owners, deadlines, dependencies, and results
 
-You can type this command into Command Prompt, Powershell, Terminal, or any other integrated terminal of your code editor.
+## Quick Start
 
-The command also installs all necessary dependencies you need to run Docusaurus.
+Ready to dive in? Start with:
 
-## Start your site
+1. **[Core Concepts](concepts/why-layer)** - Understand the fundamentals
 
-Run the development server:
+## TLÁO Agents
 
-```bash
-cd my-website
-npm run start
-```
+TLÁO includes specialized agents for common workflows:
 
-The `cd` command changes the directory you're working with. In order to work with your newly created Docusaurus site, you'll need to navigate the terminal there.
-
-The `npm run start` command builds your website locally and serves it through a development server, ready for you to view at http://localhost:3000/.
-
-Open `docs/intro.md` (this page) and edit some lines: the site **reloads automatically** and displays your changes.
+- **TLÁO Plan Agent**: Turns chaos into next actions, priorities, and blockers
+- **TLÁO Grant Agent**: Turns uncertainty into eligibility checks and proposal drafts

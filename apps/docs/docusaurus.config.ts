@@ -71,7 +71,7 @@ const config: Config = {
           type: 'docSidebar',
           sidebarId: 'tutorialSidebar',
           position: 'left',
-          label: 'Docs',
+          label: 'Documentation',
         },
         {
           href: 'https://github.com/tlao/tlao-docs',
@@ -84,7 +84,7 @@ const config: Config = {
       style: 'dark',
       links: [
         {
-          title: 'Docs',
+          title: 'Documentation',
           items: [
             {
               label: 'Introduction',
@@ -93,11 +93,19 @@ const config: Config = {
           ],
         },
         {
-          title: 'More',
+          title: 'Community',
           items: [
             {
               label: 'GitHub',
               href: 'https://github.com/tlao/tlao-docs',
+            },
+            {
+              label: 'Issues',
+              href: 'https://github.com/tlao/tlao-docs/issues',
+            },
+            {
+              label: 'Discussions',
+              href: 'https://github.com/tlao/tlao-docs/discussions',
             },
           ],
         },
