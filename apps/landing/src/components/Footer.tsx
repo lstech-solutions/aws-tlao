@@ -1,16 +1,26 @@
 'use client'
 
 import { Bot, Globe, Github, ExternalLink, Mail, Twitter } from 'lucide-react'
-import { getVersion } from '@ai-agent-platform/versioning'
 import { ThemeToggleWrapper } from './ThemeToggle'
 import { useEffect } from 'react'
 
-let versionInfo = 'v1.0.0'
-try {
-  versionInfo = getVersion()
-} catch (error) {
-  console.warn('Failed to load version info:', error)
+// Simple version utility - reads from package.json or uses environment variable
+const getVersion = (): string => {
+  try {
+    // Try to get from environment variable (set in CI/CD)
+    if (process.env.NEXT_PUBLIC_APP_VERSION) {
+      return `v${process.env.NEXT_PUBLIC_APP_VERSION}`
+    }
+
+    // Fallback to hardcoded version
+    return 'v1.4.1'
+  } catch (error) {
+    console.warn('Failed to get version:', error)
+    return 'v1.4.1'
+  }
 }
+
+const versionInfo = getVersion()
 
 // Unicorn Studio animation component as background
 function UnicornStudioBackground() {

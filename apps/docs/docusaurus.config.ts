@@ -15,10 +15,12 @@ const config: Config = {
   },
 
   // Set the production url of your site here
-  url: 'https://docs.tláo.com',
+  // Use environment variable for flexibility (GitHub Pages vs custom domain)
+  url: process.env.SITE_URL || 'https://docs.tláo.com',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/aws-tlao/',
+  // For custom domain, it can be '/'
+  baseUrl: process.env.BASE_URL || '/aws-tlao/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -88,7 +90,7 @@ const config: Config = {
           items: [
             {
               label: 'Introduction',
-              href: '/aws-tlao/',
+              href: '/',
             },
           ],
         },
