@@ -48,7 +48,7 @@ jobs:
   deploy:
     environment:
       name: github-pages-docs
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: https://docs.tlao.com
     runs-on: ubuntu-latest
     needs: build
 
