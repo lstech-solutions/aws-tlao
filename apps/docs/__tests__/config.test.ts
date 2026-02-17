@@ -39,7 +39,7 @@ describe('Docusaurus Configuration', () => {
       const configContent = fs.readFileSync(configPath, 'utf-8')
 
       // Check if the URL is set correctly
-      expect(configContent).toContain("url: 'https://docs.tláo.com'")
+      expect(configContent).toContain("url: process.env.SITE_URL || 'https://docs.tláo.com'")
     })
 
     it('should have TLÁO title and tagline', async () => {

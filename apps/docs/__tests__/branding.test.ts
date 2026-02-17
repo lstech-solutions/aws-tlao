@@ -19,7 +19,7 @@ describe('Branding Configuration', () => {
       const configPath = path.join(__dirname, '..', 'docusaurus.config.ts')
       const configContent = fs.readFileSync(configPath, 'utf-8')
 
-      expect(configContent).toContain("url: 'https://docs.tláo.com'")
+      expect(configContent).toContain("url: process.env.SITE_URL || 'https://docs.tláo.com'")
     })
 
     it('should have baseUrl set to root', () => {
@@ -27,7 +27,7 @@ describe('Branding Configuration', () => {
       const configPath = path.join(__dirname, '..', 'docusaurus.config.ts')
       const configContent = fs.readFileSync(configPath, 'utf-8')
 
-      expect(configContent).toContain("baseUrl: '/'")
+      expect(configContent).toContain("baseUrl: process.env.BASE_URL || '/aws-tlao/'")
     })
   })
 

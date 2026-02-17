@@ -86,7 +86,7 @@ This implementation plan breaks down the creation of custom agents documentation
     - Add audit and logging information
     - Add "Next Steps" links
     - _Requirements: 2.1, 2.2, 2.3, 2.4, 4.1, 4.2, 4.3, 4.4_
-  - [~] 6.2 Write unit tests for tool access page
+  - [x] 6.2 Write unit tests for tool access page
     - Test file exists and has valid frontmatter
     - Test built-in tools are documented
     - Test MCP integration is documented
@@ -95,7 +95,7 @@ This implementation plan breaks down the creation of custom agents documentation
     - Test code examples exist
     - _Requirements: 2.1, 2.2, 4.1, 4.2, 4.3_
 
-- [ ] 7. Create examples page with real-world configurations
+- [-] 7. Create examples page with real-world configurations
   - [~] 7.1 Write `examples.md` with three complete examples
     - Add frontmatter with `sidebar_position: 5`
     - Write introduction explaining the examples
