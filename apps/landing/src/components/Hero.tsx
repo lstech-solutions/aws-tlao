@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { ArrowRight, Sparkles } from 'lucide-react'
 import { InfiniteGrid } from './InfiniteGrid'
 import { ScrollIndicator } from './ScrollControls'
 
@@ -11,10 +10,6 @@ export default function Hero() {
   useEffect(() => {
     setIsVisible(true)
   }, [])
-
-  const scrollToDemo = () => {
-    document.getElementById('demo')?.scrollIntoView({ behavior: 'smooth' })
-  }
 
   const scrollToAgents = () => {
     document.getElementById('agents')?.scrollIntoView({ behavior: 'smooth' })
@@ -67,18 +62,16 @@ export default function Hero() {
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               
               <div className="relative">
-                {/* Minimalistic icon */}
-                <div className="w-16 h-16 mx-auto mb-4 relative">
-                  <div className="absolute inset-0 bg-primary/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500" />
-                  <div className="relative w-full h-full bg-gradient-to-br from-primary to-primary/80 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                    <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-                    </svg>
-                  </div>
+                {/* Logo */}
+                <div className="w-48 h-48 mx-auto mb-6 relative">
+                  <img 
+                    src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/tlao-plan-logo.png`}
+                    alt="TLÁO Plan"
+                    className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
+                  />
                 </div>
                 
-                <span className="font-bold text-2xl block mb-2">TLÁO Plan</span>
-                <span className="text-sm text-muted-foreground">Execution Planning</span>
+                <span className="text-lg text-muted-foreground">Execution Planning</span>
               </div>
             </button>
 
@@ -90,18 +83,16 @@ export default function Hero() {
               <div className="absolute inset-0 bg-gradient-to-br from-accent/5 to-accent/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               
               <div className="relative">
-                {/* Minimalistic icon */}
-                <div className="w-16 h-16 mx-auto mb-4 relative">
-                  <div className="absolute inset-0 bg-accent/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500" />
-                  <div className="relative w-full h-full bg-gradient-to-br from-accent to-accent/80 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform duration-500">
-                    <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                    </svg>
-                  </div>
+                {/* Logo */}
+                <div className="w-48 h-48 mx-auto mb-6 relative">
+                  <img 
+                    src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/tlao-grant-logo.png`}
+                    alt="TLÁO Grant"
+                    className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500"
+                  />
                 </div>
                 
-                <span className="font-bold text-2xl block mb-2">TLÁO Grant</span>
-                <span className="text-sm text-muted-foreground">Grant Discovery</span>
+                <span className="text-lg text-muted-foreground">Grant Discovery</span>
               </div>
             </button>
           </div>

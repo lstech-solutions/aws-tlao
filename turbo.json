@@ -3,7 +3,7 @@
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**", "dist/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**", ".docusaurus/**"]
     },
     "dev": {
       "cache": false,
@@ -17,6 +17,14 @@
     },
     "type-check": {
       "dependsOn": ["^build"]
+    },
+    "docs#build": {
+      "outputs": ["build/**", ".docusaurus/**"],
+      "dependsOn": ["^build"]
+    },
+    "docs#dev": {
+      "cache": false,
+      "persistent": true
     }
   }
 }
