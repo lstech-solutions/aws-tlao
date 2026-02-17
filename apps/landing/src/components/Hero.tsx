@@ -40,7 +40,7 @@ export default function Hero() {
           {/* Main heading with logo */}
           <div className="mb-4 animate-fade-in">
             <img 
-              src="/tlao-logo.png" 
+              src={`${process.env.NEXT_PUBLIC_BASE_PATH || ''}/tlao-logo.png`}
               alt="TLÁO" 
               className="w-80 md:w-[32rem] lg:w-[40rem] mx-auto"
             />

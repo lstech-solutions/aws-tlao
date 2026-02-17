@@ -94,11 +94,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return () => mediaQuery.removeEventListener('change', handleChange)
   }, [mounted, theme])
 
-  // Return children without context during SSR
-  if (!mounted) {
-    return <>{children}</>
-  }
-
+  // Always render with provider to avoid hydration mismatch
   return (
     <ThemeContext.Provider value={{ theme, setTheme, resolvedTheme }}>
       {children}
