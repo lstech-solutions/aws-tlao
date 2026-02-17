@@ -55,7 +55,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   }
 
-  const applyTheme = (newTheme: Theme) => {
+  const applyTheme = React.useCallback((newTheme: Theme) => {
     const html = document.documentElement
     let effectiveTheme: 'light' | 'dark'
 
@@ -74,7 +74,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
 
     localStorage.setItem('theme', newTheme)
-  }
+  }, [])
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme)
