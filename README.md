@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="apps/landing/public/tláo-logo.png" alt="TLÁO Logo" width="200"/>
+  <img src="apps/landing/public/tlao-logo.png" alt="TLÁO Logo" width="200"/>
 </div>
 
 # TLÁO - Autonomous Agent Platform
