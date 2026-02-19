@@ -1,10 +1,10 @@
 {
   "rootPackageJson": "package.json",
-  "packages": ["packages/versioning", "packages/backend", "apps/landing", "apps/docs"],
+  "packages": ["apps/landing", "apps/docs"],
   "changelogFile": "CHANGELOG.md",
   "conventionalCommits": true,
   "syncDependencies": true,
-  "ignorePackages": [],
+  "ignorePackages": ["packages/backend"],
   "extensions": [],
   "privateCheck": true,
   "cleanupRoot": true,
@@ -18,5 +18,20 @@
     "enforceConventionalCommits": true,
     "requireChangelog": true,
     "checkDependencySync": true
+  },
+  "branchAware": {
+    "enabled": true,
+    "mainBranch": "main",
+    "developBranch": "develop",
+    "featurePrefix": "feature/",
+    "hotfixPrefix": "hotfix/",
+    "releasePrefix": "release/",
+    "versionFormats": {
+      "main": "semantic",
+      "develop": "dev",
+      "feature": "feature",
+      "hotfix": "hotfix",
+      "release": "semantic"
+    }
   }
 }
