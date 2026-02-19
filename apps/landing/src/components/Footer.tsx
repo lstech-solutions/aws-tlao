@@ -8,16 +8,16 @@ import { TlaoXiIcon } from './icons/TlaoIcons'
 // Simple version utility - reads from environment variable or package.json
 const getVersion = (): string => {
   try {
-    // Try to get from environment variable (set in CI/CD)
+    // Try to get from environment variable (set during build)
     if (process.env.NEXT_PUBLIC_APP_VERSION) {
       return `v${process.env.NEXT_PUBLIC_APP_VERSION}`
     }
 
-    // Return the actual package version from root package.json
-    return 'v1.3.13'
+    // Fallback - this should not be used in production
+    return 'v1.3.15'
   } catch (error) {
     console.warn('Failed to get version:', error)
-    return 'v1.3.13'
+    return 'v1.3.15'
   }
 }
 
