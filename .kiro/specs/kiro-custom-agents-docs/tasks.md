@@ -96,7 +96,7 @@ This implementation plan breaks down the creation of custom agents documentation
     - _Requirements: 2.1, 2.2, 4.1, 4.2, 4.3_
 
 - [-] 7. Create examples page with real-world configurations
-  - [~] 7.1 Write `examples.md` with three complete examples
+  - [ ] 7.1 Write `examples.md` with three complete examples
     - Add frontmatter with `sidebar_position: 5`
     - Write introduction explaining the examples
     - Create AWS Infrastructure Agent example:
@@ -117,7 +117,7 @@ This implementation plan breaks down the creation of custom agents documentation
     - Add section with additional example ideas
     - Add section on customizing examples
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
-  - [~] 7.2 Write unit tests for examples page
+  - [ ] 7.2 Write unit tests for examples page
     - Test file exists and has valid frontmatter
     - Test AWS infrastructure example exists
     - Test code review example exists
@@ -127,18 +127,18 @@ This implementation plan breaks down the creation of custom agents documentation
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 5.5_
 
 - [ ] 8. Update sidebar integration
-  - [~] 8.1 Verify sidebar autogeneration includes custom agents
+  - [ ] 8.1 Verify sidebar autogeneration includes custom agents
     - Verify `_category_.json` is properly formatted
     - Build Docusaurus site locally to verify sidebar appears
     - Verify custom agents section appears in correct position
     - Verify all pages appear in sidebar in correct order
     - _Requirements: 6.2_
-  - [~] 8.2 Write integration test for sidebar
+  - [ ] 8.2 Write integration test for sidebar
     - Test that building Docusaurus succeeds
     - Test that custom agents section appears in generated sidebar
     - _Requirements: 6.2_
 
-- [~] 9. Checkpoint - Verify documentation builds and renders correctly
+- [ ] 9. Checkpoint - Verify documentation builds and renders correctly
   - Build Docusaurus site locally
   - Manually review all custom agents pages
   - Verify navigation works correctly
@@ -147,38 +147,38 @@ This implementation plan breaks down the creation of custom agents documentation
   - Ask the user if questions arise or changes are needed
 
 - [ ] 10. Write property-based tests for documentation quality
-  - [~] 10.1 Write property test for example completeness
+  - [ ] 10.1 Write property test for example completeness
     - **Property 1: Example Completeness**
     - Parse examples.md and extract all example sections
     - For each example, verify it contains both code block and explanatory text
     - Run minimum 100 iterations
     - **Validates: Requirements 5.4, 5.5**
-  - [~] 10.2 Write property test for Docusaurus convention compliance
+  - [ ] 10.2 Write property test for Docusaurus convention compliance
     - **Property 2: Docusaurus Convention Compliance**
     - List all files in custom-agents directory
     - For each file, verify .md extension, correct location, and parseable frontmatter
     - Run minimum 100 iterations
     - **Validates: Requirements 7.3**
-  - [~] 10.3 Write property test for frontmatter presence
+  - [ ] 10.3 Write property test for frontmatter presence
     - **Property 3: Frontmatter Presence**
     - List all .md files in custom-agents directory
     - For each file, parse frontmatter and verify sidebar_position exists
     - Run minimum 100 iterations
     - **Validates: Requirements 7.4**
-  - [~] 10.4 Write property test for configuration syntax validity
+  - [ ] 10.4 Write property test for configuration syntax validity
     - **Property 4: Configuration Syntax Validity**
     - Extract all code blocks with `json or `yaml tags
     - For each code block, parse as JSON/YAML and verify no errors
     - Run minimum 100 iterations
     - **Validates: Requirements 8.1**
-  - [~] 10.5 Write property test for code block syntax highlighting
+  - [ ] 10.5 Write property test for code block syntax highlighting
     - **Property 5: Code Block Syntax Highlighting**
     - Extract all code blocks from custom-agents documentation
     - For each code block, verify it has a language specifier
     - Run minimum 100 iterations
     - **Validates: Requirements 8.4**
 
-- [~] 11. Final checkpoint - Run all tests and verify build
+- [ ] 11. Final checkpoint - Run all tests and verify build
   - Run all unit tests and verify they pass
   - Run all property-based tests and verify they pass
   - Build Docusaurus site and verify no errors or warnings

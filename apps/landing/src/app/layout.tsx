@@ -9,7 +9,7 @@ const inter = Inter({ subsets: ['latin', 'greek'] })
 export const metadata: Metadata = {
   title: 'TLÁO - Tactical Layer for Action & Outcomes',
   description:
-    'TLÁO (τλάω - to bear, to endure) — AI agents that carry your operational burden. Transform messy inputs into execution plans with TLÁO Plan, discover grants with TLÁO Grant. Powered by AWS Bedrock.',
+    'TLÁO (τλάω - to bear, to endure) — AI agents and control plane that carry your operational burden. Transform messy inputs into execution plans with TLÁO Plan, discover grants with TLÁO Grant, manage emails with TLÁO Email, and orchestrate agents with TLÁO Builder. Powered by AWS Bedrock.',
   keywords: [
     'AI',
     'AWS',

@@ -2,6 +2,7 @@ import Hero from '@/components/Hero'
 import Features from '@/components/Features'
 import Architecture from '@/components/Architecture'
 import Agents from '@/components/Agents'
+import Pricing from '@/components/Pricing'
 import Competition from '@/components/Competition'
 import Demo from '@/components/Demo'
 import Footer from '@/components/Footer'
@@ -18,6 +19,7 @@ export default function Home() {
       <Features />
       <Agents />
       <Architecture />
+      <Pricing />
       <Demo />
       <Competition />
       <Footer />
