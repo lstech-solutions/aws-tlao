@@ -4,6 +4,7 @@ import { Bot, Globe, Github, ExternalLink, Mail, Twitter } from 'lucide-react'
 import { ThemeToggleWrapper } from './ThemeToggle'
 import { useEffect } from 'react'
 import { TlaoXiIcon } from './icons/TlaoIcons'
+import { createHref } from '@/lib/router'
 
 // Simple version utility - reads from environment variable or package.json
 const getVersion = (): string => {
@@ -14,10 +15,10 @@ const getVersion = (): string => {
     }
 
     // Return the actual package version from root package.json
-    return 'v1.3.11'
+    return 'v1.3.13'
   } catch (error) {
     console.warn('Failed to get version:', error)
-    return 'v1.3.11'
+    return 'v1.3.13'
   }
 }
 
@@ -220,7 +221,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="/privacy-policy"
+                  href={createHref('/privacy-policy')}
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 group"
                 >
                   <div className="w-1 h-1 rounded-full bg-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -229,7 +230,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="/terms-of-service"
+                  href={createHref('/terms-of-service')}
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 group"
                 >
                   <div className="w-1 h-1 rounded-full bg-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -238,7 +239,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href="/contact"
+                  href={createHref('/contact')}
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 group"
                 >
                   <div className="w-1 h-1 rounded-full bg-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
