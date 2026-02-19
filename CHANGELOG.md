@@ -1,3 +1,5 @@
+## [1.3.8](https://github.com/lstech-solutions/aws/compare/v1.3.7...v1.3.8) (2026-02-19)
+
 ## [1.3.7](https://github.com/lstech-solutions/aws/compare/v1.3.6...v1.3.7) (2026-02-19)
 
 ## [1.3.6](https://github.com/lstech-solutions/aws/compare/v1.3.5...v1.3.6) (2026-02-19)
@@ -142,4 +144,5 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Transcribe for audio processing
 
 ## Test Release
+
 - Test: Testing the release:patch script with automatic push
