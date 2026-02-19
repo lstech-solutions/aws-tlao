@@ -44,7 +44,7 @@ export function ScrollIndicator() {
 function BackToTopButton() {
   const [isVisible, setIsVisible] = useState(false)
   const [mounted, setMounted] = useState(false)
-  const [isNearFooter, setIsNearFooter] = useState(false)
+  const [bottomPosition, setBottomPosition] = useState('2rem')
 
   useEffect(() => {
     setMounted(true)
@@ -58,10 +58,16 @@ function BackToTopButton() {
         setIsVisible(false)
       }
 
-      // Check if near footer (within 400px from bottom)
+      // Calculate distance from footer and adjust button position
       const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight
       const distanceFromBottom = scrollableHeight - window.scrollY
-      setIsNearFooter(distanceFromBottom < 400)
+
+      // If within 200px of footer, move button up to sit at footer top
+      if (distanceFromBottom < 200) {
+        setBottomPosition(`${distanceFromBottom + 1}px`)
+      } else {
+        setBottomPosition('2rem')
+      }
     }
 
     window.addEventListener('scroll', toggleVisibility)
@@ -89,9 +95,8 @@ function BackToTopButton() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={scrollToTop}
-          className={`fixed z-40 p-3 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl hover:bg-primary/90 transition-all ${
-            isNearFooter ? 'bottom-[calc(100vh-400px)]' : 'bottom-8'
-          } right-8`}
+          style={{ bottom: bottomPosition }}
+          className="fixed z-40 p-3 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl hover:bg-primary/90 transition-all right-8"
           aria-label="Back to top"
         >
           <ChevronUp className="w-6 h-6" />
