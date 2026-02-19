@@ -44,6 +44,7 @@ export function ScrollIndicator() {
 function BackToTopButton() {
   const [isVisible, setIsVisible] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [isNearFooter, setIsNearFooter] = useState(false)
 
   useEffect(() => {
     setMounted(true)
@@ -56,6 +57,11 @@ function BackToTopButton() {
       } else {
         setIsVisible(false)
       }
+
+      // Check if near footer (within 400px from bottom)
+      const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight
+      const distanceFromBottom = scrollableHeight - window.scrollY
+      setIsNearFooter(distanceFromBottom < 400)
     }
 
     window.addEventListener('scroll', toggleVisibility)
@@ -83,7 +89,9 @@ function BackToTopButton() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           onClick={scrollToTop}
-          className="fixed bottom-8 right-8 z-40 p-3 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl hover:bg-primary/90 transition-all"
+          className={`fixed z-40 p-3 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl hover:bg-primary/90 transition-all ${
+            isNearFooter ? 'bottom-[calc(100vh-400px)]' : 'bottom-8'
+          } right-8`}
           aria-label="Back to top"
         >
           <ChevronUp className="w-6 h-6" />

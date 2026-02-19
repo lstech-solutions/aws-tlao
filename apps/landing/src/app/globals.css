@@ -87,10 +87,12 @@
   html {
     scroll-behavior: smooth;
     color-scheme: light dark;
+    overflow-x: hidden;
   }
   
   body {
     @apply bg-background text-foreground transition-colors duration-300;
+    overflow-x: hidden;
   }
 }
 
