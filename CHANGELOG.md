@@ -140,3 +140,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - DynamoDB for data persistence
 - S3 for file storage
 - Transcribe for audio processing
+
+## Test Release
+- Test: Testing the release:patch script with automatic push
