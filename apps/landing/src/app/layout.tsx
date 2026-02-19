@@ -1,8 +1,7 @@
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { ThemeProvider } from '@/components/ThemeProvider'
-import { BackToTopButtonWrapper } from '@/components/ScrollControls'
+import { RootClientWrapper } from '@/components/RootClientWrapper'
 
 const inter = Inter({ subsets: ['latin', 'greek'] })
 
@@ -64,10 +63,9 @@ export default function RootLayout({
       <body
         className={`${inter.className} bg-background text-foreground transition-colors duration-300 overflow-x-hidden`}
       >
-        <ThemeProvider>
-          <BackToTopButtonWrapper />
+        <RootClientWrapper basePath={process.env.NEXT_PUBLIC_BASE_PATH || ''}>
           {children}
-        </ThemeProvider>
+        </RootClientWrapper>
       </body>
     </html>
   )

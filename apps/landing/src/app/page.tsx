@@ -5,8 +5,12 @@ import Agents from '@/components/Agents'
 import Pricing from '@/components/Pricing'
 import Competition from '@/components/Competition'
 import Demo from '@/components/Demo'
-import Footer from '@/components/Footer'
 import { ThemeToggleWrapper } from '@/components/ThemeToggle'
+import { LandingFooter } from '@/components/LandingFooter'
+
+const appVersion = process.env.NEXT_PUBLIC_APP_VERSION
+  ? `v${process.env.NEXT_PUBLIC_APP_VERSION}`
+  : undefined
 
 export default function Home() {
   return (
@@ -22,7 +26,7 @@ export default function Home() {
       <Pricing />
       <Demo />
       <Competition />
-      <Footer />
+      <LandingFooter version={appVersion} />
     </main>
   )
 }

@@ -33,6 +33,9 @@ importers:
 
   apps/docs:
     dependencies:
+      '@ai-agent-platform/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@docusaurus/core':
         specifier: 3.9.2
         version: 3.9.2(@mdx-js/react@3.1.1)(react-dom@19.2.4)(react@19.2.4)(typescript@5.6.3)
@@ -45,6 +48,9 @@ importers:
       clsx:
         specifier: ^2.0.0
         version: 2.1.1
+      lucide-react:
+        specifier: ^0.294.0
+        version: 0.294.0(react@19.2.4)
       prism-react-renderer:
         specifier: ^2.3.0
         version: 2.4.1(react@19.2.4)
@@ -100,6 +106,9 @@ importers:
 
   apps/landing:
     dependencies:
+      '@ai-agent-platform/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       clsx:
         specifier: ^2.0.0
         version: 2.1.1
@@ -213,6 +222,37 @@ importers:
       typescript:
         specifier: ^5.3.2
         version: 5.9.3
+
+  packages/ui:
+    dependencies:
+      framer-motion:
+        specifier: ^12.23.26
+        version: 12.23.26(react-dom@19.2.4)(react@19.2.4)
+      lucide-react:
+        specifier: ^0.294.0
+        version: 0.294.0(react@19.2.4)
+      next:
+        specifier: ^15.2.3
+        version: 15.2.3(react-dom@19.2.4)(react@19.2.4)
+      react:
+        specifier: ^19.0.0
+        version: 19.2.4
+      react-dom:
+        specifier: ^19.0.0
+        version: 19.2.4(react@19.2.4)
+    devDependencies:
+      '@types/node':
+        specifier: ^22.10.0
+        version: 22.19.3
+      '@types/react':
+        specifier: ^19.0.0
+        version: 19.2.14
+      '@types/react-dom':
+        specifier: ^19.0.0
+        version: 19.2.3(@types/react@19.2.14)
+      typescript:
+        specifier: ^5.3.2
+        version: 5.6.3
 
 packages:
 

@@ -44,8 +44,6 @@ const config: Config = {
         docs: {
           routeBasePath: '/',
           sidebarPath: './sidebars.ts',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl: 'https://github.com/tlao/tlao-docs/tree/main/apps/docs/',
         },
         blog: false,
@@ -57,7 +55,6 @@ const config: Config = {
   ],
 
   themeConfig: {
-    // Replace with your project's social card
     image: 'img/docusaurus-social-card.jpg',
     colorMode: {
       respectPrefersColorScheme: true,
@@ -84,35 +81,8 @@ const config: Config = {
     },
     footer: {
       style: 'dark',
-      links: [
-        {
-          title: 'Documentation',
-          items: [
-            {
-              label: 'Introduction',
-              href: '/',
-            },
-          ],
-        },
-        {
-          title: 'Community',
-          items: [
-            {
-              label: 'GitHub',
-              href: 'https://github.com/tlao/tlao-docs',
-            },
-            {
-              label: 'Issues',
-              href: 'https://github.com/tlao/tlao-docs/issues',
-            },
-            {
-              label: 'Discussions',
-              href: 'https://github.com/tlao/tlao-docs/discussions',
-            },
-          ],
-        },
-      ],
-      copyright: `Copyright © ${new Date().getFullYear()} TLÁO. Built with Docusaurus.`,
+      links: [],
+      copyright: 'Custom footer',
     },
     prism: {
       theme: prismThemes.github,

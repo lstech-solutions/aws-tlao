@@ -6,6 +6,13 @@ const nextConfig = {
     domains: ['images.unsplash.com'],
     unoptimized: true,
   },
+  webpack: (config, { isServer }) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@ai-agent-platform/ui': require.resolve('../../packages/ui/src/index.ts'),
+    }
+    return config
+  },
 }
 
 module.exports = nextConfig
