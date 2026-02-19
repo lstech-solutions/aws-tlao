@@ -18,20 +18,5 @@
     "enforceConventionalCommits": true,
     "requireChangelog": true,
     "checkDependencySync": true
-  },
-  "branchAware": {
-    "enabled": true,
-    "mainBranch": "main",
-    "developBranch": "develop",
-    "featurePrefix": "feature/",
-    "hotfixPrefix": "hotfix/",
-    "releasePrefix": "release/",
-    "versionFormats": {
-      "main": "semantic",
-      "develop": "dev",
-      "feature": "feature",
-      "hotfix": "hotfix",
-      "release": "semantic"
-    }
   }
 }

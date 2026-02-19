@@ -1,3 +1,5 @@
+## [1.3.6](https://github.com/lstech-solutions/aws/compare/v1.3.5...v1.3.6) (2026-02-19)
+
 ## [1.3.5](https://github.com/lstech-solutions/aws/compare/v1.3.2...v1.3.5) (2026-02-19)
 
 ## [1.3.4](https://github.com/lstech-solutions/aws/compare/v1.3.2...v1.3.4) (2026-02-19)
