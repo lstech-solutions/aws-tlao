@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { Bot, Globe, Github, ExternalLink, Mail, Twitter } from 'lucide-react'
 import { ThemeToggleWrapper } from './ThemeToggle'
 import { useEffect } from 'react'
@@ -219,31 +220,31 @@ export default function Footer() {
                 </a>
               </li>
               <li>
-                <a
+                <Link
                   href="/privacy-policy"
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 group"
                 >
                   <div className="w-1 h-1 rounded-full bg-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                   Privacy
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/terms-of-service"
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 group"
                 >
                   <div className="w-1 h-1 rounded-full bg-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                   Terms
-                </a>
+                </Link>
               </li>
               <li>
-                <a
+                <Link
                   href="/contact"
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 group"
                 >
                   <div className="w-1 h-1 rounded-full bg-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
                   Contact
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
