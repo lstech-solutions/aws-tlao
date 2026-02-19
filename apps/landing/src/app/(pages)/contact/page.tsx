@@ -17,7 +17,7 @@ export default function Contact() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    setFormData(prev => ({ ...prev, [name]: value }))
+    setFormData((prev) => ({ ...prev, [name]: value }))
     setError('')
   }
 
@@ -31,10 +31,10 @@ export default function Contact() {
       const mailtoLink = `mailto:contact@lstech.solutions?subject=${encodeURIComponent(formData.subject)}&body=${encodeURIComponent(
         `Name: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}`
       )}`
-      
+
       // Open email client
       window.location.href = mailtoLink
-      
+
       // Show success message
       setSubmitted(true)
       setFormData({ name: '', email: '', subject: '', message: '' })
@@ -48,12 +48,13 @@ export default function Contact() {
   }
 
   return (
-    <main className="min-h-screen bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-50">
+    <>
       <div className="container-max section-padding">
         <div className="max-w-4xl mx-auto">
           <h1 className="text-4xl font-bold mb-4">Get in Touch</h1>
           <p className="text-xl text-gray-600 dark:text-gray-400 mb-12">
-            Have questions about AI Agent Platform? We&apos;d love to hear from you. Send us a message and we&apos;ll respond as soon as possible.
+            Have questions about AI Agent Platform? We&apos;d love to hear from you. Send us a
+            message and we&apos;ll respond as soon as possible.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
@@ -62,12 +63,15 @@ export default function Contact() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="p-6 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800"
+              className="p-6 bg-card rounded-lg border border-border"
             >
-              <Mail className="w-8 h-8 text-blue-600 dark:text-blue-400 mb-4" />
+              <Mail className="w-8 h-8 text-primary mb-4" />
               <h3 className="text-lg font-semibold mb-2">Email</h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                <a href="mailto:contact@lstech.solutions" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              <p className="text-muted-foreground">
+                <a
+                  href="mailto:contact@lstech.solutions"
+                  className="hover:text-primary transition-colors"
+                >
                   contact@lstech.solutions
                 </a>
               </p>
@@ -77,12 +81,12 @@ export default function Contact() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              className="p-6 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800"
+              className="p-6 bg-card rounded-lg border border-border"
             >
-              <Phone className="w-8 h-8 text-blue-600 dark:text-blue-400 mb-4" />
+              <Phone className="w-8 h-8 text-primary mb-4" />
               <h3 className="text-lg font-semibold mb-2">Phone</h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                <a href="tel:+1234567890" className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">
+              <p className="text-muted-foreground">
+                <a href="tel:+1234567890" className="hover:text-primary transition-colors">
                   +1 (234) 567-890
                 </a>
               </p>
@@ -92,12 +96,13 @@ export default function Contact() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="p-6 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800"
+              className="p-6 bg-card rounded-lg border border-border"
             >
-              <MapPin className="w-8 h-8 text-blue-600 dark:text-blue-400 mb-4" />
+              <MapPin className="w-8 h-8 text-primary mb-4" />
               <h3 className="text-lg font-semibold mb-2">Location</h3>
-              <p className="text-gray-600 dark:text-gray-400">
-                Global Team<br />
+              <p className="text-muted-foreground">
+                Global Team
+                <br />
                 Available 24/7
               </p>
             </motion.div>
@@ -108,7 +113,7 @@ export default function Contact() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800 p-8"
+            className="bg-card rounded-lg border border-border p-8"
           >
             <h2 className="text-2xl font-semibold mb-6">Send us a Message</h2>
 
@@ -117,9 +122,10 @@ export default function Contact() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg text-green-800 dark:text-green-200"
+                className="mb-6 p-4 bg-success/10 border border-success/20 rounded-lg text-success"
               >
-                ✓ Thank you for your message! Your email client will open to send the message to contact@lstech.solutions
+                ✓ Thank you for your message! Your email client will open to send the message to
+                contact@lstech.solutions
               </motion.div>
             )}
 
@@ -128,7 +134,7 @@ export default function Contact() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg text-red-800 dark:text-red-200"
+                className="mb-6 p-4 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive"
               >
                 ✗ {error}
               </motion.div>
@@ -147,7 +153,7 @@ export default function Contact() {
                     value={formData.name}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 transition-colors"
+                    className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                     placeholder="Your name"
                   />
                 </div>
@@ -162,7 +168,7 @@ export default function Contact() {
                     value={formData.email}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 transition-colors"
+                    className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                     placeholder="your@email.com"
                   />
                 </div>
@@ -179,7 +185,7 @@ export default function Contact() {
                   value={formData.subject}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 transition-colors"
+                  className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-colors"
                   placeholder="What is this about?"
                 />
               </div>
@@ -195,7 +201,7 @@ export default function Contact() {
                   onChange={handleChange}
                   required
                   rows={6}
-                  className="w-full px-4 py-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-400 transition-colors resize-none"
+                  className="w-full px-4 py-2 bg-background border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-colors resize-none"
                   placeholder="Tell us more about your inquiry..."
                 />
               </div>
@@ -205,7 +211,7 @@ export default function Contact() {
                 disabled={loading}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full bg-blue-600 dark:bg-blue-500 hover:bg-blue-700 dark:hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-semibold py-3 px-6 rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send className="w-5 h-5" />
                 {loading ? 'Sending...' : 'Send Message'}
@@ -240,16 +246,16 @@ export default function Contact() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 + index * 0.1 }}
-                  className="p-4 bg-gray-50 dark:bg-gray-900 rounded-lg border border-gray-200 dark:border-gray-800"
+                  className="p-4 bg-card rounded-lg border border-border"
                 >
-                  <h3 className="font-semibold mb-2 text-gray-900 dark:text-white">{faq.q}</h3>
-                  <p className="text-gray-600 dark:text-gray-400">{faq.a}</p>
+                  <h3 className="font-semibold mb-2">{faq.q}</h3>
+                  <p className="text-muted-foreground">{faq.a}</p>
                 </motion.div>
               ))}
             </div>
           </div>
         </div>
       </div>
-    </main>
+    </>
   )
 }

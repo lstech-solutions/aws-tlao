@@ -3,6 +3,7 @@
 import { Bot, Globe, Github, ExternalLink, Mail, Twitter } from 'lucide-react'
 import { ThemeToggleWrapper } from './ThemeToggle'
 import { useEffect } from 'react'
+import { TlaoXiIcon } from './icons/TlaoIcons'
 
 // Simple version utility - reads from environment variable or package.json
 const getVersion = (): string => {
@@ -121,19 +122,7 @@ export default function Footer() {
           <div className="md:col-span-2">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 bg-gradient-to-br from-primary to-accent rounded-xl flex items-center justify-center">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  />
-                </svg>
+                <TlaoXiIcon className="w-6 h-6 text-white" />
               </div>
               <span className="text-xl font-bold">TLÁO</span>
             </div>
@@ -151,7 +140,7 @@ export default function Footer() {
                 <Github className="w-4 h-4" />
               </a>
               <a
-                href="https://twitter.com"
+                href="https://x.com/LSTS_TECH"
                 className="w-9 h-9 rounded-lg bg-card/50 backdrop-blur-sm border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary transition-all duration-300 hover:scale-110"
                 aria-label="Twitter"
                 target="_blank"
@@ -160,7 +149,7 @@ export default function Footer() {
                 <Twitter className="w-4 h-4" />
               </a>
               <a
-                href="mailto:hello@tlao.dev"
+                href="mailto:hello@tláo.com"
                 className="w-9 h-9 rounded-lg bg-card/50 backdrop-blur-sm border border-border/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-primary transition-all duration-300 hover:scale-110"
                 aria-label="Email"
               >

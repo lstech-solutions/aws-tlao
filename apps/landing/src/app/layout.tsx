@@ -39,7 +39,12 @@ export const metadata: Metadata = {
       'AI agents that carry your operational burden. Execution planning and grant discovery powered by AWS Bedrock.',
   },
   icons: {
-    icon: '/favicon.ico',
+    icon: [
+      {
+        url: '/favicon.svg',
+        type: 'image/svg+xml',
+      },
+    ],
     apple: '/apple-touch-icon.png',
     other: {
       rel: 'apple-touch-icon-precomposed',
