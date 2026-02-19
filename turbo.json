@@ -18,6 +18,11 @@
     "type-check": {
       "dependsOn": ["^build"]
     },
+    "release": {
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", "build/**", ".docusaurus/**"],
+      "cache": false
+    },
     "docs#build": {
       "outputs": ["build/**", ".docusaurus/**"],
       "dependsOn": ["^build"]

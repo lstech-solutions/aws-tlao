@@ -19,15 +19,15 @@ const CARDS = [
     section: 'agents',
   },
   {
-    img: `${basePath}/tlao-plan-logo.png`,
-    title: 'TLÁO Plan',
-    description: 'Execution Planning',
+    img: `${basePath}/tlao-builder-logo.png`,
+    title: 'TLÁO Builder',
+    description: 'Agent Creation',
     section: 'agents',
   },
   {
-    img: `${basePath}/tlao-grant-logo.png`,
-    title: 'TLÁO Grant',
-    description: 'Grant Discovery',
+    img: `${basePath}/tlao-email-logo.png`,
+    title: 'TLÁO Email',
+    description: 'Email Automation',
     section: 'agents',
   },
   {
