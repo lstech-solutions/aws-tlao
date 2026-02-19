@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || ''
@@ -30,25 +30,23 @@ const CARDS = [
     description: 'Email Automation',
     section: 'agents',
   },
-  {
-    img: `${basePath}/tlao-plan-logo.png`,
-    title: 'TLÁO Plan',
-    description: 'Execution Planning',
-    section: 'agents',
-  },
-  {
-    img: `${basePath}/tlao-grant-logo.png`,
-    title: 'TLÁO Grant',
-    description: 'Grant Discovery',
-    section: 'agents',
-  },
 ]
 
 function ThreeDPhotoCarousel() {
   const [expandedCard, setExpandedCard] = useState<number | null>(null)
-  const [isPaused, setIsPaused] = useState(false)
-  const ringRef = useRef<HTMLDivElement>(null)
   const [isMobile, setIsMobile] = useState(false)
+  const ringRef = useRef<HTMLDivElement>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Drag state
+  const isDragging = useRef(false)
+  const dragStartX = useRef(0)
+  const currentAngle = useRef(0)
+  const angleAtDragStart = useRef(0)
+  const autoRotateRAF = useRef<number>(0)
+  const isAutoRotating = useRef(true)
+  const lastTimestamp = useRef(0)
+  const autoResumeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 640px)')
@@ -62,22 +60,81 @@ function ThreeDPhotoCarousel() {
   const faceWidth = isMobile ? 180 : 260
   const radius = Math.round(faceWidth / (2 * Math.tan(Math.PI / faceCount)))
 
+  const applyRotation = useCallback((angle: number) => {
+    if (ringRef.current) {
+      ringRef.current.style.transform = `rotateY(${angle}deg)`
+    }
+  }, [])
+
+  // Auto-rotate loop
+  useEffect(() => {
+    const speed = 0.3 // degrees per frame (~18deg/s)
+    const animate = (timestamp: number) => {
+      if (lastTimestamp.current === 0) lastTimestamp.current = timestamp
+      const delta = timestamp - lastTimestamp.current
+      lastTimestamp.current = timestamp
+
+      if (isAutoRotating.current && expandedCard === null) {
+        currentAngle.current += speed * (delta / 16)
+        applyRotation(currentAngle.current)
+      }
+      autoRotateRAF.current = requestAnimationFrame(animate)
+    }
+    autoRotateRAF.current = requestAnimationFrame(animate)
+    return () => cancelAnimationFrame(autoRotateRAF.current)
+  }, [applyRotation, expandedCard])
+
+  // Drag handlers
+  const onPointerDown = useCallback(
+    (e: React.PointerEvent) => {
+      if (expandedCard !== null) return
+      isDragging.current = true
+      isAutoRotating.current = false
+      dragStartX.current = e.clientX
+      angleAtDragStart.current = currentAngle.current
+      if (autoResumeTimer.current) clearTimeout(autoResumeTimer.current)
+      ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
+    },
+    [expandedCard]
+  )
+
+  const onPointerMove = useCallback(
+    (e: React.PointerEvent) => {
+      if (!isDragging.current) return
+      const dx = e.clientX - dragStartX.current
+      const sensitivity = 0.4
+      currentAngle.current = angleAtDragStart.current + dx * sensitivity
+      applyRotation(currentAngle.current)
+    },
+    [applyRotation]
+  )
+
+  const onPointerUp = useCallback(() => {
+    if (!isDragging.current) return
+    isDragging.current = false
+    // Resume auto-rotate after 2s of inactivity
+    autoResumeTimer.current = setTimeout(() => {
+      isAutoRotating.current = true
+    }, 2000)
+  }, [])
+
   const handleClick = (index: number) => {
+    if (isDragging.current) return
     if (expandedCard === index) {
       setExpandedCard(null)
-      setIsPaused(false)
+      isAutoRotating.current = true
       return
     }
-    setIsPaused(true)
-
-    // Rotate the ring so the clicked card faces front
+    isAutoRotating.current = false
+    const angle = -(index * (360 / faceCount))
+    currentAngle.current = angle
     if (ringRef.current) {
-      const angle = -(index * (360 / faceCount))
       ringRef.current.style.transition = 'transform 0.8s cubic-bezier(0.32,0.72,0,1)'
-      ringRef.current.style.animationPlayState = 'paused'
-      ringRef.current.style.transform = `rotateY(${angle}deg)`
-
-      setTimeout(() => setExpandedCard(index), 800)
+      applyRotation(angle)
+      setTimeout(() => {
+        if (ringRef.current) ringRef.current.style.transition = ''
+        setExpandedCard(index)
+      }, 800)
     }
   }
 
@@ -85,42 +142,31 @@ function ThreeDPhotoCarousel() {
     document.getElementById(section)?.scrollIntoView({ behavior: 'smooth' })
     setTimeout(() => {
       setExpandedCard(null)
-      setIsPaused(false)
-      if (ringRef.current) {
-        ringRef.current.style.transition = ''
-        ringRef.current.style.transform = ''
-        ringRef.current.style.animationPlayState = 'running'
-      }
+      isAutoRotating.current = true
     }, 400)
   }
 
   const handleClose = () => {
     setExpandedCard(null)
-    setIsPaused(false)
-    if (ringRef.current) {
-      ringRef.current.style.transition = ''
-      ringRef.current.style.transform = ''
-      ringRef.current.style.animationPlayState = 'running'
-    }
+    isAutoRotating.current = true
   }
 
   return (
     <div className="relative">
-      {/* Inject keyframes */}
-      <style>{`
-        @keyframes carousel-spin {
-          from { transform: rotateY(0deg); }
-          to   { transform: rotateY(360deg); }
-        }
-      `}</style>
-
       <div
-        className="relative mx-auto overflow-visible"
+        ref={containerRef}
+        className="relative mx-auto overflow-visible select-none"
         style={{
           perspective: '1200px',
           height: `${faceWidth + 60}px`,
           width: '100%',
+          cursor: isDragging.current ? 'grabbing' : 'grab',
+          touchAction: 'pan-y',
         }}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={onPointerUp}
+        onPointerCancel={onPointerUp}
       >
         <div
           ref={ringRef}
@@ -133,8 +179,6 @@ function ThreeDPhotoCarousel() {
             marginLeft: `${-faceWidth / 2}px`,
             marginTop: `${-faceWidth / 2}px`,
             transformStyle: 'preserve-3d',
-            animation: 'carousel-spin 30s linear infinite',
-            animationPlayState: isPaused ? 'paused' : 'running',
           }}
         >
           {CARDS.map((card, i) => {
@@ -155,7 +199,7 @@ function ThreeDPhotoCarousel() {
                 <img
                   src={card.img}
                   alt={card.title}
-                  className="w-4/5 h-4/5 object-contain drop-shadow-lg"
+                  className="w-4/5 h-4/5 object-contain drop-shadow-lg pointer-events-none"
                   draggable={false}
                 />
               </div>
