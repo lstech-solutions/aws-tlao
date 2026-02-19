@@ -4,7 +4,6 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 import { ThemeToggleWrapper } from './ThemeToggle'
 import { TlaoXiIcon } from './icons/TlaoIcons'
-import { createHref } from '@/lib/router'
 
 export default function Navbar() {
   return (
@@ -12,7 +11,7 @@ export default function Navbar() {
       <div className="container-max flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
         <div className="flex items-center gap-4">
           <Link
-            href={createHref('/')}
+            href="/"
             className="flex items-center gap-3 text-foreground hover:text-primary transition-colors"
           >
             <div className="w-8 h-8 bg-gradient-to-br from-primary to-accent rounded-lg flex items-center justify-center">
@@ -21,7 +20,7 @@ export default function Navbar() {
             <span className="text-lg font-bold">TLÁO</span>
           </Link>
           <Link
-            href={createHref('/')}
+            href="/"
             className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />

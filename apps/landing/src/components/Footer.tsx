@@ -4,7 +4,6 @@ import { Bot, Globe, Github, ExternalLink, Mail, Twitter } from 'lucide-react'
 import { ThemeToggleWrapper } from './ThemeToggle'
 import { useEffect } from 'react'
 import { TlaoXiIcon } from './icons/TlaoIcons'
-import { createHref } from '@/lib/router'
 
 // Simple version utility - reads from environment variable or package.json
 const getVersion = (): string => {
@@ -221,7 +220,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href={createHref('/privacy-policy')}
+                  href="/privacy-policy"
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 group"
                 >
                   <div className="w-1 h-1 rounded-full bg-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -230,7 +229,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href={createHref('/terms-of-service')}
+                  href="/terms-of-service"
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 group"
                 >
                   <div className="w-1 h-1 rounded-full bg-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -239,7 +238,7 @@ export default function Footer() {
               </li>
               <li>
                 <a
-                  href={createHref('/contact')}
+                  href="/contact"
                   className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-2 group"
                 >
                   <div className="w-1 h-1 rounded-full bg-foreground opacity-0 group-hover:opacity-100 transition-opacity" />
