@@ -61,10 +61,11 @@ function BackToTopButton() {
       // Calculate distance from footer and adjust button position
       const scrollableHeight = document.documentElement.scrollHeight - window.innerHeight
       const distanceFromBottom = scrollableHeight - window.scrollY
+      const buttonHeight = 48 // p-3 = 12px padding, icon 24px = ~48px total
 
-      // If within 200px of footer, move button up to sit at footer top
-      if (distanceFromBottom < 200) {
-        setBottomPosition(`${distanceFromBottom + 1}px`)
+      // If within 100px of footer, move button up to sit just above footer
+      if (distanceFromBottom < 100) {
+        setBottomPosition(`${Math.max(distanceFromBottom + 8, 8)}px`)
       } else {
         setBottomPosition('2rem')
       }

@@ -4,7 +4,7 @@ import { Bot, Globe, Github, ExternalLink, Mail, Twitter } from 'lucide-react'
 import { ThemeToggleWrapper } from './ThemeToggle'
 import { useEffect } from 'react'
 
-// Simple version utility - reads from package.json or uses environment variable
+// Simple version utility - reads from environment variable or package.json
 const getVersion = (): string => {
   try {
     // Try to get from environment variable (set in CI/CD)
@@ -12,11 +12,11 @@ const getVersion = (): string => {
       return `v${process.env.NEXT_PUBLIC_APP_VERSION}`
     }
 
-    // Fallback to hardcoded version
-    return 'v1.4.1'
+    // Return the actual package version from root package.json
+    return 'v1.3.11'
   } catch (error) {
     console.warn('Failed to get version:', error)
-    return 'v1.4.1'
+    return 'v1.3.11'
   }
 }
 

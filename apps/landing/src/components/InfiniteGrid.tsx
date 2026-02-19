@@ -81,23 +81,23 @@ export const InfiniteGrid = () => {
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      className={cn('absolute inset-0 z-0 overflow-hidden')}
+      className={cn('absolute inset-0 z-0 overflow-hidden w-full')}
     >
       {/* Layer 1: Subtle background grid (always visible) */}
-      <div className="absolute inset-0 z-0 opacity-[0.12]">
+      <div className="absolute inset-0 z-0 opacity-[0.12] overflow-hidden">
         <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} size={gridSize} />
       </div>
 
       {/* Layer 2: Highlighted grid (revealed by mouse mask) */}
       <motion.div
-        className="absolute inset-0 z-0 opacity-50"
+        className="absolute inset-0 z-0 opacity-50 overflow-hidden"
         style={{ maskImage, WebkitMaskImage: maskImage }}
       >
         <GridPattern offsetX={gridOffsetX} offsetY={gridOffsetY} size={gridSize} />
       </motion.div>
 
       {/* Decorative Blur Spheres */}
-      <div className="absolute inset-0 pointer-events-none z-0">
+      <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
         <div className="absolute right-[-20%] top-[-20%] w-[40%] h-[40%] rounded-full bg-orange-300/30 dark:bg-orange-900/20 blur-[120px]" />
         <div className="absolute right-[10%] top-[-10%] w-[20%] h-[20%] rounded-full bg-orange-200/40 dark:bg-orange-800/20 blur-[100px]" />
         <div className="absolute left-[-10%] bottom-[-20%] w-[40%] h-[40%] rounded-full bg-blue-300/30 dark:bg-blue-900/20 blur-[120px]" />

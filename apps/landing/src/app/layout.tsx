@@ -57,7 +57,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.className} bg-background text-foreground transition-colors duration-300`}
+        className={`${inter.className} bg-background text-foreground transition-colors duration-300 overflow-x-hidden`}
       >
         <ThemeProvider>
           <BackToTopButtonWrapper />
