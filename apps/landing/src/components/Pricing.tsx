@@ -72,7 +72,7 @@ export default function Pricing() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
           {pricingPlans.map((plan, index) => {
-            const isVisible = index === 0 || (index === 1 && isVisible)
+            const isPlanVisible = isVisible && (index === 0 || index === 1)
             return (
               <div
                 key={plan.name}
@@ -80,7 +80,7 @@ export default function Pricing() {
                   /* Ref handling */
                 }}
                 className={`group relative bg-card/60 backdrop-blur-xl rounded-3xl p-8 border transition-all duration-700 hover:scale-105 hover:shadow-2xl cursor-pointer overflow-hidden ${
-                  isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
+                  isPlanVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'
                 }`}
                 style={{ transitionDelay: `${index * 100}ms` }}
               >
