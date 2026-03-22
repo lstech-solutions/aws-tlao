@@ -273,4 +273,4 @@ For issues with versioning:
 
 - Check [versioning documentation](https://github.com/edcalderon/versioning)
 - Review `.versioning/` directory
-- Contact: admin@tláo.com
+- Contact: dev@lstech.solutions

@@ -216,7 +216,8 @@ Dashboard + Email Notifications
 
 ## 📞 Support & Contact
 
-- **General Inquiries**: [contact@lstech.solutions](mailto:contact@lstech.solutions)
+- **General Inquiries**: [dev@lstech.solutions](mailto:dev@lstech.solutions)
+- **Support**: [support@tláo.com](mailto:support@xn--tlo-fla.com)
 - **Security Issues**: [security@lstech.solutions](mailto:security@lstech.solutions)
 - **Website**: [https://tlao.dev](https://tlao.dev)
 
@@ -247,5 +248,5 @@ This project is an official submission to the AWS 10,000 AIdeas Challenge.
 ---
 
 **Team**: LSTS
-**Contact**: admin@lealsystem.net
+**Contact**: dev@lstech.solutions
 **Last Updated**: February 2026

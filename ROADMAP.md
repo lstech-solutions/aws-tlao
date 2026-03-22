@@ -116,5 +116,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines on contributing to the roa
 
 Submit feedback and suggestions:
 
-- Email: admin@tláo.com
+- Email: dev@lstech.solutions
 - GitHub Issues: [lstech-solutions/aws-tlao](https://github.com/lstech-solutions/aws-tlao/issues)

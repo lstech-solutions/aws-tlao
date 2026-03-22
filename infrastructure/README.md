@@ -100,4 +100,4 @@ Email → Route53 MX → SES → S3 + Lambda → SES → Destination
 
 ## Support
 
-For issues: admin@lstech.solutions
+For issues: dev@lstech.solutions
