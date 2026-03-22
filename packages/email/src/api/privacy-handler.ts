@@ -1,19 +1,13 @@
-import { privacyService } from '../services/privacy-service';
-
-interface PrivacyRequest {
-  workspaceId: string;
-  mailboxId: string;
-  optedIn: boolean;
-}
+import { privacyService } from '../services/privacy-service'
 
 interface PrivacyResponse {
-  success: boolean;
+  success: boolean
   data?: {
-    workspaceId: string;
-    mailboxId: string;
-    optedIn: boolean;
-  };
-  error?: string;
+    workspaceId: string
+    mailboxId: string
+    optedIn: boolean
+  }
+  error?: string
 }
 
 /**
@@ -25,7 +19,7 @@ export async function handleCheckOptIn(
   mailboxId: string
 ): Promise<PrivacyResponse> {
   try {
-    const optedIn = await privacyService.checkOptIn(workspaceId, mailboxId);
+    const optedIn = await privacyService.checkOptIn(workspaceId, mailboxId)
 
     return {
       success: true,
@@ -34,12 +28,12 @@ export async function handleCheckOptIn(
         mailboxId,
         optedIn,
       },
-    };
+    }
   } catch (error) {
     return {
       success: false,
       error: `Failed to check opt-in status: ${error instanceof Error ? error.message : String(error)}`,
-    };
+    }
   }
 }
 
@@ -53,7 +47,7 @@ export async function handleSetOptIn(
   optedIn: boolean
 ): Promise<PrivacyResponse> {
   try {
-    await privacyService.setOptIn(workspaceId, mailboxId, optedIn);
+    await privacyService.setOptIn(workspaceId, mailboxId, optedIn)
 
     return {
       success: true,
@@ -62,11 +56,11 @@ export async function handleSetOptIn(
         mailboxId,
         optedIn,
       },
-    };
+    }
   } catch (error) {
     return {
       success: false,
       error: `Failed to update opt-in preference: ${error instanceof Error ? error.message : String(error)}`,
-    };
+    }
   }
 }

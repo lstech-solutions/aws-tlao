@@ -1,7 +1,3 @@
-import * as AWS from 'aws-sdk';
-
-const route53 = new AWS.Route53();
-
 export class DNSConfigService {
   async configureDNS(domain: string, stalwartHostname: string): Promise<void> {
     // This is a placeholder - actual implementation would:
@@ -9,7 +5,7 @@ export class DNSConfigService {
     // 2. Create MX, SPF, DKIM, DMARC records
     // 3. Validate propagation
 
-    console.log(`Configuring DNS for ${domain} -> ${stalwartHostname}`);
+    console.log(`Configuring DNS for ${domain} -> ${stalwartHostname}`)
 
     // In production, this would call Route 53 API
     // For now, just log the configuration
@@ -21,9 +17,9 @@ export class DNSConfigService {
     // 2. Verify they point to correct values
     // 3. Return true if all records are propagated
 
-    console.log(`Validating DNS propagation for ${domain}`);
-    return true;
+    console.log(`Validating DNS propagation for ${domain}`)
+    return true
   }
 }
 
-export const dnsConfigService = new DNSConfigService();
+export const dnsConfigService = new DNSConfigService()

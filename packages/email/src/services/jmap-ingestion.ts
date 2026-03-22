@@ -1,32 +1,31 @@
-import fetch from 'node-fetch';
-import * as AWS from 'aws-sdk';
+import fetch from 'node-fetch'
+import * as AWS from 'aws-sdk'
 
-const lambda = new AWS.Lambda({ region: process.env.AWS_REGION || 'us-east-1' });
-const cloudwatch = new AWS.CloudWatch({ region: process.env.AWS_REGION || 'us-east-1' });
+const lambda = new AWS.Lambda({ region: process.env.AWS_REGION || 'us-east-1' })
 
 export interface EmailReference {
-  emailId: string;
-  mailboxId: string;
-  receivedAt: number;
+  emailId: string
+  mailboxId: string
+  receivedAt: number
 }
 
 export interface RawEmailContent {
-  raw: string;
-  emailId: string;
+  raw: string
+  emailId: string
 }
 
 interface RetryConfig {
-  maxRetries: number;
-  baseDelayMs: number;
-  maxDelayMs: number;
+  maxRetries: number
+  baseDelayMs: number
+  maxDelayMs: number
 }
 
 export class JMAPIngestionService {
-  private stalwartUrl: string;
-  private apiKey: string;
-  private pollIntervalMs: number;
-  private retryConfig: RetryConfig;
-  private lambdaFunctionName: string;
+  private stalwartUrl: string
+  private apiKey: string
+  private pollIntervalMs: number
+  private retryConfig: RetryConfig
+  private lambdaFunctionName: string
 
   constructor(
     stalwartUrl: string,
@@ -34,42 +33,41 @@ export class JMAPIngestionService {
     pollIntervalMs: number = 30000,
     lambdaFunctionName: string = 'email-parser'
   ) {
-    this.stalwartUrl = stalwartUrl.replace(/\/$/, '');
-    this.apiKey = apiKey;
-    this.pollIntervalMs = pollIntervalMs;
-    this.lambdaFunctionName = lambdaFunctionName;
+    this.stalwartUrl = stalwartUrl.replace(/\/$/, '')
+    this.apiKey = apiKey
+    this.pollIntervalMs = pollIntervalMs
+    this.lambdaFunctionName = lambdaFunctionName
     this.retryConfig = {
       maxRetries: 5,
       baseDelayMs: 100,
       maxDelayMs: 5000,
-    };
+    }
   }
 
-  private async exponentialBackoffRetry<T>(
-    fn: () => Promise<T>,
-    context: string
-  ): Promise<T> {
-    let lastError: Error | null = null;
+  private async exponentialBackoffRetry<T>(fn: () => Promise<T>, context: string): Promise<T> {
+    let lastError: Error | null = null
 
     for (let attempt = 0; attempt <= this.retryConfig.maxRetries; attempt++) {
       try {
-        return await fn();
+        return await fn()
       } catch (error) {
-        lastError = error as Error;
+        lastError = error as Error
         if (attempt < this.retryConfig.maxRetries) {
           const delayMs = Math.min(
             this.retryConfig.baseDelayMs * Math.pow(2, attempt),
             this.retryConfig.maxDelayMs
-          );
+          )
           console.warn(
             `[${context}] Attempt ${attempt + 1} failed, retrying in ${delayMs}ms: ${lastError.message}`
-          );
-          await new Promise((resolve) => setTimeout(resolve, delayMs));
+          )
+          await new Promise((resolve) => setTimeout(resolve, delayMs))
         }
       }
     }
 
-    throw new Error(`${context} failed after ${this.retryConfig.maxRetries + 1} attempts: ${lastError?.message}`);
+    throw new Error(
+      `${context} failed after ${this.retryConfig.maxRetries + 1} attempts: ${lastError?.message}`
+    )
   }
 
   private logToCloudWatch(
@@ -77,13 +75,13 @@ export class JMAPIngestionService {
     message: string,
     context?: Record<string, unknown>
   ): void {
-    const timestamp = new Date().toISOString();
+    const timestamp = new Date().toISOString()
     const logMessage = {
       timestamp,
       message,
       context,
-    };
-    console.log(`[${logGroup}] ${JSON.stringify(logMessage)}`);
+    }
+    console.log(`[${logGroup}] ${JSON.stringify(logMessage)}`)
   }
 
   async connect(): Promise<void> {
@@ -91,21 +89,21 @@ export class JMAPIngestionService {
       await this.exponentialBackoffRetry(async () => {
         const response = await fetch(`${this.stalwartUrl}/.well-known/jmap`, {
           headers: {
-            'Authorization': `Bearer ${this.apiKey}`,
+            Authorization: `Bearer ${this.apiKey}`,
           },
-        });
+        })
 
         if (!response.ok) {
-          throw new Error(`JMAP connection failed: ${response.status}`);
+          throw new Error(`JMAP connection failed: ${response.status}`)
         }
-      }, 'JMAP connection');
+      }, 'JMAP connection')
 
-      this.logToCloudWatch('jmap-ingestion', 'JMAP connection established');
+      this.logToCloudWatch('jmap-ingestion', 'JMAP connection established')
     } catch (error) {
       this.logToCloudWatch('jmap-ingestion', 'JMAP connection failed', {
         error: (error as Error).message,
-      });
-      throw error;
+      })
+      throw error
     }
   }
 
@@ -116,7 +114,7 @@ export class JMAPIngestionService {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.apiKey}`,
+            Authorization: `Bearer ${this.apiKey}`,
           },
           body: JSON.stringify({
             using: ['urn:ietf:params:jmap:core', 'urn:ietf:params:jmap:mail'],
@@ -134,41 +132,41 @@ export class JMAPIngestionService {
               ],
             ],
           }),
-        });
+        })
 
         if (!response.ok) {
-          throw new Error(`JMAP query failed: ${response.status}`);
+          throw new Error(`JMAP query failed: ${response.status}`)
         }
 
-        const data = (await response.json()) as any;
-        const emailIds = data.methodResponses?.[0]?.[1]?.ids || [];
+        const data = (await response.json()) as any
+        const emailIds = data.methodResponses?.[0]?.[1]?.ids || []
 
         return emailIds.map((emailId: string) => ({
           emailId,
           mailboxId,
           receivedAt: Date.now(),
-        }));
-      }, 'JMAP poll');
+        }))
+      }, 'JMAP poll')
 
       this.logToCloudWatch('jmap-ingestion', 'Polled for new emails', {
         mailboxId,
         workspaceId,
         emailCount: emailReferences.length,
-      });
+      })
 
       // Trigger Lambda for each email
       for (const emailRef of emailReferences) {
-        await this.triggerEmailParserLambda(emailRef, workspaceId);
+        await this.triggerEmailParserLambda(emailRef, workspaceId)
       }
 
-      return emailReferences;
+      return emailReferences
     } catch (error) {
       this.logToCloudWatch('jmap-ingestion', 'Error polling for new emails', {
         mailboxId,
         workspaceId,
         error: (error as Error).message,
-      });
-      return [];
+      })
+      return []
     }
   }
 
@@ -181,7 +179,7 @@ export class JMAPIngestionService {
         emailId: emailRef.emailId,
         mailboxId: emailRef.mailboxId,
         workspaceId,
-      };
+      }
 
       await lambda
         .invoke({
@@ -189,21 +187,21 @@ export class JMAPIngestionService {
           InvocationType: 'Event', // Async invocation
           Payload: JSON.stringify(payload),
         })
-        .promise();
+        .promise()
 
       this.logToCloudWatch('jmap-ingestion', 'Triggered Email Parser Lambda', {
         emailId: emailRef.emailId,
         mailboxId: emailRef.mailboxId,
         workspaceId,
-      });
+      })
     } catch (error) {
       this.logToCloudWatch('jmap-ingestion', 'Failed to trigger Email Parser Lambda', {
         emailId: emailRef.emailId,
         mailboxId: emailRef.mailboxId,
         workspaceId,
         error: (error as Error).message,
-      });
-      throw error;
+      })
+      throw error
     }
   }
 
@@ -214,7 +212,7 @@ export class JMAPIngestionService {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.apiKey}`,
+            Authorization: `Bearer ${this.apiKey}`,
           },
           body: JSON.stringify({
             using: ['urn:ietf:params:jmap:core', 'urn:ietf:params:jmap:mail'],
@@ -230,32 +228,32 @@ export class JMAPIngestionService {
               ],
             ],
           }),
-        });
+        })
 
         if (!response.ok) {
-          throw new Error(`JMAP get failed: ${response.status}`);
+          throw new Error(`JMAP get failed: ${response.status}`)
         }
 
-        const data = (await response.json()) as any;
-        const email = data.methodResponses?.[0]?.[1]?.list?.[0];
+        const data = (await response.json()) as any
+        const email = data.methodResponses?.[0]?.[1]?.list?.[0]
 
         if (!email) {
-          throw new Error('Email not found');
+          throw new Error('Email not found')
         }
 
         return {
           raw: email.bodyRaw || '',
           emailId,
-        };
-      }, 'JMAP get email content');
+        }
+      }, 'JMAP get email content')
 
-      return content;
+      return content
     } catch (error) {
       this.logToCloudWatch('jmap-ingestion', 'Failed to get email content', {
         emailId,
         error: (error as Error).message,
-      });
-      throw error;
+      })
+      throw error
     }
   }
 
@@ -266,7 +264,7 @@ export class JMAPIngestionService {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.apiKey}`,
+            Authorization: `Bearer ${this.apiKey}`,
           },
           body: JSON.stringify({
             using: ['urn:ietf:params:jmap:core', 'urn:ietf:params:jmap:mail'],
@@ -285,15 +283,15 @@ export class JMAPIngestionService {
               ],
             ],
           }),
-        });
-      }, 'JMAP mark as processed');
+        })
+      }, 'JMAP mark as processed')
 
-      this.logToCloudWatch('jmap-ingestion', 'Marked email as processed', { emailId });
+      this.logToCloudWatch('jmap-ingestion', 'Marked email as processed', { emailId })
     } catch (error) {
       this.logToCloudWatch('jmap-ingestion', 'Failed to mark email as processed', {
         emailId,
         error: (error as Error).message,
-      });
+      })
     }
   }
 }

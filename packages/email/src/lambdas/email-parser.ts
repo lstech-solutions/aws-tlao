@@ -1,6 +1,5 @@
 import { simpleParser, AddressObject } from 'mailparser'
 import { v4 as uuidv4 } from 'uuid'
-import * as AWS from 'aws-sdk'
 import { MailMessage } from '../types/mail-message'
 import { dynamoDBService } from '../lib/dynamodb'
 import { s3Service } from '../lib/s3'
@@ -13,8 +12,6 @@ interface ParserEvent {
   mailboxId: string
   workspaceId: string
 }
-
-const cloudwatch = new AWS.CloudWatch({ region: process.env.AWS_REGION || 'us-east-1' })
 
 const jmapService = new JMAPIngestionService(
   process.env.STALWART_URL || 'http://localhost:8080',
@@ -77,10 +74,6 @@ export async function handler(event: ParserEvent): Promise<void> {
 
     // Extract threading headers
     const inReplyTo = (parsed.headers.get('in-reply-to') as string) || undefined
-    const references = ((parsed.headers.get('references') as string) || '')
-      .split(/\s+/)
-      .filter((r) => r)
-
     // Resolve threadId
     let threadId = uuidv4()
     if (inReplyTo) {

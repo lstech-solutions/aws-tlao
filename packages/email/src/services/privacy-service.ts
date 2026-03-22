@@ -1,18 +1,15 @@
-import * as AWS from 'aws-sdk';
-import { dynamoDBService } from '../lib/dynamodb';
+import { dynamoDBService } from '../lib/dynamodb'
 
 interface OptInRecord {
-  workspaceId: string;
-  mailboxId: string;
-  optedIn: boolean;
-  createdAt: number;
-  updatedAt: number;
+  workspaceId: string
+  mailboxId: string
+  optedIn: boolean
+  createdAt: number
+  updatedAt: number
 }
 
-const cloudwatch = new AWS.CloudWatch({ region: process.env.AWS_REGION || 'us-east-1' });
-
 export class PrivacyService {
-  private tableName = 'tlao-email-privacy-optin';
+  private tableName = 'tlao-email-privacy-optin'
 
   /**
    * Check if a user has opted in for personal mailbox ingestion
@@ -25,25 +22,25 @@ export class PrivacyService {
       const record = (await dynamoDBService.get(this.tableName, {
         workspaceId,
         mailboxId,
-      })) as OptInRecord | null;
+      })) as OptInRecord | null
 
-      const optedIn = record?.optedIn ?? false;
+      const optedIn = record?.optedIn ?? false
 
       this.logToCloudWatch('privacy-service', 'Checked opt-in status', {
         workspaceId,
         mailboxId,
         optedIn,
-      });
+      })
 
-      return optedIn;
+      return optedIn
     } catch (error) {
       this.logToCloudWatch('privacy-service', 'Error checking opt-in status', {
         workspaceId,
         mailboxId,
         error: (error as Error).message,
-      });
+      })
       // Default to false (no opt-in) on error for safety
-      return false;
+      return false
     }
   }
 
@@ -53,36 +50,32 @@ export class PrivacyService {
    * @param mailboxId - The mailbox ID
    * @param optedIn - Whether the user is opting in or out
    */
-  async setOptIn(
-    workspaceId: string,
-    mailboxId: string,
-    optedIn: boolean
-  ): Promise<void> {
+  async setOptIn(workspaceId: string, mailboxId: string, optedIn: boolean): Promise<void> {
     try {
-      const now = Date.now();
+      const now = Date.now()
       const record: OptInRecord = {
         workspaceId,
         mailboxId,
         optedIn,
         createdAt: now,
         updatedAt: now,
-      };
+      }
 
-      await dynamoDBService.put(this.tableName, record);
+      await dynamoDBService.put(this.tableName, record)
 
       this.logToCloudWatch('privacy-service', 'Updated opt-in preference', {
         workspaceId,
         mailboxId,
         optedIn,
-      });
+      })
     } catch (error) {
       this.logToCloudWatch('privacy-service', 'Error updating opt-in preference', {
         workspaceId,
         mailboxId,
         optedIn,
         error: (error as Error).message,
-      });
-      throw error;
+      })
+      throw error
     }
   }
 
@@ -96,9 +89,9 @@ export class PrivacyService {
    */
   applyPrivacyControls(bodyText: string, optedIn: boolean): string {
     if (!optedIn) {
-      return '(content hidden - user has not opted in to personal email ingestion)';
+      return '(content hidden - user has not opted in to personal email ingestion)'
     }
-    return bodyText;
+    return bodyText
   }
 
   private logToCloudWatch(
@@ -106,14 +99,14 @@ export class PrivacyService {
     message: string,
     context?: Record<string, unknown>
   ): void {
-    const timestamp = new Date().toISOString();
+    const timestamp = new Date().toISOString()
     const logMessage = {
       timestamp,
       message,
       context,
-    };
-    console.log(`[${logGroup}] ${JSON.stringify(logMessage)}`);
+    }
+    console.log(`[${logGroup}] ${JSON.stringify(logMessage)}`)
   }
 }
 
-export const privacyService = new PrivacyService();
+export const privacyService = new PrivacyService()

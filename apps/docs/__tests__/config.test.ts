@@ -31,7 +31,7 @@ describe('Docusaurus Configuration', () => {
   })
 
   describe('docusaurus.config.ts', () => {
-    it('should set url to https://docs.tláo.com', async () => {
+    it('should set url to the TLÁO apex domain', async () => {
       // Import the config dynamically
       const configPath = path.join(__dirname, '..', 'docusaurus.config.ts')
 
@@ -39,7 +39,7 @@ describe('Docusaurus Configuration', () => {
       const configContent = fs.readFileSync(configPath, 'utf-8')
 
       // Check if the URL is set correctly
-      expect(configContent).toContain("url: process.env.SITE_URL || 'https://docs.tláo.com'")
+      expect(configContent).toContain("url: process.env.SITE_URL || 'https://xn--tlo-fla.com'")
     })
 
     it('should have TLÁO title and tagline', async () => {
