@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { Footer } from '@ai-agent-platform/ui'
+import { Footer } from '@tlao/ui'
 import { ThemeToggleWrapper } from './ThemeToggle'
 
 /**

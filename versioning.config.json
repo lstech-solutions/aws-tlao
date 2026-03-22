@@ -6,6 +6,12 @@
   "syncDependencies": true,
   "ignorePackages": ["packages/backend"],
   "extensions": [],
+  "extensionConfig": {
+    "workspace-env": {
+      "enabled": true,
+      "manifestPath": "config/env/manifest.cjs"
+    }
+  },
   "privateCheck": true,
   "cleanupRoot": true,
   "roadmapFile": "ROADMAP.md",

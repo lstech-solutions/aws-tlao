@@ -1,0 +1,31 @@
+{
+  "name": "@tlao/infra",
+  "version": "1.0.0",
+  "description": "TLÁO infrastructure wrapper — @lsts_tech/infra + SST v3 pipelines",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src/**/*.ts",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf dist",
+    "doctor": "npx @lsts_tech/infra doctor --target .",
+    "deploy:dev": "npx sst deploy --stage dev",
+    "deploy:staging": "npx sst deploy --stage staging",
+    "deploy:production": "npx sst deploy --stage production",
+    "pipelines:create": "APPROVE=true bash scripts/ensure-pipelines.sh",
+    "secrets:check": "bash scripts/ensure-secrets.sh"
+  },
+  "dependencies": {
+    "@lsts_tech/infra": "^1.0.3",
+    "sst": "^3.19.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0"
+  }
+}

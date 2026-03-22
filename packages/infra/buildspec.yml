@@ -1,0 +1,47 @@
+version: 0.2
+
+# TLAO Email System — CodeBuild buildspec
+# Used by the CodePipeline created via createEmailPipelines()
+
+env:
+  variables:
+    NODE_VERSION: "22"
+    PNPM_VERSION: "9.15.0"
+  parameter-store:
+    # Fetch secrets from SSM at build time — never stored in source
+    CODESTAR_CONNECTION_ARN: /tlao/email/codestar-connection-arn
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 22
+    commands:
+      - echo "=== Installing pnpm ==="
+      - npm install -g pnpm@${PNPM_VERSION}
+      - echo "=== Installing dependencies ==="
+      - pnpm install --frozen-lockfile
+
+  pre_build:
+    commands:
+      - echo "=== Stage: ${STAGE} ==="
+      - echo "=== Running type-check ==="
+      - pnpm --filter @tlao/infra type-check
+      - echo "=== Running lint ==="
+      - pnpm --filter @tlao/infra lint || true
+
+  build:
+    commands:
+      - echo "=== Building email package ==="
+      - pnpm --filter @tlao/email build
+      - echo "=== Deploying infra to stage: ${STAGE} ==="
+      - pnpm --filter @tlao/infra deploy:${STAGE}
+
+  post_build:
+    commands:
+      - echo "=== Deploy complete for stage: ${STAGE} ==="
+
+cache:
+  paths:
+    - node_modules/**/*
+    - packages/*/node_modules/**/*
+    - .pnpm-store/**/*

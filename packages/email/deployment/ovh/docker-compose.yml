@@ -1,0 +1,58 @@
+services:
+  stalwart:
+    image: stalwartlabs/stalwart:v0.14
+    container_name: tlao-stalwart
+    restart: unless-stopped
+    env_file:
+      - ${TLAO_MAIL_ROOT:-/opt/tlao-mail}/.env
+    environment:
+      TZ: ${TZ:-UTC}
+    cap_add:
+      - NET_BIND_SERVICE
+    ulimits:
+      nofile:
+        soft: 65536
+        hard: 65536
+    ports:
+      - '25:25'
+      - '465:465'
+      - '587:587'
+      - '993:993'
+      - '127.0.0.1:8080:8080'
+    volumes:
+      - ${TLAO_MAIL_ROOT:-/opt/tlao-mail}/stalwart:/opt/stalwart
+
+  snappymail:
+    build:
+      context: ${TLAO_MAIL_ROOT:-/opt/tlao-mail}/email-ui/snappymail-image
+    image: tlao-snappymail:v2.38.2-tlao
+    container_name: tlao-snappymail
+    restart: unless-stopped
+    env_file:
+      - ${TLAO_MAIL_ROOT:-/opt/tlao-mail}/.env
+    environment:
+      TZ: ${TZ:-UTC}
+    depends_on:
+      - stalwart
+    volumes:
+      - ${TLAO_MAIL_ROOT:-/opt/tlao-mail}/snappymail:/var/lib/snappymail
+
+  caddy:
+    image: caddy:2.11.2-alpine
+    container_name: tlao-caddy
+    restart: unless-stopped
+    env_file:
+      - ${TLAO_MAIL_ROOT:-/opt/tlao-mail}/.env
+    environment:
+      TZ: ${TZ:-UTC}
+    depends_on:
+      - stalwart
+      - snappymail
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - ${TLAO_MAIL_ROOT:-/opt/tlao-mail}/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ${TLAO_MAIL_ROOT:-/opt/tlao-mail}/caddy/data:/data
+      - ${TLAO_MAIL_ROOT:-/opt/tlao-mail}/caddy/config:/config
+      - ${TLAO_MAIL_ROOT:-/opt/tlao-mail}/caddy/logs:/var/log/caddy

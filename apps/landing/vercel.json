@@ -1,5 +1,5 @@
 {
-  "buildCommand": "cd ../.. && pnpm run build --filter=@ai-agent-platform/landing",
+  "buildCommand": "cd ../.. && pnpm run build --filter=@tlao/landing",
   "outputDirectory": ".next",
   "installCommand": "cd ../.. && pnpm install",
   "framework": "nextjs",

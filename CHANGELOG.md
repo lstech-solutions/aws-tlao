@@ -1,3 +1,14 @@
+## [1.3.20](https://github.com/lstech-solutions/aws/compare/v1.3.17...v1.3.20) (2026-03-22)
+
+
+### Bug Fixes
+
+* improve footer animation zoom and version badge display ([2ef9b1f](https://github.com/lstech-solutions/aws/commit/2ef9b1f4d3edc04673df78343a5b4ada5034b4af))
+
+
+
+
+
 ## [1.3.19](https://github.com/lstech-solutions/aws/compare/v1.3.17...v1.3.19) (2026-02-19)
 
 ## [1.3.18](https://github.com/lstech-solutions/aws/compare/v1.3.17...v1.3.18) (2026-02-19)

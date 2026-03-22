@@ -1,0 +1,135 @@
+[server]
+hostname = "%{env:MAIL_FQDN}%"
+max-connections = 8192
+
+[server.tls]
+enable = true
+implicit = false
+timeout = "1m"
+certificate = "default"
+
+[server.listener."smtp"]
+bind = ["[::]:25"]
+protocol = "smtp"
+
+[server.listener."submission"]
+bind = ["[::]:587"]
+protocol = "smtp"
+
+[server.listener."submissions"]
+bind = ["[::]:465"]
+protocol = "smtp"
+tls.implicit = true
+
+[server.listener."imaps"]
+bind = ["[::]:993"]
+protocol = "imap"
+tls.implicit = true
+
+[server.listener."http"]
+bind = ["[::]:8080"]
+protocol = "http"
+
+[certificate."default"]
+cert = "%{file:/opt/stalwart/certs/mail.pem}%"
+private-key = "%{file:/opt/stalwart/certs/mail.key}%"
+default = true
+
+[storage]
+data = "rocksdb"
+fts = "rocksdb"
+blob = "rocksdb"
+lookup = "rocksdb"
+directory = "internal"
+
+[store."rocksdb"]
+type = "rocksdb"
+path = "/opt/stalwart/data"
+compression = "lz4"
+
+[directory."internal"]
+type = "internal"
+store = "rocksdb"
+
+[authentication.fallback-admin]
+user = "%{env:STALWART_ADMIN_USER}%"
+secret = "%{env:STALWART_ADMIN_SECRET}%"
+
+[http]
+url = "protocol + '://' + config_get('server.hostname')"
+use-x-forwarded = true
+
+[http.rate-limit]
+anonymous = "25/1m"
+account = "250/1m"
+
+[signature."dkim_primary"]
+private-key = "%{file:/opt/stalwart/dkim/primary.ed25519.key}%"
+domain = "%{env:MAIL_PRIMARY_DOMAIN}%"
+selector = "%{env:DKIM_SELECTOR}%"
+headers = ["From", "To", "Cc", "Date", "Subject", "Message-ID", "Organization", "MIME-Version", "Content-Type", "In-Reply-To", "References", "List-Id", "User-Agent", "Thread-Topic", "Thread-Index"]
+algorithm = "ed25519-sha256"
+canonicalization = "relaxed/relaxed"
+expire = "10d"
+set-body-length = false
+report = false
+
+[signature."dkim_secondary"]
+private-key = "%{file:/opt/stalwart/dkim/secondary.ed25519.key}%"
+domain = "%{env:MAIL_ALT_DOMAIN}%"
+selector = "%{env:DKIM_SELECTOR}%"
+headers = ["From", "To", "Cc", "Date", "Subject", "Message-ID", "Organization", "MIME-Version", "Content-Type", "In-Reply-To", "References", "List-Id", "User-Agent", "Thread-Topic", "Thread-Index"]
+algorithm = "ed25519-sha256"
+canonicalization = "relaxed/relaxed"
+expire = "10d"
+set-body-length = false
+report = false
+
+[auth.dkim]
+sign = [
+  { if = "listener != 'smtp' && sender_domain = '%{env:MAIL_PRIMARY_DOMAIN}%'", then = "['dkim_primary']" },
+  { if = "listener != 'smtp' && sender_domain = '%{env:MAIL_ALT_DOMAIN}%'", then = "['dkim_secondary']" },
+  { else = false }
+]
+
+[session.rcpt]
+rewrite = [
+  { if = "matches('^(.+)@tláo\\.com$', rcpt)", then = "$1 + '@xn--tlo-fla.com'" },
+  { else = false }
+]
+
+[server.auto-ban.auth]
+rate = "10/1h"
+
+[server.auto-ban.abuse]
+rate = "20/1h"
+
+[server.auto-ban.loiter]
+rate = "25/1h"
+
+[server.auto-ban.scan]
+rate = "20/1d"
+paths = [
+  "*.php*",
+  "*.cgi*",
+  "*.asp*",
+  "*/wp-*",
+  "*/cgi-bin*",
+  "*../*",
+  "*xmlrpc*"
+]
+
+[tracer.console]
+type = "console"
+level = "info"
+ansi = false
+enable = true
+
+[tracer.file]
+type = "log"
+path = "/opt/stalwart/logs"
+prefix = "stalwart"
+rotate = "daily"
+level = "info"
+ansi = false
+enable = true

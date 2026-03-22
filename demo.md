@@ -73,7 +73,7 @@ pnpm type-check
 ## 📁 Project Structure
 
 ```
-ai-agent-platform/
+tlao/
 ├── apps/
 │   └── landing/              # Next.js landing page (localhost:3000)
 │       ├── src/

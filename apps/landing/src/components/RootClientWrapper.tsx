@@ -1,6 +1,6 @@
 'use client'
 
-import { AppProvider } from '@ai-agent-platform/ui'
+import { AppProvider } from '@tlao/ui'
 import { ThemeProvider } from './ThemeProvider'
 import { BackToTopButtonWrapper } from './ScrollControls'
 

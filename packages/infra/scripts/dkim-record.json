@@ -1,0 +1,17 @@
+{
+  "Changes": [
+    {
+      "Action": "UPSERT",
+      "ResourceRecordSet": {
+        "Name": "mail._domainkey.xn--tlo-fla.com.",
+        "Type": "TXT",
+        "TTL": 300,
+        "ResourceRecords": [
+          {
+            "Value": "\"v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAwoPBt8+TOliJb1uaTy32PTuskZn1tEzBjpJ8e1yTv7VH7NjoqS52pv5klbSVruvK3jEr6D+DVsoOlUgLl4L96qhSl1f7P5PgUB5sXoJPjdljAx6L7KeQRV5mkNKcmorH74r463zBPsb39eTMVssygaVJNL9NRfa2YpOXPfPZbXuz5BsDymWkTN8J4yLxK0GCJ\" \"ijNCbvvkSg3fCuj3v/57y4XDAE77Isz98Pn2S0YJPrILGgoMEmpDj62NYrs795w7d5DA8Xa3+0dP9zUottNq1iy5uF/MoXGSHBuIjKV6vLlkXOWgPkR3bSc+2OXmWSD1VnK9FEGNHrJLd1gzz7rKwIDAQAB\""
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "pipelines": [
+    {
+      "name": "tlao-email",
+      "repo": "tlao-org/tlao",
+      "permissionsMode": "least-privilege",
+      "stages": [
+        { "stage": "dev", "branch": "main", "autoDeploy": true },
+        { "stage": "staging", "branch": "staging", "autoDeploy": true },
+        { "stage": "production", "branch": "production", "autoDeploy": false }
+      ]
+    }
+  ]
+}

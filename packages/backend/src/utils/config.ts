@@ -31,13 +31,13 @@ export const config = {
     temperature: parseFloat(process.env.BEDROCK_TEMPERATURE || '0.7'),
   },
   dynamodb: {
-    usersTable: process.env.DYNAMODB_USERS_TABLE || 'ai-agent-platform-users',
-    documentsTable: process.env.DYNAMODB_DOCUMENTS_TABLE || 'ai-agent-platform-documents',
-    resultsTable: process.env.DYNAMODB_RESULTS_TABLE || 'ai-agent-platform-results',
-    sessionsTable: process.env.DYNAMODB_SESSIONS_TABLE || 'ai-agent-platform-sessions',
+    usersTable: process.env.DYNAMODB_USERS_TABLE || 'tlao-users',
+    documentsTable: process.env.DYNAMODB_DOCUMENTS_TABLE || 'tlao-documents',
+    resultsTable: process.env.DYNAMODB_RESULTS_TABLE || 'tlao-results',
+    sessionsTable: process.env.DYNAMODB_SESSIONS_TABLE || 'tlao-sessions',
   },
   s3: {
-    bucketName: process.env.S3_BUCKET_NAME || 'ai-agent-platform-documents',
+    bucketName: process.env.S3_BUCKET_NAME || 'tlao-documents',
     region: process.env.S3_REGION || 'us-east-1',
   },
   api: {

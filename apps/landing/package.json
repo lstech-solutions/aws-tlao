@@ -1,6 +1,6 @@
 {
-  "name": "@ai-agent-platform/landing",
-  "version": "1.3.19",
+  "name": "@tlao/landing",
+  "version": "1.3.20",
   "private": true,
   "scripts": {
     "dev": "next dev -p 3003",
@@ -12,7 +12,7 @@
     "release": "pnpm run lint && pnpm run type-check && pnpm run build"
   },
   "dependencies": {
-    "@ai-agent-platform/ui": "workspace:*",
+    "@tlao/ui": "workspace:*",
     "next": "15.2.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

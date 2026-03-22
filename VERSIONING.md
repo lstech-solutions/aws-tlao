@@ -66,13 +66,13 @@ The versioning tool is configured in `versioning.config.json`:
 
 The monorepo contains three packages that are version-synchronized:
 
-1. **@ai-agent-platform/versioning** (`packages/versioning`)
+1. **@tlao/versioning** (`packages/versioning`)
    - Versioning utilities and helpers
 
-2. **@ai-agent-platform/backend** (`packages/backend`)
+2. **@tlao/backend** (`packages/backend`)
    - AWS Lambda functions and backend services
 
-3. **@ai-agent-platform/landing** (`apps/landing`)
+3. **@tlao/landing** (`apps/landing`)
    - Next.js landing page application
 
 ## Conventional Commits

@@ -1,143 +1,280 @@
-# Requirements Document: TLÁO Email Handling System
+# Requirements Document
 
 ## Introduction
 
-The TLÁO Email Handling System is the core input layer (Layer 1 — Intake) of the TLÁO Tactical Layer for Action & Outcomes platform. It ingests emails via AWS SES, classifies them using AI (Amazon Bedrock), converts them into operational signals, and triggers TLÁO agents (Plan or Grant) to produce execution artifacts. Email is not treated as communication — it is treated as execution infrastructure within the TLÁO execution graph.
-
-The system supports a tiered model: Free tier users receive @tláo.com (xn--tlo-6ma.com) email addresses, while Pro tier users can bring custom domains. All emails flow through a unified Intake pipeline alongside manual uploads, connectors, and APIs, ultimately producing TLÁO Runs and Artifacts.
+The TLÁO Email System is a standalone mail package and application that integrates Stalwart (an open-source Rust-based mail server) with TLÁO's operational intelligence capabilities. The system provides enterprise-grade email hosting with automated provisioning while extracting operational signals from incoming mail to drive TLÁO's execution engine. This enables email to function as both a communication platform and an operational data source for projects, outcomes, and artifacts.
 
 ## Glossary
 
-- **TLÁO_Email_System**: The email ingestion and mailbox subsystem serving as the Intake Layer
-- **Intake_Layer**: Layer 1 of the TLÁO architecture responsible for receiving all operational inputs
-- **Mailbox**: A named email address within a workspace that receives and stores emails
-- **Workspace**: A project-level container that owns mailboxes, runs, and artifacts
-- **MailMessage**: A parsed email record stored in DynamoDB with metadata and a reference to the raw email in S3
-- **Intake_Processor**: The service that classifies incoming emails and routes them to the appropriate TLÁO agent
-- **Email_Classification**: The AI-determined category of an email (e.g., client_request, bug_report, invoice, grant_announcement, grant_response, partner_reply)
-- **TLÁO_Run**: An execution record created when an agent processes an intake signal
-- **TLÁO_Artifact**: An output produced by a run (execution_plan, grant_draft, alert)
-- **SES_Inbound**: AWS Simple Email Service configured to receive emails for verified domains
-- **Email_Parser_Lambda**: The Lambda function that parses raw emails from S3 into structured MailMessage records
-- **Raw_Email**: The original email stored as-is in S3 by SES inbound rules
-- **Thread**: A group of related MailMessages linked by threadId
-- **Tier_System**: The pricing model with Free (@tláo.com, limited) and Pro (custom domain, higher limits) tiers
-- **Rate_Limiter**: The service that enforces per-workspace email processing rate limits
+- **Stalwart**: The open-source mail server substrate providing IMAP, JMAP, POP3, SMTP, CalDAV, CardDAV, and WebDAV protocols
+- **Mail_Provisioner**: The service that automates mailbox creation, DNS configuration, and TLÁO registration
+- **TLÁO_Mail_Ingestion**: The service that monitors mailboxes and converts emails into operational signals
+- **Execution_Engine**: The TLÁO component that processes signals and creates execution runs
+- **Principal**: A Stalwart user account with authentication credentials
+- **Mailbox**: An email storage location associated with a principal
+- **Alias**: An email address that forwards to one or more mailboxes
+- **Workspace**: A TLÁO organizational unit that can own domains and mailboxes
+- **Domain**: A DNS domain configured for mail delivery
+- **Ingestion_Mode**: Classification determining how emails are processed (operational, opportunity, personal)
+- **Signal**: A TLÁO operational event extracted from an email
+- **Execution_Run**: A TLÁO workflow instance created from a signal
+- **Outcome**: A TLÁO goal or deliverable that can be linked to emails
+- **Artifact**: A TLÁO document or resource generated from email content
+- **IMAP**: Internet Message Access Protocol for retrieving emails from a mail server
+- **IMAPS**: IMAP with TLS encryption for secure email retrieval
+- **SMTP**: Simple Mail Transfer Protocol for sending emails
+- **SMTPS**: SMTP with TLS encryption for secure email sending
+- **Autodiscover**: Microsoft protocol for automatic email client configuration
+- **Autoconfig**: Mozilla protocol for automatic email client configuration
+- **Email_Client**: A software application used to access email (e.g., Thunderbird, Outlook, Gmail, Apple Mail)
 
 ## Requirements
 
-### Requirement 1: SES Inbound Email Reception
+### Requirement 1: Stalwart Mail Server Infrastructure
 
-**User Story:** As a workspace owner, I want emails sent to my workspace mailbox addresses to be automatically received and stored, so that they enter the TLÁO execution pipeline without manual intervention.
-
-#### Acceptance Criteria
-
-1. WHEN an email is received by SES for a verified domain, THE SES_Inbound SHALL store the raw email in S3 under the path `incoming/{workspaceId}/{messageId}`
-2. WHEN a raw email is stored in S3, THE SES_Inbound SHALL trigger the Email_Parser_Lambda via S3 event notification
-3. IF an email exceeds 5MB in size, THEN THE SES_Inbound SHALL reject the email and log the rejection event
-4. WHEN an email is received for a mailbox address that does not exist in any workspace, THE TLÁO_Email_System SHALL reject the email with a bounce response
-
-### Requirement 2: Email Parsing and Storage
-
-**User Story:** As a workspace member, I want incoming emails to be parsed into structured records, so that the system can classify and act on them.
+**User Story:** As a system administrator, I want a fully functional mail server infrastructure, so that users can send and receive emails using standard protocols.
 
 #### Acceptance Criteria
 
-1. WHEN the Email_Parser_Lambda is triggered, THE Email_Parser_Lambda SHALL extract sender address, subject, plain-text body, HTML body, and attachment metadata from the raw email
-2. WHEN parsing is complete, THE Email_Parser_Lambda SHALL create a MailMessage record in DynamoDB with fields: workspaceId, mailbox, messageId, fromAddress, subject, bodyText, receivedAt, s3RawKey, threadId, and status set to "received"
-3. WHEN the email contains In-Reply-To or References headers, THE Email_Parser_Lambda SHALL assign the MailMessage to an existing thread by matching threadId
-4. IF the raw email cannot be parsed, THEN THE Email_Parser_Lambda SHALL set the MailMessage status to "parse_error" and log the error with the messageId and error details
-5. WHEN a MailMessage is successfully created, THE Email_Parser_Lambda SHALL emit a NewMailMessageCreated event containing the workspaceId and messageId
+1. THE Stalwart SHALL support IMAP protocol for mail client access
+2. THE Stalwart SHALL support JMAP protocol for modern mail client access
+3. THE Stalwart SHALL support POP3 protocol for legacy mail client access
+4. THE Stalwart SHALL support SMTP protocol for sending and receiving emails
+5. THE Stalwart SHALL support CalDAV protocol for calendar synchronization
+6. THE Stalwart SHALL support CardDAV protocol for contact synchronization
+7. THE Stalwart SHALL support WebDAV protocol for file access
+8. THE Stalwart SHALL provide a web-based administration interface
+9. THE Stalwart SHALL provide a management API for automation
+10. THE Stalwart SHALL store messages in an encrypted message store
+11. THE Stalwart SHALL authenticate principals before granting access
+12. THE Stalwart SHALL deliver incoming messages to the appropriate mailbox
 
-### Requirement 3: Email Classification
+### Requirement 2: AWS Infrastructure Deployment
 
-**User Story:** As a workspace owner, I want incoming emails to be automatically classified by intent, so that the correct TLÁO agent is triggered without manual triage.
-
-#### Acceptance Criteria
-
-1. WHEN a NewMailMessageCreated event is received, THE Intake_Processor SHALL retrieve the MailMessage and invoke Amazon Bedrock to classify the email into one of the defined categories: client_request, bug_report, invoice, grant_announcement, grant_response, or partner_reply
-2. WHEN classification is complete, THE Intake_Processor SHALL update the MailMessage record with the classification result and a confidence score between 0 and 1
-3. IF the classification confidence score is below 0.6, THEN THE Intake_Processor SHALL set the MailMessage status to "needs_review" and skip automatic agent triggering
-4. WHEN the email body exceeds 10,000 characters, THE Intake_Processor SHALL truncate the body to 10,000 characters before sending it to Bedrock for classification
-
-### Requirement 4: TLÁO Agent Triggering
-
-**User Story:** As a workspace owner, I want classified emails to automatically trigger the appropriate TLÁO agent, so that execution artifacts are produced without manual steps.
+**User Story:** As a system administrator, I want the mail system deployed on AWS infrastructure, so that it benefits from cloud scalability and reliability.
 
 #### Acceptance Criteria
 
-1. WHEN an email is classified as client_request, bug_report, invoice, or partner_reply, THE Intake_Processor SHALL create a TLÁO_Run record with agentType set to "PLAN" and source set to "EMAIL"
-2. WHEN an email is classified as grant_announcement or grant_response, THE Intake_Processor SHALL create a TLÁO_Run record with agentType set to "GRANT" and source set to "EMAIL"
-3. WHEN a TLÁO_Run is created, THE Intake_Processor SHALL invoke the corresponding TLÁO agent (TLÁO Plan or TLÁO Grant) with the MailMessage content as input
-4. WHEN the agent completes execution, THE TLÁO_Email_System SHALL create a TLÁO_Artifact record with the artifact type (execution_plan, grant_draft, or alert), the S3 key of the artifact content, and a reference to the runId
-5. WHEN a TLÁO_Run completes, THE TLÁO_Email_System SHALL update the MailMessage status to "processed" and link the runId to the MailMessage record
+1. THE System SHALL deploy Stalwart on an EC2 instance
+2. THE System SHALL use EBS volumes for mail storage
+3. THE System SHALL use S3 buckets for backup storage
+4. THE System SHALL use Route 53 for DNS management
+5. WHERE outbound relay is enabled, THE System SHALL integrate with SES for SMTP relay
+6. THE System SHALL use CloudWatch for monitoring and alerting
+7. THE System SHALL assign an Elastic IP to the EC2 instance for stable reverse DNS
+8. THE System SHALL encrypt EBS volumes at rest
+9. THE System SHALL encrypt S3 backup data at rest
 
-### Requirement 5: Mailbox Management
+### Requirement 3: Domain and DNS Configuration
 
-**User Story:** As a workspace owner, I want to create and manage mailboxes within my workspace, so that I can organize incoming emails by purpose.
-
-#### Acceptance Criteria
-
-1. WHEN a workspace owner creates a mailbox, THE TLÁO_Email_System SHALL validate that the workspace has fewer than 5 existing mailboxes
-2. IF a workspace already has 5 mailboxes, THEN THE TLÁO_Email_System SHALL reject the creation request with an error indicating the maximum mailbox limit has been reached
-3. WHEN a mailbox is created for a Free tier workspace, THE TLÁO_Email_System SHALL assign an address in the format `{mailbox-name}@xn--tlo-6ma.com`
-4. WHEN a mailbox is created for a Pro tier workspace with a custom domain, THE TLÁO_Email_System SHALL assign an address using the workspace custom domain in the format `{mailbox-name}@{custom-domain}`
-5. WHEN a mailbox is deleted, THE TLÁO_Email_System SHALL stop accepting new emails for that address and retain existing MailMessages for the TTL period
-
-### Requirement 6: Tier-Based Limits and Safety Controls
-
-**User Story:** As a platform operator, I want to enforce tier-based limits on email processing, so that the system stays within AWS Free Tier constraints and prevents abuse.
+**User Story:** As a system administrator, I want automated DNS configuration, so that domains are properly configured for mail delivery.
 
 #### Acceptance Criteria
 
-1. FOR ALL Free tier workspaces, THE TLÁO_Email_System SHALL enforce a maximum of 100 emails received per day per workspace
-2. WHEN a Free tier workspace exceeds the daily email limit, THE TLÁO_Email_System SHALL reject additional incoming emails with a bounce response until the next calendar day
-3. FOR ALL Free tier workspaces, THE TLÁO_Email_System SHALL apply a TTL of 60 days to MailMessage records in DynamoDB, automatically deleting expired records
-4. WHEN processing an email, THE Rate_Limiter SHALL enforce a maximum of 10 email processing operations per minute per workspace
-5. IF the per-workspace processing rate limit is exceeded, THEN THE Rate_Limiter SHALL queue the email for deferred processing and update the MailMessage status to "queued"
+1. WHEN a domain is provisioned, THE Mail_Provisioner SHALL create an MX record pointing to the Stalwart host
+2. WHEN a domain is provisioned, THE Mail_Provisioner SHALL create an SPF record for sender authentication
+3. WHEN a domain is provisioned, THE Mail_Provisioner SHALL create a DKIM record for message signing
+4. WHEN a domain is provisioned, THE Mail_Provisioner SHALL create a DMARC record for policy enforcement
+5. WHEN a domain is provisioned, THE Mail_Provisioner SHALL configure reverse DNS for the Elastic IP
+6. THE Mail_Provisioner SHALL validate DNS propagation before marking provisioning complete
 
-### Requirement 7: Data Model and Persistence
+### Requirement 4: Mailbox Provisioning Service
 
-**User Story:** As a developer, I want a well-defined data model for email records, runs, and artifacts, so that the system maintains data integrity and supports querying.
-
-#### Acceptance Criteria
-
-1. THE TLÁO_Email_System SHALL store MailMessage records in a DynamoDB table with partition key workspaceId and sort key messageId
-2. THE TLÁO_Email_System SHALL store TLÁO_Run records in a DynamoDB table with partition key workspaceId and sort key runId, including fields: agentType, source, sourceMessageId, status, createdAt, and completedAt
-3. THE TLÁO_Email_System SHALL store TLÁO_Artifact records in a DynamoDB table with partition key runId and sort key artifactId, including fields: type, s3Key, and createdAt
-4. WHEN a MailMessage record is serialized to DynamoDB and then deserialized, THE TLÁO_Email_System SHALL produce an equivalent MailMessage object (round-trip consistency)
-5. WHEN a TLÁO_Run record is serialized to DynamoDB and then deserialized, THE TLÁO_Email_System SHALL produce an equivalent TLÁO_Run object (round-trip consistency)
-6. WHEN a TLÁO_Artifact record is serialized to DynamoDB and then deserialized, THE TLÁO_Email_System SHALL produce an equivalent TLÁO_Artifact object (round-trip consistency)
-
-### Requirement 8: Email Inbox UI API
-
-**User Story:** As a workspace member, I want to view received emails, their classification, and linked runs inside the TLÁO UI, so that I can track how emails are being processed.
+**User Story:** As a workspace administrator, I want to provision mailboxes programmatically, so that I can automate user onboarding.
 
 #### Acceptance Criteria
 
-1. WHEN a user requests the inbox for a workspace, THE TLÁO_Email_System SHALL return a paginated list of MailMessages sorted by receivedAt in descending order
-2. WHEN a user requests a specific MailMessage, THE TLÁO_Email_System SHALL return the full message details including classification, confidence score, linked runId, and linked artifacts
-3. WHEN a user requests messages filtered by status (received, processing, processed, needs_review, parse_error), THE TLÁO_Email_System SHALL return only messages matching the specified status
-4. WHEN a user requests messages for a specific mailbox within a workspace, THE TLÁO_Email_System SHALL return only messages addressed to that mailbox
+1. WHEN a provisioning request is received, THE Mail_Provisioner SHALL validate the domain and workspace parameters
+2. WHEN a provisioning request is valid, THE Mail_Provisioner SHALL create a Stalwart principal with authentication credentials
+3. WHEN a principal is created, THE Mail_Provisioner SHALL create the associated mailbox
+4. WHERE aliases are specified, THE Mail_Provisioner SHALL create alias mappings to the mailbox
+5. WHEN provisioning succeeds, THE Mail_Provisioner SHALL register the mailbox in TLÁO Mail with the specified ingestion mode
+6. WHEN provisioning succeeds, THE Mail_Provisioner SHALL return credentials and setup information
+7. IF provisioning fails, THEN THE Mail_Provisioner SHALL rollback partial changes and return an error description
+8. THE Mail_Provisioner SHALL use the Stalwart management API with an API key for all automation
 
-### Requirement 9: Error Handling and Resilience
+### Requirement 5: Security Controls
 
-**User Story:** As a platform operator, I want the email processing pipeline to handle failures gracefully, so that no emails are lost and errors are recoverable.
-
-#### Acceptance Criteria
-
-1. IF the Email_Parser_Lambda fails during processing, THEN THE TLÁO_Email_System SHALL retain the raw email in S3 and set the MailMessage status to "parse_error" for later retry
-2. IF the Intake_Processor fails during classification or agent triggering, THEN THE TLÁO_Email_System SHALL set the MailMessage status to "processing_error" and log the error with workspaceId, messageId, and error details
-3. WHEN a Bedrock API call fails during classification, THE Intake_Processor SHALL retry with exponential backoff up to 3 attempts before marking the MailMessage as "processing_error"
-4. IF a TLÁO agent fails during execution, THEN THE TLÁO_Email_System SHALL set the TLÁO_Run status to "error", store partial results if available, and update the MailMessage status to "processing_error"
-
-### Requirement 10: Monitoring and Observability
-
-**User Story:** As a platform operator, I want visibility into email processing metrics and errors, so that I can maintain service quality and diagnose issues.
+**User Story:** As a security officer, I want comprehensive security controls, so that the mail system is protected from unauthorized access and attacks.
 
 #### Acceptance Criteria
 
-1. FOR ALL email processing operations, THE TLÁO_Email_System SHALL log operation metadata (workspaceId, messageId, operation type, duration, status) to CloudWatch
-2. WHEN an error occurs in any stage of the email pipeline, THE TLÁO_Email_System SHALL log the error with full context (workspaceId, messageId, stage, error message, stack trace) to CloudWatch
-3. FOR ALL workspaces, THE TLÁO_Email_System SHALL track daily email volume metrics and expose them via a CloudWatch dashboard
-4. WHEN a workspace reaches 80% of its daily email limit, THE TLÁO_Email_System SHALL emit a CloudWatch alarm
+1. THE System SHALL enforce TLS encryption for all SMTP connections
+2. THE System SHALL enforce TLS encryption for all IMAP connections
+3. THE System SHALL enforce TLS encryption for all JMAP connections
+4. THE System SHALL block all network ports except those required for mail protocols and administration
+5. THE System SHALL implement rate limiting to prevent brute force authentication attempts
+6. THE System SHALL restrict web administration access to authorized IP ranges or VPN connections
+7. THE System SHALL require strong authentication for administrative access
+8. THE System SHALL log all authentication attempts
+9. WHEN repeated failed authentication attempts occur, THE System SHALL temporarily block the source IP address
+10. THE System SHALL send CloudWatch alerts for security events
+
+### Requirement 6: JMAP Mail Ingestion
+
+**User Story:** As a TLÁO user, I want emails automatically converted into operational signals, so that I can track work and outcomes through email.
+
+#### Acceptance Criteria
+
+1. THE TLÁO_Mail_Ingestion SHALL connect to Stalwart using JMAP protocol as the primary method
+2. WHERE JMAP is unavailable, THE TLÁO_Mail_Ingestion SHALL fall back to IMAP protocol
+3. WHEN a new email arrives in a monitored mailbox, THE TLÁO_Mail_Ingestion SHALL detect it within 60 seconds
+4. WHEN an email is detected, THE TLÁO_Mail_Ingestion SHALL extract sender, recipients, subject, body, and attachments
+5. WHEN an email is extracted, THE TLÁO_Mail_Ingestion SHALL classify it by ingestion mode
+6. WHEN an email is classified, THE TLÁO_Mail_Ingestion SHALL normalize it into a signal structure
+7. THE TLÁO_Mail_Ingestion SHALL preserve the original email message ID for traceability
+
+### Requirement 7: Operational Email Classification
+
+**User Story:** As a TLÁO user, I want operational emails automatically processed, so that support requests and alerts become actionable signals.
+
+#### Acceptance Criteria
+
+1. WHEN an email arrives at an operational mailbox (support@, ops@, alerts@), THE TLÁO_Mail_Ingestion SHALL create a signal with operational classification
+2. WHEN an operational signal is created, THE TLÁO_Mail_Ingestion SHALL submit it to the Execution_Engine
+3. WHEN the Execution_Engine receives an operational signal, THE Execution_Engine SHALL create an execution run
+4. WHERE the email content references existing outcomes, THE TLÁO_Mail_Ingestion SHALL link the signal to those outcomes
+5. WHERE the email content references existing projects, THE TLÁO_Mail_Ingestion SHALL link the signal to those projects
+6. THE TLÁO_Mail_Ingestion SHALL generate suggested tasks based on email content
+7. THE TLÁO_Mail_Ingestion SHALL generate suggested plans based on email content
+
+### Requirement 8: Opportunity Email Classification
+
+**User Story:** As a grants manager, I want opportunity emails routed for evaluation, so that grant and partnership opportunities are properly assessed.
+
+#### Acceptance Criteria
+
+1. WHEN an email arrives at an opportunity mailbox (grants@, partnerships@), THE TLÁO_Mail_Ingestion SHALL create a signal with opportunity classification
+2. WHEN an opportunity signal is created, THE TLÁO_Mail_Ingestion SHALL route it to the Grant evaluation workflow
+3. WHEN an opportunity signal is created, THE TLÁO_Mail_Ingestion SHALL route it to the Opportunity evaluation workflow
+4. THE TLÁO_Mail_Ingestion SHALL extract opportunity metadata including deadlines, funding amounts, and requirements
+
+### Requirement 9: Personal Email Classification
+
+**User Story:** As a TLÁO user, I want control over personal email ingestion, so that my privacy is protected.
+
+#### Acceptance Criteria
+
+1. WHERE a mailbox has personal ingestion mode, THE TLÁO_Mail_Ingestion SHALL only process emails if the user has opted in
+2. WHERE a user has not opted in, THE TLÁO_Mail_Ingestion SHALL not access the mailbox contents
+3. WHERE a user has opted in, THE TLÁO_Mail_Ingestion SHALL apply privacy controls to limit data extraction
+4. THE System SHALL allow users to revoke opt-in at any time
+
+### Requirement 10: Outcome and Artifact Mapping
+
+**User Story:** As a TLÁO user, I want emails linked to outcomes and artifacts, so that I can track communication related to my work.
+
+#### Acceptance Criteria
+
+1. WHEN a signal is processed, THE TLÁO_Mail_Ingestion SHALL analyze content for outcome references
+2. WHEN outcome references are found, THE TLÁO_Mail_Ingestion SHALL create links between the email and the outcomes
+3. WHEN a signal is processed, THE TLÁO_Mail_Ingestion SHALL analyze content for artifact generation opportunities
+4. WHERE artifact generation is appropriate, THE TLÁO_Mail_Ingestion SHALL create artifact proposals
+5. THE TLÁO_Mail_Ingestion SHALL store routing rules that map email patterns to outcomes
+
+### Requirement 11: Backup and Recovery
+
+**User Story:** As a system administrator, I want automated backups, so that mail data can be recovered after failures.
+
+#### Acceptance Criteria
+
+1. THE System SHALL backup mail storage to S3 daily
+2. THE System SHALL retain backups for 90 days
+3. THE System SHALL encrypt backup data before uploading to S3
+4. THE System SHALL verify backup integrity after each backup operation
+5. WHEN a backup fails, THE System SHALL send a CloudWatch alert
+6. THE System SHALL provide a recovery procedure to restore from S3 backups
+
+### Requirement 12: Monitoring and Alerting
+
+**User Story:** As a system administrator, I want comprehensive monitoring, so that I can detect and respond to issues quickly.
+
+#### Acceptance Criteria
+
+1. THE System SHALL send CloudWatch metrics for mail delivery success rate
+2. THE System SHALL send CloudWatch metrics for mail delivery latency
+3. THE System SHALL send CloudWatch metrics for authentication failure rate
+4. THE System SHALL send CloudWatch metrics for disk usage
+5. THE System SHALL send CloudWatch metrics for CPU and memory utilization
+6. WHEN disk usage exceeds 80 percent, THE System SHALL send a CloudWatch alert
+7. WHEN authentication failure rate exceeds threshold, THE System SHALL send a CloudWatch alert
+8. WHEN mail delivery failure rate exceeds threshold, THE System SHALL send a CloudWatch alert
+
+### Requirement 13: Multi-Domain Support
+
+**User Story:** As a workspace administrator, I want to host multiple domains, so that different teams can have separate email identities.
+
+#### Acceptance Criteria
+
+1. THE System SHALL support multiple domains within a single Stalwart instance
+2. WHEN a domain is added, THE Mail_Provisioner SHALL configure DNS records for that domain
+3. THE System SHALL isolate mailboxes by domain
+4. THE System SHALL allow aliases to reference mailboxes within the same domain
+5. THE System SHALL associate each domain with a workspace in TLÁO
+
+### Requirement 14: Alias Management
+
+**User Story:** As a workspace administrator, I want to create email aliases, so that multiple addresses can route to the same mailbox.
+
+#### Acceptance Criteria
+
+1. THE Mail_Provisioner SHALL create aliases that forward to one or more mailboxes
+2. WHEN an email is sent to an alias, THE Stalwart SHALL deliver it to all configured target mailboxes
+3. THE Mail_Provisioner SHALL allow aliases to be updated after creation
+4. THE Mail_Provisioner SHALL allow aliases to be deleted
+5. THE System SHALL validate that alias targets exist before creating the alias
+
+### Requirement 15: Outbound Mail Relay
+
+**User Story:** As a system administrator, I want optional SES relay for outbound mail, so that I can improve deliverability.
+
+#### Acceptance Criteria
+
+1. WHERE SES relay is enabled, THE Stalwart SHALL route outbound SMTP through SES
+2. WHERE SES relay is disabled, THE Stalwart SHALL send outbound SMTP directly
+3. THE System SHALL allow SES relay to be enabled or disabled per domain
+4. WHEN SES relay is enabled, THE System SHALL configure SMTP credentials for SES authentication
+
+### Requirement 16: Provisioning Status Tracking
+
+**User Story:** As a workspace administrator, I want to track provisioning status, so that I know when mailboxes are ready to use.
+
+#### Acceptance Criteria
+
+1. WHEN provisioning begins, THE Mail_Provisioner SHALL create a provisioning status record
+2. WHILE provisioning is in progress, THE Mail_Provisioner SHALL update the status record with current step
+3. WHEN provisioning completes successfully, THE Mail_Provisioner SHALL mark the status as complete
+4. IF provisioning fails, THEN THE Mail_Provisioner SHALL mark the status as failed with error details
+5. THE Mail_Provisioner SHALL allow querying provisioning status by request ID
+
+### Requirement 17: Configuration Parser and Validator
+
+**User Story:** As a developer, I want to parse and validate configuration files, so that system configuration is correct before deployment.
+
+#### Acceptance Criteria
+
+1. WHEN a configuration file is provided, THE Configuration_Parser SHALL parse it into a Configuration object
+2. IF the configuration file is invalid, THEN THE Configuration_Parser SHALL return a descriptive error with line and column information
+3. THE Configuration_Validator SHALL validate that required fields are present
+4. THE Configuration_Validator SHALL validate that field values are within acceptable ranges
+5. THE Configuration_Pretty_Printer SHALL format Configuration objects into valid configuration files
+6. FOR ALL valid Configuration objects, parsing then printing then parsing SHALL produce an equivalent Configuration object (round-trip property)
+
+### Requirement 18: Standard Email Client Support
+
+**User Story:** As a user, I want to configure my mailbox in standard email clients like Thunderbird, Gmail, Outlook, and Apple Mail, so that I can access my email using my preferred client.
+
+#### Acceptance Criteria
+
+1. THE Stalwart SHALL support IMAP protocol on port 143 with STARTTLS for email client access
+2. THE Stalwart SHALL support IMAPS protocol on port 993 with TLS encryption for secure email client access
+3. THE Stalwart SHALL support SMTP protocol on port 587 with STARTTLS for email client sending
+4. THE Stalwart SHALL support SMTPS protocol on port 465 with TLS encryption for secure email client sending
+5. THE Stalwart SHALL authenticate email clients using username and password credentials
+6. WHEN a mailbox is provisioned, THE Mail_Provisioner SHALL return connection details including IMAP server hostname, IMAP port, SMTP server hostname, SMTP port, and security settings
+7. THE System SHALL provide autodiscover configuration for Microsoft Outlook clients
+8. THE System SHALL provide autoconfig configuration for Mozilla Thunderbird clients
+9. WHEN an email client requests autodiscover configuration, THE System SHALL return XML configuration with IMAP and SMTP server details
+10. WHEN an email client requests autoconfig configuration, THE System SHALL return XML configuration with IMAP and SMTP server details
+11. THE System SHALL document connection settings for manual configuration in Gmail, Apple Mail, and other standard clients
+12. THE Stalwart SHALL support standard IMAP operations including FETCH, STORE, SEARCH, and IDLE for email client compatibility

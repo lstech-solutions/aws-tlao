@@ -9,7 +9,7 @@ const nextConfig = {
   webpack: (config, { isServer }) => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@ai-agent-platform/ui': require.resolve('../../packages/ui/src/index.ts'),
+      '@tlao/ui': require.resolve('../../packages/ui/src/index.ts'),
     }
     return config
   },

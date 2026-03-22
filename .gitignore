@@ -41,6 +41,8 @@ Thumbs.db
 # AWS
 .aws-sam/
 cdk.out/
+.sst/
+packages/infra/.sst/
 
 # Infrastructure sensitive files
 infrastructure/sensitive/*

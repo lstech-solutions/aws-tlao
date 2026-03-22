@@ -1,0 +1,15 @@
+{
+  "name": "@tlao/email-ui",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TLÁO Mail UI package with a SnappyMail fallback and a future custom webmail surface",
+  "type": "module",
+  "scripts": {
+    "render:snappymail": "node ./scripts/render-snappymail.mjs",
+    "prepare:snappymail-branding": "node -e \"process.stdout.write('SnappyMail branding assets are source-controlled under packages/email-ui/snappymail/image\\n')\"",
+    "build": "node -e \"process.stdout.write('email-ui is deployment-first for now\\n')\"",
+    "type-check": "node -e \"process.exit(0)\"",
+    "lint": "node -e \"process.exit(0)\"",
+    "test": "node -e \"process.exit(0)\""
+  }
+}

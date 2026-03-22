@@ -1,4 +1,4 @@
-# @ai-agent-platform/ui
+# @tlao/ui
 
 Shared UI components for the TLÁO platform. This package provides reusable components that work across the landing page, documentation, and future applications.
 
@@ -19,7 +19,7 @@ The package is already included in the monorepo workspaces.
 Wrap your app with `AppProvider` in the root layout:
 
 ```tsx
-import { AppProvider } from '@ai-agent-platform/ui'
+import { AppProvider } from '@tlao/ui'
 
 export default function RootLayout({ children }) {
   return (
@@ -37,7 +37,7 @@ export default function RootLayout({ children }) {
 ### Use Shared Footer
 
 ```tsx
-import { Footer } from '@ai-agent-platform/ui'
+import { Footer } from '@tlao/ui'
 
 export default function Page() {
   return (
@@ -66,7 +66,7 @@ Add custom links to the footer:
 ### Router Utilities
 
 ```tsx
-import { createInternalLink, getBasePath } from '@ai-agent-platform/ui'
+import { createInternalLink, getBasePath } from '@tlao/ui'
 
 // Create a link to another app
 const docsLink = createInternalLink('/guide', 'docs', {

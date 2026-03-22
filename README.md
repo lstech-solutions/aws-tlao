@@ -96,7 +96,8 @@ cd aws-tlao
 pnpm install
 
 # Set up environment variables
-cp .env.example .env.local
+cp .env.example .env
+pnpm run env:sync
 ```
 
 ### Development
@@ -231,6 +232,7 @@ Current Version: **1.3.7**
 - [DEPLOYMENT.md](./DEPLOYMENT.md) - Deployment instructions
 - [CHANGELOG.md](./CHANGELOG.md) - Release notes
 - [ROADMAP.md](./ROADMAP.md) - Development roadmap
+- [OVH Mail Deployment Bundle](./packages/email/deployment/ovh/README.md) - standalone Stalwart + Caddy substrate for the OVH VPS path
 
 ## 🏆 AWS 10,000 AIdeas Challenge
 

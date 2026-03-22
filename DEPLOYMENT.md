@@ -1,6 +1,6 @@
-# Deployment Guide - AI Agent Platform
+# Deployment Guide - TLÁO Platform
 
-This guide covers deploying the AI Agent Platform for the AWS 10,000 AIdeas Competition.
+This guide covers deploying the TLÁO Platform for the AWS 10,000 AIdeas Competition.
 
 ## 🚀 Quick Deploy
 
@@ -23,7 +23,7 @@ This guide covers deploying the AI Agent Platform for the AWS 10,000 AIdeas Comp
 pnpm install
 
 # Build landing page
-pnpm run build --filter=@ai-agent-platform/landing
+pnpm run build --filter=@tlao/landing
 
 # Deploy to Vercel
 cd apps/landing
@@ -33,7 +33,7 @@ vercel --prod
 #### Backend (AWS Lambda)
 ```bash
 # Build backend
-pnpm run build --filter=@ai-agent-platform/backend
+pnpm run build --filter=@tlao/backend
 
 # Deploy with AWS SAM or Serverless Framework
 cd packages/backend
@@ -45,13 +45,13 @@ cd packages/backend
 ### Frontend Options
 
 #### Vercel (Recommended)
-- **URL**: https://ai-agent-platform.vercel.app
+- **URL**: https://tlao.vercel.app
 - **Features**: Automatic deployments, edge functions, analytics
 - **Setup**: Connect GitHub repo, auto-deploy on push
 
 #### Netlify
 - **Features**: Form handling, edge functions, split testing
-- **Setup**: Connect GitHub repo, build command: `pnpm run build --filter=@ai-agent-platform/landing`
+- **Setup**: Connect GitHub repo, build command: `pnpm run build --filter=@tlao/landing`
 
 #### AWS Amplify
 - **Features**: Native AWS integration, custom domains
@@ -73,7 +73,7 @@ cd packages/backend
 ### Frontend Environment Variables
 ```bash
 # apps/landing/.env.local
-NEXT_PUBLIC_API_URL=https://api.ai-agent-platform.com
+NEXT_PUBLIC_API_URL=https://api.tlao.com
 NEXT_PUBLIC_DEMO_MODE=true
 ```
 
@@ -82,11 +82,11 @@ NEXT_PUBLIC_DEMO_MODE=true
 # packages/backend/.env
 AWS_REGION=us-east-1
 BEDROCK_MODEL_ID=anthropic.claude-3-sonnet-20240229-v1:0
-DYNAMODB_USERS_TABLE=ai-agent-platform-users
-DYNAMODB_DOCUMENTS_TABLE=ai-agent-platform-documents
-DYNAMODB_RESULTS_TABLE=ai-agent-platform-results
-DYNAMODB_SESSIONS_TABLE=ai-agent-platform-sessions
-S3_BUCKET_NAME=ai-agent-platform-documents
+DYNAMODB_USERS_TABLE=tlao-users
+DYNAMODB_DOCUMENTS_TABLE=tlao-documents
+DYNAMODB_RESULTS_TABLE=tlao-results
+DYNAMODB_SESSIONS_TABLE=tlao-sessions
+S3_BUCKET_NAME=tlao-documents
 API_KEY_HASH_SECRET=your-secret-key-here
 ```
 
@@ -94,8 +94,8 @@ API_KEY_HASH_SECRET=your-secret-key-here
 
 ### AWS CDK (Coming Soon)
 ```typescript
-// infrastructure/lib/ai-agent-platform-stack.ts
-export class AiAgentPlatformStack extends Stack {
+// infrastructure/lib/tlao-stack.ts
+export class TlaoStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
     
@@ -112,7 +112,7 @@ export class AiAgentPlatformStack extends Stack {
 ```hcl
 # infrastructure/main.tf
 resource "aws_dynamodb_table" "users" {
-  name           = "ai-agent-platform-users"
+  name           = "tlao-users"
   billing_mode   = "PAY_PER_REQUEST"
   hash_key       = "userId"
   
@@ -203,7 +203,7 @@ aws logs describe-log-groups
 ```bash
 # Verify environment variables
 vercel env ls
-aws ssm get-parameters-by-path --path "/ai-agent-platform/"
+aws ssm get-parameters-by-path --path "/tlao/"
 ```
 
 ## 📞 Support
@@ -216,4 +216,4 @@ For deployment issues:
 
 ---
 
-🏆 **Competition Ready**: This deployment guide ensures your AI Agent Platform is ready for the AWS 10,000 AIdeas Competition judging process.
+🏆 **Competition Ready**: This deployment guide ensures your TLÁO Platform is ready for the AWS 10,000 AIdeas Competition judging process.
