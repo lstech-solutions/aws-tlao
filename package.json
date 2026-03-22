@@ -1,6 +1,6 @@
 {
   "name": "tlao",
-  "version": "1.3.20",
+  "version": "1.3.21",
   "description": "TLÁO - Tactical Layer for Autonomous Operations - AWS 10,000 AIdeas Competition Entry",
   "private": true,
   "workspaces": [
