@@ -34,10 +34,19 @@ get_config() {
 
 # Load configuration
 DOMAIN_NAME=$(get_config "name")
-TARGET_URL=$(get_config "target_url")
+GITHUB_PAGES_DOMAIN=$(get_config "github_pages_domain")
 AWS_REGION=$(get_config "region")
 DOMAIN_STACK=$(get_config "domain_redirect")
 EMAIL_STACK=$(get_config "email_forwarding")
+
+if [ -z "$GITHUB_PAGES_DOMAIN" ]; then
+    LEGACY_TARGET_URL=$(get_config "target_url")
+    if [ -n "$LEGACY_TARGET_URL" ]; then
+        GITHUB_PAGES_DOMAIN=$(printf '%s' "$LEGACY_TARGET_URL" | sed -E 's#https?://([^/]+)/?.*#\1#')
+    else
+        GITHUB_PAGES_DOMAIN="lstech-solutions.github.io"
+    fi
+fi
 
 # Validate configuration
 if [ -z "$DOMAIN_NAME" ] || [ -z "$AWS_REGION" ]; then
@@ -49,7 +58,7 @@ fi
 echo "Configuration:"
 echo "  Domain: $DOMAIN_NAME"
 echo "  Region: $AWS_REGION"
-echo "  Target: $TARGET_URL"
+echo "  GitHub Pages Host: $GITHUB_PAGES_DOMAIN"
 echo ""
 
 # Parse email forwarding mappings from config
@@ -93,12 +102,12 @@ wait_for_stack() {
     fi
 }
 
-# Deploy Domain Redirect Stack
-echo -e "${BLUE}Step 1: Deploying Domain Redirect Stack${NC}"
+# Deploy GitHub Pages DNS Stack
+echo -e "${BLUE}Step 1: Deploying GitHub Pages DNS Stack${NC}"
 echo "This will create:"
-echo "  - S3 bucket for redirect"
-echo "  - CloudFront distribution"
-echo "  - ACM certificate"
+echo "  - Route53 apex A records for GitHub Pages"
+echo "  - Route53 apex AAAA records for GitHub Pages"
+echo "  - Route53 www CNAME for GitHub Pages"
 echo ""
 
 if stack_exists "$DOMAIN_STACK"; then
@@ -108,7 +117,7 @@ if stack_exists "$DOMAIN_STACK"; then
         --template-body file://"$INFRA_DIR/cloudformation/domain-redirect.yaml" \
         --parameters \
             ParameterKey=DomainName,ParameterValue="$DOMAIN_NAME" \
-            ParameterKey=TargetURL,ParameterValue="$TARGET_URL" \
+            ParameterKey=GitHubPagesHost,ParameterValue="$GITHUB_PAGES_DOMAIN" \
         --region "$AWS_REGION" \
         --capabilities CAPABILITY_NAMED_IAM 2>&1 | grep -v "No updates are to be performed" || echo "No updates needed"
     
@@ -122,7 +131,7 @@ else
         --template-body file://"$INFRA_DIR/cloudformation/domain-redirect.yaml" \
         --parameters \
             ParameterKey=DomainName,ParameterValue="$DOMAIN_NAME" \
-            ParameterKey=TargetURL,ParameterValue="$TARGET_URL" \
+            ParameterKey=GitHubPagesHost,ParameterValue="$GITHUB_PAGES_DOMAIN" \
         --region "$AWS_REGION" \
         --capabilities CAPABILITY_NAMED_IAM
     
@@ -174,10 +183,9 @@ echo -e "${GREEN}=== Deployment Complete ===${NC}"
 echo ""
 echo -e "${BLUE}Next Steps:${NC}"
 echo ""
-echo "1. Get CloudFront domain name:"
-echo "   aws cloudformation describe-stacks --stack-name $DOMAIN_STACK --query 'Stacks[0].Outputs[?OutputKey==\`CloudFrontDomainName\`].OutputValue' --output text --region $AWS_REGION"
+echo "1. Confirm GitHub Pages custom domain is set to $DOMAIN_NAME in the GitHub repository settings"
 echo ""
-echo "2. Configure Route53 DNS (see infrastructure/docs/dns-setup.md)"
+echo "2. Configure Route53 DNS (see infrastructure/docs/post-deployment.md)"
 echo ""
 echo "3. Verify ACM certificate (check ACM Console)"
 echo ""

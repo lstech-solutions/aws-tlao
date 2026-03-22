@@ -17,8 +17,8 @@ OUTPUT_DIR=""
 case $ENVIRONMENT in
   "github-pages")
     echo "📦 Building for GitHub Pages..."
-    SITE_URL="https://lstech-solutions.github.io"
-    BASE_URL="/aws-tlao/"
+    SITE_URL="https://xn--tlo-fla.com"
+    BASE_URL="/documentation/"
     OUTPUT_DIR="build-github"
     ;;
   "custom-domain")

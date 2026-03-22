@@ -1,5 +1,9 @@
 # AWS Redirect Deployment Guide for tláo.com
 
+> Deprecated / not used in current production
+> This guide documents the legacy CloudFront redirect option kept for future reuse.
+> The active production path is direct `Route53 -> GitHub Pages`.
+
 ## Overview
 
 This guide explains how to deploy the AWS infrastructure to redirect `tláo.com` to `lstech-solutions.github.io/aws-tlao/`.

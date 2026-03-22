@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# DEPRECATED / NOT USED IN CURRENT PRODUCTION
+# Legacy CloudFront maintenance helper retained for future redirect experiments.
+
 # Get the current CloudFront distribution config
 CONFIG=$(aws cloudfront get-distribution-config --id EKJYIC9UXK8KB --region us-east-1)
 

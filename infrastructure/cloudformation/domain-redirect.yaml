@@ -1,141 +1,58 @@
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Domain redirect from tláo.com (xn--tlo-6ma.com) to GitHub Pages with CloudFront'
+Description: 'Route53 GitHub Pages DNS records for tláo.com'
 
 Parameters:
   DomainName:
     Type: String
-    Default: 'xn--tlo-6ma.com'
+    Default: 'xn--tlo-fla.com'
     Description: 'Punycode version of tláo.com'
 
-  TargetURL:
+  GitHubPagesHost:
     Type: String
-    Default: 'https://lstech-solutions.github.io/aws-tlao/'
-    Description: 'Target GitHub Pages URL'
+    Default: 'lstech-solutions.github.io'
+    Description: 'GitHub Pages host for the organization or user site'
 
 Resources:
-  # S3 Bucket for redirect
-  RedirectBucket:
-    Type: AWS::S3::Bucket
+  ApexARecords:
+    Type: AWS::Route53::RecordSet
     Properties:
-      BucketName: !Sub '${DomainName}-redirect'
-      WebsiteConfiguration:
-        RedirectAllRequestsTo:
-          HostName: 'lstech-solutions.github.io'
-          Protocol: 'https'
-      PublicAccessBlockConfiguration:
-        BlockPublicAcls: false
-        BlockPublicPolicy: false
-        IgnorePublicAcls: false
-        RestrictPublicBuckets: false
+      HostedZoneName: !Sub '${DomainName}.'
+      Name: !Sub '${DomainName}.'
+      Type: A
+      TTL: 300
+      ResourceRecords:
+        - 185.199.108.153
+        - 185.199.109.153
+        - 185.199.110.153
+        - 185.199.111.153
 
-  # Bucket Policy for public read
-  RedirectBucketPolicy:
-    Type: AWS::S3::BucketPolicy
+  ApexAAAARecords:
+    Type: AWS::Route53::RecordSet
     Properties:
-      Bucket: !Ref RedirectBucket
-      PolicyDocument:
-        Statement:
-          - Sid: PublicReadGetObject
-            Effect: Allow
-            Principal: '*'
-            Action: 's3:GetObject'
-            Resource: !Sub '${RedirectBucket.Arn}/*'
+      HostedZoneName: !Sub '${DomainName}.'
+      Name: !Sub '${DomainName}.'
+      Type: AAAA
+      TTL: 300
+      ResourceRecords:
+        - 2606:50c0:8000::153
+        - 2606:50c0:8001::153
+        - 2606:50c0:8002::153
+        - 2606:50c0:8003::153
 
-  # ACM Certificate for CloudFront (must be in us-east-1)
-  Certificate:
-    Type: AWS::CertificateManager::Certificate
+  WwwRecord:
+    Type: AWS::Route53::RecordSet
     Properties:
-      DomainName: !Ref DomainName
-      SubjectAlternativeNames:
-        - !Sub 'www.${DomainName}'
-      ValidationMethod: DNS
-      Tags:
-        - Key: Name
-          Value: !Sub '${DomainName}-cert'
-
-  # CloudFront Distribution
-  CloudFrontDistribution:
-    Type: AWS::CloudFront::Distribution
-    Properties:
-      DistributionConfig:
-        Enabled: true
-        Comment: !Sub 'Redirect ${DomainName} to GitHub Pages'
-        Aliases:
-          - !Ref DomainName
-          - !Sub 'www.${DomainName}'
-        DefaultCacheBehavior:
-          TargetOriginId: S3Origin
-          ViewerProtocolPolicy: redirect-to-https
-          AllowedMethods:
-            - GET
-            - HEAD
-          CachedMethods:
-            - GET
-            - HEAD
-          ForwardedValues:
-            QueryString: true
-            Cookies:
-              Forward: none
-          Compress: true
-          DefaultTTL: 86400
-          MaxTTL: 31536000
-          MinTTL: 0
-        Origins:
-          - Id: S3Origin
-            DomainName: !GetAtt RedirectBucket.RegionalDomainName
-            S3OriginConfig:
-              OriginAccessIdentity: ''
-            CustomOriginConfig:
-              HTTPPort: 80
-              HTTPSPort: 443
-              OriginProtocolPolicy: http-only
-        ViewerCertificate:
-          AcmCertificateArn: !Ref Certificate
-          SslSupportMethod: sni-only
-          MinimumProtocolVersion: TLSv1.2_2021
-        HttpVersion: http2
-        PriceClass: PriceClass_100
+      HostedZoneName: !Sub '${DomainName}.'
+      Name: !Sub 'www.${DomainName}.'
+      Type: CNAME
+      TTL: 300
+      ResourceRecords:
+        - !Sub '${GitHubPagesHost}.'
 
 Outputs:
-  CloudFrontDomainName:
-    Description: 'CloudFront distribution domain name'
-    Value: !GetAtt CloudFrontDistribution.DomainName
-    Export:
-      Name: !Sub '${AWS::StackName}-CloudFrontDomain'
-
-  CloudFrontDistributionId:
-    Description: 'CloudFront distribution ID'
-    Value: !Ref CloudFrontDistribution
-    Export:
-      Name: !Sub '${AWS::StackName}-DistributionId'
-
-  CertificateArn:
-    Description: 'ACM Certificate ARN'
-    Value: !Ref Certificate
-    Export:
-      Name: !Sub '${AWS::StackName}-CertificateArn'
-
-  RedirectBucketName:
-    Description: 'S3 Bucket name for redirect'
-    Value: !Ref RedirectBucket
-    Export:
-      Name: !Sub '${AWS::StackName}-BucketName'
-
-  Route53Instructions:
-    Description: 'Route53 DNS Configuration'
+  GitHubPagesDnsSummary:
+    Description: 'GitHub Pages DNS configuration'
     Value: !Sub |
-      Create the following DNS records in Route53 for ${DomainName}:
-
-      1. A Record (Alias):
-         Name: ${DomainName}
-         Type: A
-         Alias: Yes
-         Alias Target: ${CloudFrontDistribution.DomainName}
-
-      2. A Record (Alias) for www:
-         Name: www.${DomainName}
-         Type: A
-         Alias: Yes
-         Alias Target: ${CloudFrontDistribution.DomainName}
-
-      3. Certificate Validation (check ACM console for CNAME records)
+      Apex A: 185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153
+      Apex AAAA: 2606:50c0:8000::153, 2606:50c0:8001::153, 2606:50c0:8002::153, 2606:50c0:8003::153
+      WWW CNAME: ${GitHubPagesHost}.

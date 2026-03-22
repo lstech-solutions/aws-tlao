@@ -20,8 +20,8 @@ export function createInternalLink(path: string, targetApp: AppType): string {
 
   // Map app types to their base paths
   const appBasePaths: Record<AppType, string> = {
-    landing: process.env.NEXT_PUBLIC_LANDING_BASE_PATH || '/aws-tlao',
-    docs: process.env.NEXT_PUBLIC_DOCS_BASE_PATH || '/aws-tlao/documentation',
+    landing: process.env.NEXT_PUBLIC_LANDING_BASE_PATH || '',
+    docs: process.env.NEXT_PUBLIC_DOCS_BASE_PATH || '/documentation',
     app: process.env.NEXT_PUBLIC_APP_BASE_PATH || '/app',
   }
 
@@ -41,8 +41,8 @@ export function createLink(path: string, appType: AppType): string {
  */
 export function getBasePath(appType: AppType): string {
   const appBasePaths: Record<AppType, string> = {
-    landing: process.env.NEXT_PUBLIC_LANDING_BASE_PATH || '/aws-tlao',
-    docs: process.env.NEXT_PUBLIC_DOCS_BASE_PATH || '/aws-tlao/documentation',
+    landing: process.env.NEXT_PUBLIC_LANDING_BASE_PATH || '',
+    docs: process.env.NEXT_PUBLIC_DOCS_BASE_PATH || '/documentation',
     app: process.env.NEXT_PUBLIC_APP_BASE_PATH || '/app',
   }
 

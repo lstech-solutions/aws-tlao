@@ -4,34 +4,37 @@ After running the deployment script, follow these steps to complete the setup.
 
 ## 1. Configure Route53 DNS
 
-### Get CloudFront Domain Name
-
-```bash
-aws cloudformation describe-stacks \
-  --stack-name tlao-domain-redirect \
-  --query 'Stacks[0].Outputs[?OutputKey==`CloudFrontDomainName`].OutputValue' \
-  --output text \
-  --region us-east-1
-```
-
 ### Add DNS Records
 
-Go to Route53 Console and add these records for `xn--tlo-6ma.com`:
+Go to Route53 Console and add these records for `xn--tlo-fla.com`:
 
-#### A Record (Alias) for apex domain
+#### A Records for apex domain
 
-- **Name**: `xn--tlo-6ma.com`
+- **Name**: `xn--tlo-fla.com`
 - **Type**: `A`
-- **Alias**: `Yes`
-- **Alias Target**: `<CloudFront-Domain-Name>` (from above)
+- **Values**:
+  - `185.199.108.153`
+  - `185.199.109.153`
+  - `185.199.110.153`
+  - `185.199.111.153`
 - **Routing Policy**: Simple
 
-#### A Record (Alias) for www
+#### AAAA Records for apex domain
 
-- **Name**: `www.xn--tlo-6ma.com`
-- **Type**: `A`
-- **Alias**: `Yes`
-- **Alias Target**: `<CloudFront-Domain-Name>` (from above)
+- **Name**: `xn--tlo-fla.com`
+- **Type**: `AAAA`
+- **Values**:
+  - `2606:50c0:8000::153`
+  - `2606:50c0:8001::153`
+  - `2606:50c0:8002::153`
+  - `2606:50c0:8003::153`
+- **Routing Policy**: Simple
+
+#### CNAME Record for www
+
+- **Name**: `www.xn--tlo-fla.com`
+- **Type**: `CNAME`
+- **Value**: `lstech-solutions.github.io`
 - **Routing Policy**: Simple
 
 #### MX Record for email

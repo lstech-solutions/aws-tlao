@@ -12,7 +12,7 @@ function getEnvironmentUrls() {
   const hostname = window.location.hostname
   const isLocal = hostname === 'localhost' || hostname === '127.0.0.1'
   return {
-    landing: isLocal ? 'http://localhost:3003' : '/aws-tlao',
+    landing: isLocal ? 'http://localhost:3003' : '/',
   }
 }
 

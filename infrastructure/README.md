@@ -2,9 +2,17 @@
 
 AWS infrastructure as code for tláo.com domain management.
 
+> Legacy note
+> Current production uses direct `Route53 -> GitHub Pages` for the apex site.
+> The CloudFront redirect assets are intentionally retained under
+> [aws-redirect](/home/ed/Documents/LSTS/aws/infrastructure/aws-redirect/README.md)
+> and [redirect-cloudfront.yml](/home/ed/Documents/LSTS/aws/infrastructure/redirect-cloudfront.yml)
+> as deprecated reference-only infrastructure for possible future redirect flows.
+> They are not part of the active production path.
+
 ## Features
 
-1. **Domain Redirect**: Redirect tláo.com → GitHub Pages
+1. **GitHub Pages DNS**: Point tláo.com directly to GitHub Pages
 2. **Email Forwarding**: Forward emails from @tláo.com to @lstech.solutions
 
 ## Quick Start
@@ -31,8 +39,9 @@ Follow the instructions in [docs/post-deployment.md](docs/post-deployment.md)
 
 ```
 infrastructure/
+├── aws-redirect/           # Legacy CloudFront redirect path (deprecated, kept for future reuse)
 ├── cloudformation/          # CloudFormation templates
-│   ├── domain-redirect.yaml
+│   ├── domain-redirect.yaml # Active Route53 -> GitHub Pages DNS template
 │   └── email-forwarding.yaml
 ├── scripts/                 # Deployment and management scripts
 │   ├── deploy.sh
@@ -74,11 +83,19 @@ infrastructure/
 
 ## Architecture
 
-### Domain Redirect
+### GitHub Pages DNS
 
 ```
-tláo.com → Route53 → CloudFront → S3 → GitHub Pages
+tláo.com → Route53 → GitHub Pages
 ```
+
+### Legacy CloudFront Redirect
+
+```
+tláo.com → Route53 → CloudFront → S3 redirect
+```
+
+This legacy path is kept in the repo for future optional redirect use, but it is not active today.
 
 ### Email Forwarding
 

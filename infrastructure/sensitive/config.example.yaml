@@ -4,11 +4,11 @@
 
 domain:
   # Punycode version of tláo.com
-  name: "xn--tlo-6ma.com"
+  name: "xn--tlo-fla.com"
   # Display name
   display_name: "tláo.com"
-  # Target URL for redirect
-  target_url: "https://lstech-solutions.github.io/aws-tlao/"
+  # GitHub Pages host used for the www CNAME record
+  github_pages_domain: "lstech-solutions.github.io"
 
 aws:
   # AWS Region (must be us-east-1 for CloudFront certificates)

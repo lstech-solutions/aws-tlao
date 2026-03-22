@@ -1,5 +1,9 @@
 # AWS Redirect Infrastructure for tláo.com
 
+> Deprecated / not used in current production
+> This CloudFront + S3 redirect path is retained only as a future-use reference.
+> The active production setup for the apex site is direct `Route53 -> GitHub Pages`.
+
 This directory contains the infrastructure setup to redirect `tláo.com` to `lstech-solutions.github.io/aws-tlao/`.
 
 ## Architecture

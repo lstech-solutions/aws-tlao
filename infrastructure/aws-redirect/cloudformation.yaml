@@ -1,5 +1,8 @@
+# DEPRECATED / NOT USED IN CURRENT PRODUCTION
+# Legacy CloudFront redirect template retained for future optional redirect flows.
+
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Updated AWS Infrastructure for tláo.com redirect to GitHub Pages'
+Description: 'DEPRECATED legacy CloudFront redirect template for tláo.com'
 
 Parameters:
   DomainName:

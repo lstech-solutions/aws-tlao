@@ -14,12 +14,12 @@ import * as path from 'path'
 
 describe('Branding Configuration', () => {
   describe('Domain Configuration', () => {
-    it('should be configured for docs.tláo.com domain', () => {
+    it('should be configured for the TLÁO apex domain', () => {
       // Validates: Requirement 1.5
       const configPath = path.join(__dirname, '..', 'docusaurus.config.ts')
       const configContent = fs.readFileSync(configPath, 'utf-8')
 
-      expect(configContent).toContain("url: process.env.SITE_URL || 'https://docs.tláo.com'")
+      expect(configContent).toContain("url: process.env.SITE_URL || 'https://xn--tlo-fla.com'")
     })
 
     it('should have baseUrl set to root', () => {
@@ -27,7 +27,7 @@ describe('Branding Configuration', () => {
       const configPath = path.join(__dirname, '..', 'docusaurus.config.ts')
       const configContent = fs.readFileSync(configPath, 'utf-8')
 
-      expect(configContent).toContain("baseUrl: process.env.BASE_URL || '/aws-tlao/'")
+      expect(configContent).toContain("baseUrl: process.env.BASE_URL || '/'")
     })
   })
 

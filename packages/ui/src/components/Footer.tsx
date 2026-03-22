@@ -24,8 +24,8 @@ function getEnvironmentUrls(docsUrl?: string, landingUrl?: string) {
   const hostname = window.location.hostname
   const isLocal = hostname === 'localhost' || hostname === '127.0.0.1'
   return {
-    docs: docsUrl || (isLocal ? 'http://localhost:3002' : '/aws-tlao/documentation'),
-    landing: landingUrl || (isLocal ? 'http://localhost:3003' : '/aws-tlao'),
+    docs: docsUrl || (isLocal ? 'http://localhost:3002' : '/documentation'),
+    landing: landingUrl || (isLocal ? 'http://localhost:3003' : '/'),
   }
 }
 

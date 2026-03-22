@@ -16,7 +16,7 @@ const config: Config = {
 
   // Set the production url of your site here
   // Use environment variable for flexibility (GitHub Pages vs custom domain)
-  url: process.env.SITE_URL || 'https://docs.tlao.com',
+  url: process.env.SITE_URL || 'https://xn--tlo-fla.com',
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
   // For custom domain, it can be '/'

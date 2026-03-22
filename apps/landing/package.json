@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev -p 3003",
-    "build": "NEXT_PUBLIC_BASE_PATH=/aws-tlao NEXT_PUBLIC_APP_VERSION=$(node -e \"console.log(require('../../package.json').version)\") next build",
+    "build": "NEXT_PUBLIC_APP_VERSION=$(node -e \"console.log(require('../../package.json').version)\") next build",
     "build:local": "next build",
     "start": "next start -p 3003",
     "lint": "next lint",

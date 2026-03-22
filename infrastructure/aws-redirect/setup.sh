@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# DEPRECATED / NOT USED IN CURRENT PRODUCTION
+# Legacy CloudFront redirect setup retained for future optional redirect use.
+
 # AWS Redirect Setup Script for tláo.com
 # This script sets up the infrastructure to redirect tláo.com to lstech-solutions.github.io/aws-tlao/
 
@@ -7,6 +10,9 @@ set -e
 
 echo "🚀 AWS Redirect Setup for tláo.com"
 echo "=================================="
+echo ""
+echo "⚠️  Deprecated path: this CloudFront redirect flow is not the active production setup."
+echo "⚠️  Current production uses direct Route53 -> GitHub Pages."
 echo ""
 
 # Configuration

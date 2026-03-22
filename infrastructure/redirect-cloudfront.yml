@@ -1,92 +1,54 @@
+# DEPRECATED / NOT USED IN CURRENT PRODUCTION
+# Kept only as a reference stub for a possible future Route53/CloudFront redirect flow.
+# Current production path uses direct GitHub Pages DNS via infrastructure/cloudformation/domain-redirect.yaml.
+
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'Redirect tlao.com to GitHub Pages'
+Description: 'DEPRECATED reference stub - not used in current production'
 
 Parameters:
   DomainName:
     Type: String
-    Default: tlao.com
-    Description: The domain to redirect'
+    Default: xn--tlo-fla.com
+    Description: The punycode apex domain for TLÁO'
 
-  TargetUrl:
+  GitHubPagesHost:
     Type: String
-    Default: https://lstech-solutions.github.io/aws-tlao/
-    Description: The target URL for redirects'
+    Default: lstech-solutions.github.io
+    Description: The GitHub Pages host for the organization or user site'
 
 Resources:
-  # S3 Bucket for redirect website
-  RedirectBucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Sub '${DomainName}'
-      WebsiteConfiguration:
-        RedirectAllRequestsTo:
-          HostName: !Sub '${TargetUrl#//}'
-          Protocol: https
-
-  # CloudFront Distribution for redirect
-  RedirectCloudFrontDistribution:
-    Type: AWS::CloudFront::Distribution
-    Properties:
-      DistributionConfig:
-        Origins:
-          - DomainName: !Sub '${DomainName}.s3-website-${AWS::Region}.amazonaws.com'
-            Id: S3Origin
-            CustomOriginConfig:
-              HTTPPort: 80
-              HTTPSPort: 443
-              OriginProtocolPolicy: http-only
-        Enabled: true
-        DefaultRootObject: ''
-        DefaultCacheBehavior:
-          TargetOriginId: S3Origin
-          ViewerProtocolPolicy: redirect-to-https
-          AllowedMethods:
-            - GET
-            - HEAD
-            - OPTIONS
-          CachedMethods:
-            - GET
-            - HEAD
-            - OPTIONS
-          ForwardedValues:
-            QueryString: false
-            Headers:
-              - Origin
-            Cookies:
-              Forward: none
-        PriceClass: PriceClass_100
-        HttpVersion: http2
-        IsIPV6Enabled: true
-
-  # ACM Certificate for the domain
-  DomainCertificate:
-    Type: AWS::CertificateManager::Certificate
-    Properties:
-      DomainName: !Sub '*.${DomainName}'
-      ValidationMethod: DNS
-      SubjectAlternativeNames:
-        - !Sub '${DomainName}'
-
-  # Route53 Record for redirect
-  RedirectRecord:
+  ApexARecords:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneName: !Sub '${DomainName}.'
       Name: !Sub '${DomainName}.'
       Type: A
-      AliasTarget:
-        HostedZoneId: Z2FDTNDATAQYW2
-        DNSName: !GetAtt RedirectCloudFrontDistribution.DomainName
-        EvaluateTargetHealth: false
+      TTL: 300
+      ResourceRecords:
+        - 185.199.108.153
+        - 185.199.109.153
+        - 185.199.110.153
+        - 185.199.111.153
 
-  # Route53 Record for www redirect
-  WwwRedirectRecord:
+  ApexAAAARecords:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneName: !Sub '${DomainName}.'
+      Name: !Sub '${DomainName}.'
+      Type: AAAA
+      TTL: 300
+      ResourceRecords:
+        - 2606:50c0:8000::153
+        - 2606:50c0:8001::153
+        - 2606:50c0:8002::153
+        - 2606:50c0:8003::153
+
+  WwwRecord:
     Type: AWS::Route53::RecordSet
     Properties:
       HostedZoneName: !Sub '${DomainName}.'
       Name: !Sub 'www.${DomainName}.'
-      Type: A
-      AliasTarget:
-        HostedZoneId: Z2FDTNDATAQYW2
-        DNSName: !GetAtt RedirectCloudFrontDistribution.DomainName
-        EvaluateTargetHealth: false
+      Type: CNAME
+      TTL: 300
+      ResourceRecords:
+        - !Sub '${GitHubPagesHost}.'

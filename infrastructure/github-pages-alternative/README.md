@@ -1,5 +1,10 @@
 # GitHub Pages Alternative for tláo.com
 
+> Legacy evaluation note
+> This document is retained for historical context and future fallback ideas.
+> The current production setup already uses GitHub Pages directly with Route53 DNS,
+> so this file should not be treated as the active deployment guide.
+
 ## Overview
 
 This approach uses GitHub Pages native features instead of AWS for redirecting `tláo.com` to your GitHub Pages site.

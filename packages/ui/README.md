@@ -71,11 +71,11 @@ import { createInternalLink, getBasePath } from '@tlao/ui'
 // Create a link to another app
 const docsLink = createInternalLink('/guide', 'docs', {
   appType: 'landing',
-  basePath: '/aws-tlao',
+  basePath: '/',
 })
 
 // Get current app's base path
-const basePath = getBasePath('landing') // '/aws-tlao'
+const basePath = getBasePath('landing') // ''
 ```
 
 ## App Types
@@ -86,6 +86,6 @@ const basePath = getBasePath('landing') // '/aws-tlao'
 
 ## Environment Variables
 
-- `NEXT_PUBLIC_LANDING_BASE_PATH` - Landing app base path (default: `/aws-tlao`)
-- `NEXT_PUBLIC_DOCS_BASE_PATH` - Docs app base path (default: `/aws-tlao/documentation`)
+- `NEXT_PUBLIC_LANDING_BASE_PATH` - Landing app base path (default: root `/`)
+- `NEXT_PUBLIC_DOCS_BASE_PATH` - Docs app base path (default: `/documentation`)
 - `NEXT_PUBLIC_APP_BASE_PATH` - App base path (default: `/app`)
